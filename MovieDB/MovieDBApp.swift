@@ -1,20 +1,30 @@
-//
-//  MovieDBApp.swift
-//  MovieDB
-//
-//  Created by Saturnino Collaco Teixeria Filho on 2/22/24.
-//
-
+import Core
+import Dependencies
+import ImageProvider
+import Networking
 import SwiftUI
 
 @main
 struct MovieDBApp: App {
-    let persistenceController = PersistenceController.shared
-
     var body: some Scene {
         WindowGroup {
+          TabView {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+              .background(.yellow)
+              .tabItem { Label("Movies", systemImage: "1.circle") }
+              
+            ContentView2()
+              .tabItem { Label("Series", systemImage: "2.circle") }
+          }
+          
         }
     }
+  
+  func makeDependencies() -> ConcreteDependencies {
+    .init(
+      network: NetworkImpl(),
+      imageProvider: ImageProviderImpl()
+    )
+  }
 }
+

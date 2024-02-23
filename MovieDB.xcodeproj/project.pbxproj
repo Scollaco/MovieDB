@@ -11,11 +11,16 @@
 		3B3FACEC2B8780B100BE59C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACEB2B8780B100BE59C8 /* ContentView.swift */; };
 		3B3FACEE2B8780B400BE59C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B3FACED2B8780B400BE59C8 /* Assets.xcassets */; };
 		3B3FACF12B8780B400BE59C8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B3FACF02B8780B400BE59C8 /* Preview Assets.xcassets */; };
-		3B3FACF32B8780B400BE59C8 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACF22B8780B400BE59C8 /* Persistence.swift */; };
-		3B3FACF62B8780B400BE59C8 /* MovieDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACF42B8780B400BE59C8 /* MovieDB.xcdatamodeld */; };
 		3B3FAD002B8780B400BE59C8 /* MovieDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACFF2B8780B400BE59C8 /* MovieDBTests.swift */; };
 		3B3FAD0A2B8780B400BE59C8 /* MovieDBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FAD092B8780B400BE59C8 /* MovieDBUITests.swift */; };
 		3B3FAD0C2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FAD0B2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift */; };
+		3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21DC2B88CABE00130BF5 /* Dependencies */; };
+		3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21DE2B88CABE00130BF5 /* Networking */; };
+		3BCD21E12B88CABE00130BF5 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21E02B88CABE00130BF5 /* Storage */; };
+		3BCD21E32B88CABE00130BF5 /* UIComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21E22B88CABE00130BF5 /* UIComponents */; };
+		3BCD21E82B88E6CA00130BF5 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCD21E72B88E6CA00130BF5 /* DependencyContainer.swift */; };
+		3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21EA2B88EB0B00130BF5 /* Core */; };
+		3BCD21ED2B88ED4600130BF5 /* ImageProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21EC2B88ED4600130BF5 /* ImageProvider */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,13 +46,18 @@
 		3B3FACEB2B8780B100BE59C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3B3FACED2B8780B400BE59C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3B3FACF02B8780B400BE59C8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		3B3FACF22B8780B400BE59C8 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		3B3FACF52B8780B400BE59C8 /* MovieDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MovieDB.xcdatamodel; sourceTree = "<group>"; };
 		3B3FACFB2B8780B400BE59C8 /* MovieDBTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieDBTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3FACFF2B8780B400BE59C8 /* MovieDBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBTests.swift; sourceTree = "<group>"; };
 		3B3FAD052B8780B400BE59C8 /* MovieDBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieDBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3FAD092B8780B400BE59C8 /* MovieDBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBUITests.swift; sourceTree = "<group>"; };
 		3B3FAD0B2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3B3FAD262B8792AB00BE59C8 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Networking; path = Modules/Networking; sourceTree = "<group>"; };
+		3B3FAD272B8793EE00BE59C8 /* UIComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = UIComponents; path = Modules/UIComponents; sourceTree = "<group>"; };
+		3BCD21D92B8795D000130BF5 /* Storage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Storage; path = Modules/Storage; sourceTree = "<group>"; };
+		3BCD21DA2B88CA1600130BF5 /* Dependencies */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Dependencies; path = Modules/Dependencies; sourceTree = "<group>"; };
+		3BCD21E42B88DCBB00130BF5 /* ImageProvider */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ImageProvider; path = Modules/ImageProvider; sourceTree = "<group>"; };
+		3BCD21E72B88E6CA00130BF5 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
+		3BCD21E92B88E89200130BF5 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Modules/Core; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +65,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BCD21E32B88CABE00130BF5 /* UIComponents in Frameworks */,
+				3BCD21E12B88CABE00130BF5 /* Storage in Frameworks */,
+				3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */,
+				3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */,
+				3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */,
+				3BCD21ED2B88ED4600130BF5 /* ImageProvider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,10 +94,17 @@
 		3B3FACDD2B8780B100BE59C8 = {
 			isa = PBXGroup;
 			children = (
+				3BCD21E92B88E89200130BF5 /* Core */,
+				3BCD21E42B88DCBB00130BF5 /* ImageProvider */,
+				3BCD21DA2B88CA1600130BF5 /* Dependencies */,
+				3BCD21D92B8795D000130BF5 /* Storage */,
+				3B3FAD272B8793EE00BE59C8 /* UIComponents */,
+				3B3FAD262B8792AB00BE59C8 /* Networking */,
 				3B3FACE82B8780B100BE59C8 /* MovieDB */,
 				3B3FACFE2B8780B400BE59C8 /* MovieDBTests */,
 				3B3FAD082B8780B400BE59C8 /* MovieDBUITests */,
 				3B3FACE72B8780B100BE59C8 /* Products */,
+				3BCD21DB2B88CABE00130BF5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,9 +123,8 @@
 			children = (
 				3B3FACE92B8780B100BE59C8 /* MovieDBApp.swift */,
 				3B3FACEB2B8780B100BE59C8 /* ContentView.swift */,
+				3BCD21E72B88E6CA00130BF5 /* DependencyContainer.swift */,
 				3B3FACED2B8780B400BE59C8 /* Assets.xcassets */,
-				3B3FACF22B8780B400BE59C8 /* Persistence.swift */,
-				3B3FACF42B8780B400BE59C8 /* MovieDB.xcdatamodeld */,
 				3B3FACEF2B8780B400BE59C8 /* Preview Content */,
 			);
 			path = MovieDB;
@@ -133,6 +155,13 @@
 			path = MovieDBUITests;
 			sourceTree = "<group>";
 		};
+		3BCD21DB2B88CABE00130BF5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -149,6 +178,14 @@
 			dependencies = (
 			);
 			name = MovieDB;
+			packageProductDependencies = (
+				3BCD21DC2B88CABE00130BF5 /* Dependencies */,
+				3BCD21DE2B88CABE00130BF5 /* Networking */,
+				3BCD21E02B88CABE00130BF5 /* Storage */,
+				3BCD21E22B88CABE00130BF5 /* UIComponents */,
+				3BCD21EA2B88EB0B00130BF5 /* Core */,
+				3BCD21EC2B88ED4600130BF5 /* ImageProvider */,
+			);
 			productName = MovieDB;
 			productReference = 3B3FACE62B8780B100BE59C8 /* MovieDB.app */;
 			productType = "com.apple.product-type.application";
@@ -263,9 +300,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B3FACF32B8780B400BE59C8 /* Persistence.swift in Sources */,
 				3B3FACEC2B8780B100BE59C8 /* ContentView.swift in Sources */,
-				3B3FACF62B8780B400BE59C8 /* MovieDB.xcdatamodeld in Sources */,
+				3BCD21E82B88E6CA00130BF5 /* DependencyContainer.swift in Sources */,
 				3B3FACEA2B8780B100BE59C8 /* MovieDBApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -597,18 +633,32 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCVersionGroup section */
-		3B3FACF42B8780B400BE59C8 /* MovieDB.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				3B3FACF52B8780B400BE59C8 /* MovieDB.xcdatamodel */,
-			);
-			currentVersion = 3B3FACF52B8780B400BE59C8 /* MovieDB.xcdatamodel */;
-			path = MovieDB.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
+/* Begin XCSwiftPackageProductDependency section */
+		3BCD21DC2B88CABE00130BF5 /* Dependencies */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Dependencies;
 		};
-/* End XCVersionGroup section */
+		3BCD21DE2B88CABE00130BF5 /* Networking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Networking;
+		};
+		3BCD21E02B88CABE00130BF5 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Storage;
+		};
+		3BCD21E22B88CABE00130BF5 /* UIComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UIComponents;
+		};
+		3BCD21EA2B88EB0B00130BF5 /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
+		3BCD21EC2B88ED4600130BF5 /* ImageProvider */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ImageProvider;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3B3FACDE2B8780B100BE59C8 /* Project object */;
 }
