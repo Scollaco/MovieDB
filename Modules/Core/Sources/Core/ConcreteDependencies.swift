@@ -1,7 +1,7 @@
 import Foundation
 import Dependencies
 
-public final class ConcreteDependencies: ObservableObject, Dependencies {
+public final class ConcreteDependencies: Dependencies {
   public let imageProvider: ImageProviderInterface
   public let network: NetworkInterface
   

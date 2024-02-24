@@ -19,5 +19,5 @@ public protocol Endpoint {
 }
 
 public protocol NetworkInterface {
-  func task<T: Decodable>(endpoint: Endpoint, type: T.Type) async -> Result<T, Error>
+  func request<T: Decodable>(endpoint: Endpoint, type: T.Type) async -> Result<T, Error>
 }

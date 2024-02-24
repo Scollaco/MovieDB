@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B2763CB2B895EC8002DB24C /* MoviesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3B2763CA2B895EC8002DB24C /* MoviesFeature */; };
 		3B3FACEA2B8780B100BE59C8 /* MovieDBApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACE92B8780B100BE59C8 /* MovieDBApp.swift */; };
 		3B3FACEC2B8780B100BE59C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACEB2B8780B100BE59C8 /* ContentView.swift */; };
 		3B3FACEE2B8780B400BE59C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B3FACED2B8780B400BE59C8 /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3B2763C92B895C2A002DB24C /* MoviesFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MoviesFeature; path = Modules/MoviesFeature; sourceTree = "<group>"; };
 		3B3FACE62B8780B100BE59C8 /* MovieDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3FACE92B8780B100BE59C8 /* MovieDBApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBApp.swift; sourceTree = "<group>"; };
 		3B3FACEB2B8780B100BE59C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */,
 				3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */,
 				3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */,
+				3B2763CB2B895EC8002DB24C /* MoviesFeature in Frameworks */,
 				3BCD21ED2B88ED4600130BF5 /* ImageProvider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,6 +97,7 @@
 		3B3FACDD2B8780B100BE59C8 = {
 			isa = PBXGroup;
 			children = (
+				3B2763C92B895C2A002DB24C /* MoviesFeature */,
 				3BCD21E92B88E89200130BF5 /* Core */,
 				3BCD21E42B88DCBB00130BF5 /* ImageProvider */,
 				3BCD21DA2B88CA1600130BF5 /* Dependencies */,
@@ -185,6 +189,7 @@
 				3BCD21E22B88CABE00130BF5 /* UIComponents */,
 				3BCD21EA2B88EB0B00130BF5 /* Core */,
 				3BCD21EC2B88ED4600130BF5 /* ImageProvider */,
+				3B2763CA2B895EC8002DB24C /* MoviesFeature */,
 			);
 			productName = MovieDB;
 			productReference = 3B3FACE62B8780B100BE59C8 /* MovieDB.app */;
@@ -634,6 +639,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3B2763CA2B895EC8002DB24C /* MoviesFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MoviesFeature;
+		};
 		3BCD21DC2B88CABE00130BF5 /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Dependencies;

@@ -1,6 +1,7 @@
 import Core
 import Dependencies
 import ImageProvider
+import MoviesFeature
 import Networking
 import SwiftUI
 
@@ -9,7 +10,7 @@ struct MovieDBApp: App {
     var body: some Scene {
         WindowGroup {
           TabView {
-            ContentView()
+            MoviesMainView(dependencies: makeDependencies())
               .background(.yellow)
               .tabItem { Label("Movies", systemImage: "1.circle") }
               

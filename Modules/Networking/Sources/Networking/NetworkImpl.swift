@@ -5,14 +5,14 @@ public final class NetworkImpl: NetworkInterface {
     
     private let session: URLSession = URLSession.shared
     private let decoder: JSONDecoder
-    private let authToken: String = "710800b3814f390982572b1ec12faf7f"
-    private let host: String = "host"
+    private let authToken: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MTA4MDBiMzgxNGYzOTA5ODI1NzJiMWVjMTJmYWY3ZiIsInN1YiI6IjY1ZDc0N2IyOWFmMTcxMDE3YjU5M2VlMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.COx_GEjUYyU-N8eX16Ud_HcXQVb6l61s3LfkkP8fVyg"
+    private let host: String = "api.themoviedb.org"
 
     // MARK: - Init
 
     public init() {
         decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
 
     // MARK: - Private
@@ -70,12 +70,12 @@ public final class NetworkImpl: NetworkInterface {
 // MARK: - NetworkInterface
 
 extension NetworkImpl {
-  public func task<T>(endpoint: Endpoint, type: T.Type) async -> Result<T, Error> where T: Decodable {
+  public func request<T>(endpoint: Endpoint, type: T.Type) async -> Result<T, Error> where T: Decodable {
     guard let request = buildRequest(endpoint: endpoint) else {
       return .failure(RestAPIClientError.invalidUrl)
     }
     do {
-      let (data, response) = try await session.data(for: request)
+      let (data, _) = try await session.data(for: request)
       let decoded = try decoder.decode(T.self, from: data)
       return .success(decoded)
     } catch {
@@ -84,10 +84,15 @@ extension NetworkImpl {
   }
 }
 
+struct ServerAPIError: Error {
+  let statusCode: Int
+  let statusMessage: String
+  let success: Bool
+}
+
 enum RestAPIClientError: Error {
     case invalidUrl
     case unknown
-
     var localizedDescription: String {
         switch self {
         case .invalidUrl:
