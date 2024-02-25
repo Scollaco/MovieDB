@@ -1,3 +1,4 @@
+import UIComponents
 import Core
 import Dependencies
 import ImageProvider
@@ -13,9 +14,22 @@ struct MovieDBApp: App {
       }()
         WindowGroup {
           TabView {
-            moviesView(with: dependencies)
-              .background(.background)
-              .tabItem { Label("Discover", systemImage: "movieclapper") }
+            TopTabBarView(titles: ["Movies", "Series", "TV"]) {
+              
+              Color.clear
+              
+              moviesView(with: dependencies)
+                .background(.background)
+                .tag(0)
+              
+              Text("Series")
+                .tag(1)
+              
+              Text("TV")
+                .tag(2)
+            }
+            .tabItem { Label("Discover", systemImage: "movieclapper") }
+            
               
             ContentView2()
               .tabItem { Label("Series", systemImage: "2.circle") }
