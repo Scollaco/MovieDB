@@ -11,7 +11,7 @@ struct MoviesMainView: View {
     self.viewModel = viewModel
   }
   public var body: some View {
-    ScrollView {
+    ScrollView(showsIndicators: false) {
       ListSection(
         title: "Now Playing",
         category: .nowPlaying,

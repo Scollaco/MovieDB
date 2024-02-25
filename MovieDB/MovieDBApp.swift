@@ -16,8 +16,6 @@ struct MovieDBApp: App {
           TabView {
             TopTabBarView(titles: ["Movies", "Series", "TV"]) {
               
-              Color.clear
-              
               moviesView(with: dependencies)
                 .background(.background)
                 .tag(0)
@@ -34,7 +32,11 @@ struct MovieDBApp: App {
             ContentView2()
               .tabItem { Label("Series", systemImage: "2.circle") }
           }
-          
+          .onAppear() {
+            let standardAppearance = UITabBarAppearance()
+            standardAppearance.shadowColor = UIColor(Color.gray)
+            UITabBar.appearance().standardAppearance = standardAppearance
+          }
         }
     }
   
