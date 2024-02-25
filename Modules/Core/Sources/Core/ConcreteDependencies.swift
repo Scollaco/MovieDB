@@ -2,8 +2,8 @@ import Foundation
 import Dependencies
 
 public final class ConcreteDependencies: Dependencies {
-  public let imageProvider: ImageProviderInterface
-  public let network: NetworkInterface
+  public var imageProvider: ImageProviderInterface
+  public var network: NetworkInterface
   
   public init(
     network: NetworkInterface,

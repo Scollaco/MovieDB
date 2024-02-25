@@ -11,8 +11,8 @@ public final class NetworkImpl: NetworkInterface {
     // MARK: - Init
 
     public init() {
-        decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
+      decoder = JSONDecoder()
+      decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
 
     // MARK: - Private

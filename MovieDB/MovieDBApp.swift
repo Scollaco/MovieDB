@@ -8,11 +8,14 @@ import SwiftUI
 @main
 struct MovieDBApp: App {
     var body: some Scene {
+      lazy var dependencies: Dependencies = {
+        makeDependencies()
+      }()
         WindowGroup {
           TabView {
-            MoviesMainView(dependencies: makeDependencies())
-              .background(.yellow)
-              .tabItem { Label("Movies", systemImage: "1.circle") }
+            moviesView(with: dependencies)
+              .background(.background)
+              .tabItem { Label("Discover", systemImage: "movieclapper") }
               
             ContentView2()
               .tabItem { Label("Series", systemImage: "2.circle") }
@@ -20,6 +23,11 @@ struct MovieDBApp: App {
           
         }
     }
+  
+  private func moviesView(with dependencies: Dependencies) -> some View {
+    let factory = MoviesViewFactory(dependencies: dependencies)
+    return factory.makeMainView()
+  }
   
   func makeDependencies() -> ConcreteDependencies {
     .init(

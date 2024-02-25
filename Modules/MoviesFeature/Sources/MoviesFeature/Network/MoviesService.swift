@@ -1,64 +1,29 @@
 import Dependencies
+import Foundation
 
+public protocol Service {
+  func fetchMovies(category: Category, page: Int) async throws -> MovieResponse
+}
 
-protocol Service {
-  func fetchNowPlayingMovies() async throws -> MovieResponse
+public enum Category: String {
+  case nowPlaying = "now_playing"
+  case popular
+  case topRated = "top_rated"
+  case upcoming
 }
 
 final class MoviesService: Service {
-  enum Category: String {
-    case nowPlaying = "now_playing"
-    case popular
-    case topRated = "top_rated"
-    case upcoming
-  }
-  
   private let dependencies: Dependencies
   init(dependencies: Dependencies) {
     self.dependencies = dependencies
   }
   
-  func fetchNowPlayingMovies() async throws -> MovieResponse {
+  func fetchMovies(
+    category: Category,
+    page: Int = 1
+  ) async throws -> MovieResponse {
     let result = await dependencies.network.request(
-      endpoint: MovieEndpoint(category: .nowPlaying),
-      type: MovieResponse.self
-    )
-    switch result {
-    case .success(let response):
-      return response
-    case .failure(let error):
-      throw(error)
-    }
-  }
-  
-  func fetchPopularMovies() async throws -> MovieResponse {
-    let result = await dependencies.network.request(
-      endpoint: MovieEndpoint(category: .popular),
-      type: MovieResponse.self
-    )
-    switch result {
-    case .success(let response):
-      return response
-    case .failure(let error):
-      throw(error)
-    }
-  }
-  
-  func fetchTopRatedMovies() async throws -> MovieResponse {
-    let result = await dependencies.network.request(
-      endpoint: MovieEndpoint(category: .topRated),
-      type: MovieResponse.self
-    )
-    switch result {
-    case .success(let response):
-      return response
-    case .failure(let error):
-      throw(error)
-    }
-  }
-  func fetchUpcomingMovies() async throws -> MovieResponse {
-    let result = await dependencies.network.request(
-      endpoint: MovieEndpoint(category: .upcoming),
+      endpoint: MovieEndpoint(category: category, page: page),
       type: MovieResponse.self
     )
     switch result {
@@ -74,9 +39,11 @@ fileprivate struct MovieEndpoint: Endpoint {
   var path: String = "/3/movie/"
   var additionalHeaders: [String : String]? = nil
   var method: HTTPMethod {
-    .get([])
+    .get([URLQueryItem(name: "page", value: "\(page)")])
   }
-  init(category: MoviesService.Category) {
+  let page: Int
+  init(category: Category, page: Int = 1) {
     self.path.append(category.rawValue)
+    self.page = page
   }
 }
