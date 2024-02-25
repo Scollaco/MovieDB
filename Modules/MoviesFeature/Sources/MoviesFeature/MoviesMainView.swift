@@ -1,5 +1,6 @@
 import Foundation
 import Dependencies
+import UIComponents
 import SwiftUI
 import CoreData
 
@@ -43,13 +44,6 @@ struct MoviesMainView: View {
   }
 }
 
-struct ScrollOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGPoint = .zero
-
-    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
-    }
-}
-
 struct ListSection: View {
   let title: String
   let category: Category
@@ -87,18 +81,20 @@ struct ImageView: View {
   
   var body: some View {
     VStack {
-      AsyncImage(url: URL(string: movie.imageUrl), content: { phase in
-        switch phase {
-        case .failure:
-          Image(systemName: "photo") .font(.largeTitle)
-        case .success(let image):
-          image.resizable()
-        default:
-          ProgressView()
+      if let url = URL(string: movie.imageUrl) {
+        CacheAsyncImage(url: url) { phase in
+          switch phase {
+          case .failure:
+            Image(systemName: "photo") .font(.largeTitle)
+          case .success(let image):
+            image.resizable()
+          default:
+            ProgressView()
+          }
         }
-      })
-      .frame(height: 165)
-      .clipShape(RoundedRectangle(cornerRadius: 5))
+        .frame(height: 165)
+        .clipShape(RoundedRectangle(cornerRadius: 5))
+      }
       
       Text(movie.title)
         .font(.footnote)
