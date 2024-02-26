@@ -11,6 +11,6 @@ public final class MoviesViewFactory {
   public func makeMainView() -> some View {
     let service = MoviesService(dependencies: dependencies)
     let viewModel = MoviesMainViewModel(service: service)
-    return MoviesMainView(viewModel: viewModel)
+    return MoviesMainView(viewModel: viewModel, router: MoviesRouter(with: dependencies.router))
   }
 }

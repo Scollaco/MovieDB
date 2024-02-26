@@ -6,9 +6,11 @@ import CoreData
 
 struct MoviesMainView: View {
   @ObservedObject private var viewModel: MoviesMainViewModel
+  private var router: MoviesRouter
   
-  init(viewModel: MoviesMainViewModel) {
+  init(viewModel: MoviesMainViewModel, router: MoviesRouter) {
     self.viewModel = viewModel
+    self.router = router
   }
   public var body: some View {
     ScrollView(showsIndicators: false) {
@@ -18,18 +20,24 @@ struct MoviesMainView: View {
         viewModel: viewModel,
         items: $viewModel.nowPlayingMovies
       )
+      .padding(.bottom)
+      
       ListSection(
         title: "Top Rated",
         category: .topRated,
         viewModel: viewModel,
         items: $viewModel.topRatedMovies
       )
+      .padding(.bottom)
+      
       ListSection(
         title: "Popular",
         category: .popular,
         viewModel: viewModel,
         items: $viewModel.popularMovies
       )
+      .padding(.bottom)
+      
       ListSection(
         title: "Upcoming",
         category: .upcoming,
@@ -72,7 +80,7 @@ struct ListSection: View {
         .bold()
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 10))
+    .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
   }
 }
 

@@ -4,52 +4,83 @@ import Dependencies
 import ImageProvider
 import MoviesFeature
 import Networking
+import Routing
 import SwiftUI
 
 @main
 struct MovieDBApp: App {
-    var body: some Scene {
-      lazy var dependencies: Dependencies = {
-        makeDependencies()
-      }()
-        WindowGroup {
-          TabView {
-            TopTabBarView(titles: ["Movies", "Series", "TV"]) {
-              
-              moviesView(with: dependencies)
-                .background(.background)
-                .tag(0)
-              
-              Text("Series")
-                .tag(1)
-              
-              Text("TV")
-                .tag(2)
-            }
-            .tabItem { Label("Discover", systemImage: "movieclapper") }
-            
-              
-            ContentView2()
-              .tabItem { Label("Series", systemImage: "2.circle") }
-          }
-          .onAppear() {
-            let standardAppearance = UITabBarAppearance()
-            standardAppearance.shadowColor = UIColor(Color.gray)
-            UITabBar.appearance().standardAppearance = standardAppearance
-          }
-        }
-    }
-  
-  private func moviesView(with dependencies: Dependencies) -> some View {
-    let factory = MoviesViewFactory(dependencies: dependencies)
-    return factory.makeMainView()
+  @ObservedObject var router: AppRouter
+  init() {
+    self.router = MovieDBApp.dependencies.router as! AppRouter
   }
   
-  func makeDependencies() -> ConcreteDependencies {
+  var body: some Scene {
+    WindowGroup {
+      TabView {
+        DiscoverView(path: $router.path)
+        TabView2(path: $router.path)
+        TabView3(path: $router.path)
+      }
+      .navigationBarTitleDisplayMode(.large)
+    }
+  }
+  
+  static let dependencies: ConcreteDependencies = {
     .init(
       network: NetworkImpl(),
-      imageProvider: ImageProviderImpl()
+      imageProvider: ImageProviderImpl(),
+      router: AppRouter(path: .init())
     )
+  }()
+}
+
+struct DiscoverView: View {
+  @Binding var path: NavigationPath
+  
+  var body: some View {
+    NavigationStack(path: $path) {
+      TopTabBarView(titles: ["Movies", "Series", "TV"]) {
+        moviesView()
+          .withMovieRoutes()
+          .tag(0)
+        
+        Text("Series")
+          .tag(1)
+        
+        Text("TV")
+          .tag(2)
+      }
+      .navigationTitle("Discover")
+    }
+    .tabItem { Label("Discover", systemImage: "movieclapper") }
+  }
+  
+  private func moviesView() -> some View {
+    let factory = MoviesViewFactory(dependencies: MovieDBApp.dependencies)
+    return factory.makeMainView()
   }
 }
 
+struct TabView2: View {
+  @Binding var path: NavigationPath
+  
+  var body: some View {
+    NavigationStack(path: $path) {
+      ContentView2()
+        .navigationTitle("Search")
+    }
+    .tabItem { Label("Search", systemImage: "magnifyingglass") }
+  }
+}
+
+struct TabView3: View {
+  @Binding var path: NavigationPath
+  
+  var body: some View {
+    NavigationStack(path: $path) {
+      ContentView()
+        .navigationTitle("Watchlist")
+    }
+    .tabItem { Label("Watchlist", systemImage: "bookmark") }
+  }
+}
