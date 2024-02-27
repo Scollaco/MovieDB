@@ -61,7 +61,7 @@ public final class NetworkImpl: NetworkInterface {
             urlRequest.httpBody = data
         }
 
-        urlRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        urlRequest.cachePolicy = .returnCacheDataElseLoad
         return urlRequest
     }
     

@@ -18,6 +18,7 @@ struct MoviesMainView: View {
         title: "Now Playing",
         category: .nowPlaying,
         viewModel: viewModel,
+        router: router,
         items: $viewModel.nowPlayingMovies
       )
       .padding(.bottom)
@@ -26,6 +27,7 @@ struct MoviesMainView: View {
         title: "Top Rated",
         category: .topRated,
         viewModel: viewModel,
+        router: router,
         items: $viewModel.topRatedMovies
       )
       .padding(.bottom)
@@ -34,6 +36,7 @@ struct MoviesMainView: View {
         title: "Popular",
         category: .popular,
         viewModel: viewModel,
+        router: router,
         items: $viewModel.popularMovies
       )
       .padding(.bottom)
@@ -42,13 +45,11 @@ struct MoviesMainView: View {
         title: "Upcoming",
         category: .upcoming,
         viewModel: viewModel,
+        router: router,
         items: $viewModel.upcomingMovies
       )
     }
     .listRowSpacing(10)
-    .onAppear {
-      viewModel.fetchMovies()
-    }
   }
 }
 
@@ -56,6 +57,7 @@ struct ListSection: View {
   let title: String
   let category: Category
   let viewModel: MoviesMainViewModel
+  let router: MoviesRouter
   @Binding var items: [Movie]
   
   @State private var scrollPosition: CGFloat = .zero
@@ -70,6 +72,9 @@ struct ListSection: View {
                 if viewModel.shouldLoadMoreData(movie.id, items: items) {
                   viewModel.loadMoreData(for: category)
                 }
+              }
+              .onTapGesture {
+                router.navigate(to: .details)
               }
           }
         }
@@ -116,9 +121,9 @@ struct ImageView: View {
     .frame(width: 110)
   }
 }
-//
+
 //#Preview {
 //  MoviesMainView()
 //}
 //
-//
+

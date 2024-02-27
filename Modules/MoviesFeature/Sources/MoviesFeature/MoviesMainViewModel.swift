@@ -15,6 +15,7 @@ public final class MoviesMainViewModel: ObservableObject {
   
   public init(service: Service) {
     self.service = service
+    fetchMovies()
   }
   
   func fetchMovies() {

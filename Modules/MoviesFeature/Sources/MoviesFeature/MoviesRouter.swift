@@ -6,11 +6,7 @@ protocol ModuleRouter {
   var appRouter: RouterInterface { get }
 }
 
-enum MoviesRoute: Hashable {
-  case details
-}
-
-enum MoviesExit: Hashable {
+public enum MoviesExit: Hashable {
   case details
 }
 
@@ -21,7 +17,7 @@ final public class MoviesRouter: ModuleRouter {
     self.appRouter = appRouter
   }
   
-  func navigate(to target: MoviesRoute) {
+  func navigate(to target: MoviesExit) {
     appRouter.navigate(to: target)
   }
   
@@ -30,10 +26,9 @@ final public class MoviesRouter: ModuleRouter {
   }
 }
 
-// Custom view modifier for routing of this module
 public extension View {
   func withMovieRoutes() -> some View {
-        self.navigationDestination(for: MoviesRoute.self) { destination in
+        self.navigationDestination(for: MoviesExit.self) { destination in
             switch destination {
                 case .details:
                   Text("Details view")

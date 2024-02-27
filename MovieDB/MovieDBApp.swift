@@ -3,6 +3,7 @@ import Core
 import Dependencies
 import ImageProvider
 import MoviesFeature
+import Details
 import Networking
 import Routing
 import SwiftUI
@@ -34,14 +35,29 @@ struct MovieDBApp: App {
   }()
 }
 
+private let moviesView: some View = {
+  let factory = MoviesViewFactory(dependencies: MovieDBApp.dependencies)
+  return factory.makeMainView()
+}()
+
+private let detailsView: some View = {
+  let factory = DetailsViewFactory(dependencies: MovieDBApp.dependencies)
+  return factory.makeDetailsView()
+}()
+
 struct DiscoverView: View {
   @Binding var path: NavigationPath
-  
   var body: some View {
     NavigationStack(path: $path) {
       TopTabBarView(titles: ["Movies", "Series", "TV"]) {
-        moviesView()
-          .withMovieRoutes()
+        moviesView
+          .withDetailsRoutes()
+          .navigationDestination(for: MoviesExit.self) { destination in
+            switch destination {
+            case .details:
+              detailsView
+            }
+          }
           .tag(0)
         
         Text("Series")
@@ -53,11 +69,6 @@ struct DiscoverView: View {
       .navigationTitle("Discover")
     }
     .tabItem { Label("Discover", systemImage: "movieclapper") }
-  }
-  
-  private func moviesView() -> some View {
-    let factory = MoviesViewFactory(dependencies: MovieDBApp.dependencies)
-    return factory.makeMainView()
   }
 }
 

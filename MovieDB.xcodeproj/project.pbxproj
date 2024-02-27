@@ -10,6 +10,7 @@
 		3B2763CB2B895EC8002DB24C /* MoviesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3B2763CA2B895EC8002DB24C /* MoviesFeature */; };
 		3B2764062B8CC448002DB24C /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2764052B8CC448002DB24C /* AppRouter.swift */; };
 		3B2764082B8CC946002DB24C /* Routing in Frameworks */ = {isa = PBXBuildFile; productRef = 3B2764072B8CC946002DB24C /* Routing */; };
+		3B27640B2B8D196F002DB24C /* Details in Frameworks */ = {isa = PBXBuildFile; productRef = 3B27640A2B8D196F002DB24C /* Details */; };
 		3B3FACEA2B8780B100BE59C8 /* MovieDBApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACE92B8780B100BE59C8 /* MovieDBApp.swift */; };
 		3B3FACEC2B8780B100BE59C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACEB2B8780B100BE59C8 /* ContentView.swift */; };
 		3B3FACEE2B8780B400BE59C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B3FACED2B8780B400BE59C8 /* Assets.xcassets */; };
@@ -47,6 +48,7 @@
 		3B2763C92B895C2A002DB24C /* MoviesFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MoviesFeature; path = Modules/MoviesFeature; sourceTree = "<group>"; };
 		3B2764042B8BF35F002DB24C /* Routing */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Routing; path = ../../Routing; sourceTree = "<group>"; };
 		3B2764052B8CC448002DB24C /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		3B2764092B8D0843002DB24C /* Details */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Details; path = ../../Details; sourceTree = "<group>"; };
 		3B3FACE62B8780B100BE59C8 /* MovieDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3FACE92B8780B100BE59C8 /* MovieDBApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBApp.swift; sourceTree = "<group>"; };
 		3B3FACEB2B8780B100BE59C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */,
 				3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */,
 				3B2763CB2B895EC8002DB24C /* MoviesFeature in Frameworks */,
+				3B27640B2B8D196F002DB24C /* Details in Frameworks */,
 				3BCD21ED2B88ED4600130BF5 /* ImageProvider in Frameworks */,
 				3B2764082B8CC946002DB24C /* Routing in Frameworks */,
 			);
@@ -102,6 +105,7 @@
 		3B3FACDD2B8780B100BE59C8 = {
 			isa = PBXGroup;
 			children = (
+				3B2764092B8D0843002DB24C /* Details */,
 				3B2764042B8BF35F002DB24C /* Routing */,
 				3B2763C92B895C2A002DB24C /* MoviesFeature */,
 				3BCD21E92B88E89200130BF5 /* Core */,
@@ -198,6 +202,7 @@
 				3BCD21EC2B88ED4600130BF5 /* ImageProvider */,
 				3B2763CA2B895EC8002DB24C /* MoviesFeature */,
 				3B2764072B8CC946002DB24C /* Routing */,
+				3B27640A2B8D196F002DB24C /* Details */,
 			);
 			productName = MovieDB;
 			productReference = 3B3FACE62B8780B100BE59C8 /* MovieDB.app */;
@@ -657,6 +662,10 @@
 		3B2764072B8CC946002DB24C /* Routing */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Routing;
+		};
+		3B27640A2B8D196F002DB24C /* Details */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Details;
 		};
 		3BCD21DC2B88CABE00130BF5 /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;
