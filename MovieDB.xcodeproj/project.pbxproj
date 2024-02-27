@@ -11,6 +11,7 @@
 		3B2764062B8CC448002DB24C /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2764052B8CC448002DB24C /* AppRouter.swift */; };
 		3B2764082B8CC946002DB24C /* Routing in Frameworks */ = {isa = PBXBuildFile; productRef = 3B2764072B8CC946002DB24C /* Routing */; };
 		3B27640B2B8D196F002DB24C /* Details in Frameworks */ = {isa = PBXBuildFile; productRef = 3B27640A2B8D196F002DB24C /* Details */; };
+		3B27640E2B8E26BD002DB24C /* YouTubePlayerKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3B27640D2B8E26BD002DB24C /* YouTubePlayerKit */; };
 		3B3FACEA2B8780B100BE59C8 /* MovieDBApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACE92B8780B100BE59C8 /* MovieDBApp.swift */; };
 		3B3FACEC2B8780B100BE59C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACEB2B8780B100BE59C8 /* ContentView.swift */; };
 		3B3FACEE2B8780B400BE59C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B3FACED2B8780B400BE59C8 /* Assets.xcassets */; };
@@ -75,6 +76,7 @@
 			files = (
 				3BCD21E32B88CABE00130BF5 /* UIComponents in Frameworks */,
 				3BCD21E12B88CABE00130BF5 /* Storage in Frameworks */,
+				3B27640E2B8E26BD002DB24C /* YouTubePlayerKit in Frameworks */,
 				3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */,
 				3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */,
 				3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */,
@@ -203,6 +205,7 @@
 				3B2763CA2B895EC8002DB24C /* MoviesFeature */,
 				3B2764072B8CC946002DB24C /* Routing */,
 				3B27640A2B8D196F002DB24C /* Details */,
+				3B27640D2B8E26BD002DB24C /* YouTubePlayerKit */,
 			);
 			productName = MovieDB;
 			productReference = 3B3FACE62B8780B100BE59C8 /* MovieDB.app */;
@@ -276,6 +279,9 @@
 				Base,
 			);
 			mainGroup = 3B3FACDD2B8780B100BE59C8;
+			packageReferences = (
+				3B27640C2B8E26BD002DB24C /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */,
+			);
 			productRefGroup = 3B3FACE72B8780B100BE59C8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -654,6 +660,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		3B27640C2B8E26BD002DB24C /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SvenTiigi/YouTubePlayerKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		3B2763CA2B895EC8002DB24C /* MoviesFeature */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -666,6 +683,11 @@
 		3B27640A2B8D196F002DB24C /* Details */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Details;
+		};
+		3B27640D2B8E26BD002DB24C /* YouTubePlayerKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3B27640C2B8E26BD002DB24C /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */;
+			productName = YouTubePlayerKit;
 		};
 		3BCD21DC2B88CABE00130BF5 /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;
