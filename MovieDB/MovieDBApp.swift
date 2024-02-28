@@ -1,12 +1,13 @@
-import UIComponents
 import Core
 import Dependencies
+import Details
 import ImageProvider
 import MoviesFeature
-import Details
 import Networking
 import Routing
+import SeriesFeature
 import SwiftUI
+import UIComponents
 
 @main
 struct MovieDBApp: App {
@@ -40,6 +41,11 @@ private let moviesView: some View = {
   return factory.makeMainView()
 }()
 
+private let seriesView: some View = {
+  let factory = SeriesViewFactory(dependencies: MovieDBApp.dependencies)
+  return factory.makeMainView()
+}()
+
 private let detailsView: some View = {
   let factory = DetailsViewFactory(dependencies: MovieDBApp.dependencies)
   return factory.makeDetailsView()
@@ -60,7 +66,14 @@ struct DiscoverView: View {
           }
           .tag(0)
         
-        Text("Series")
+        seriesView
+          .withDetailsRoutes()
+          .navigationDestination(for: SeriesExit.self) { destination in
+            switch destination {
+            case .details:
+              detailsView
+            }
+          }
           .tag(1)
       }
       .navigationTitle("Discover")

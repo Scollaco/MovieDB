@@ -7,14 +7,14 @@ public struct MovieResponse: Decodable {
 
 public struct Movie: Decodable, Identifiable {
   let adult: Bool
-  let backdropPath: String
+  let backdropPath: String?
   public let id: Int
   let genreIds: [Int]
   let originalLanguage: String
   let originalTitle: String
   let overview: String
   let popularity: Double
-  let posterPath: String
+  let posterPath: String?
   let releaseDate: String
   let title: String
   let voteAverage: Double
@@ -23,7 +23,8 @@ public struct Movie: Decodable, Identifiable {
 
 extension Movie {
   var imageUrl: String {
-    "https://image.tmdb.org/t/p/w500/\(posterPath)"
+    guard let path = posterPath else { return . init() }
+    return "https://image.tmdb.org/t/p/w500/\(path)"
   }
   
   var formattedDate: String {

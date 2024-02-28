@@ -20,6 +20,7 @@
 		3B3FAD0A2B8780B400BE59C8 /* MovieDBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FAD092B8780B400BE59C8 /* MovieDBUITests.swift */; };
 		3B3FAD0C2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FAD0B2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift */; };
 		3BC2D24F2B8FA61C00D2762D /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC2D24E2B8FA61C00D2762D /* Utilities */; };
+		3BC2D2532B8FEC3800D2762D /* SeriesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC2D2522B8FEC3800D2762D /* SeriesFeature */; };
 		3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21DC2B88CABE00130BF5 /* Dependencies */; };
 		3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21DE2B88CABE00130BF5 /* Networking */; };
 		3BCD21E12B88CABE00130BF5 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21E02B88CABE00130BF5 /* Storage */; };
@@ -81,6 +82,7 @@
 				3BCD21E12B88CABE00130BF5 /* Storage in Frameworks */,
 				3B27640E2B8E26BD002DB24C /* YouTubePlayerKit in Frameworks */,
 				3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */,
+				3BC2D2532B8FEC3800D2762D /* SeriesFeature in Frameworks */,
 				3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */,
 				3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */,
 				3BC2D24F2B8FA61C00D2762D /* Utilities in Frameworks */,
@@ -213,6 +215,7 @@
 				3B27640A2B8D196F002DB24C /* Details */,
 				3B27640D2B8E26BD002DB24C /* YouTubePlayerKit */,
 				3BC2D24E2B8FA61C00D2762D /* Utilities */,
+				3BC2D2522B8FEC3800D2762D /* SeriesFeature */,
 			);
 			productName = MovieDB;
 			productReference = 3B3FACE62B8780B100BE59C8 /* MovieDB.app */;
@@ -699,6 +702,10 @@
 		3BC2D24E2B8FA61C00D2762D /* Utilities */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Utilities;
+		};
+		3BC2D2522B8FEC3800D2762D /* SeriesFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SeriesFeature;
 		};
 		3BCD21DC2B88CABE00130BF5 /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;
