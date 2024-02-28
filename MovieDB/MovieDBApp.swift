@@ -49,7 +49,7 @@ struct DiscoverView: View {
   @Binding var path: NavigationPath
   var body: some View {
     NavigationStack(path: $path) {
-      TopTabBarView(titles: ["Movies", "Series", "TV"]) {
+      TopTabBarView(titles: ["Movies", "TV Series"]) {
         moviesView
           .withDetailsRoutes()
           .navigationDestination(for: MoviesExit.self) { destination in
@@ -62,9 +62,6 @@ struct DiscoverView: View {
         
         Text("Series")
           .tag(1)
-        
-        Text("TV")
-          .tag(2)
       }
       .navigationTitle("Discover")
     }

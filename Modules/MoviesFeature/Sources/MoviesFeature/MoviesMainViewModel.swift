@@ -1,4 +1,5 @@
 import Foundation
+import Utilities
 
 public final class MoviesMainViewModel: ObservableObject {
   private let service: Service
@@ -37,7 +38,7 @@ public final class MoviesMainViewModel: ObservableObject {
     nextPopularPage = popularResponse.page + 1
     let movies = popularResponse
       .results
-      .sorted(by: { $0.voteAverage > $1.voteAverage})
+      .sorted(by: { $0.popularity > $1.popularity})
     popularMovies.append(contentsOf: movies)
   }
   
@@ -47,7 +48,6 @@ public final class MoviesMainViewModel: ObservableObject {
     nextNowPlayingPage = nowPlayingResponse.page + 1
     let movies = nowPlayingResponse
       .results
-      .sorted(by: { $0.voteAverage > $1.voteAverage})
     nowPlayingMovies.append(contentsOf: movies)
   }
   
@@ -57,7 +57,7 @@ public final class MoviesMainViewModel: ObservableObject {
     nextTopRatedPage = topRatedResponse.page + 1
     let movies = topRatedResponse
       .results
-      .sorted(by: { $0.voteAverage > $1.voteAverage})
+      .sorted(by: { $0.voteAverage > $1.voteAverage })
     topRatedMovies.append(contentsOf: movies)
   }
   
@@ -68,7 +68,9 @@ public final class MoviesMainViewModel: ObservableObject {
     let movies = upcomingMoviesResponse
       .results
       .sorted(by: { $0.releaseDate > $1.releaseDate })
-    upcomingMovies.append(contentsOf: movies)
+    if let last = movies.last {
+      upcomingMovies.append(contentsOf: [last])
+    }
   }
   
   func shouldLoadMoreData(_ movieId: Int, items: [Movie]) -> Bool {

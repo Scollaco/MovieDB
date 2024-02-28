@@ -1,5 +1,6 @@
 import Foundation
 import Dependencies
+import Utilities
 import UIComponents
 import SwiftUI
 import CoreData
@@ -39,7 +40,6 @@ struct MoviesMainView: View {
         router: router,
         items: $viewModel.popularMovies
       )
-      .padding(.bottom)
       
       ListSection(
         title: "Upcoming",
@@ -48,6 +48,7 @@ struct MoviesMainView: View {
         router: router,
         items: $viewModel.upcomingMovies
       )
+      .padding(.bottom)
     }
     .listRowSpacing(10)
   }
@@ -67,7 +68,9 @@ struct ListSection: View {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach($items, id: \.id) { movie in
-            ImageView(movie: movie)
+            ImageView(
+              movie: movie
+            )
               .onAppear {
                 if viewModel.shouldLoadMoreData(movie.id, items: items) {
                   viewModel.loadMoreData(for: category)
