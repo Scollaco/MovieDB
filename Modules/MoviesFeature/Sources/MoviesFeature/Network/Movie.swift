@@ -5,29 +5,29 @@ public struct MovieResponse: Decodable {
   let results: [Movie]
 }
 
-public struct Movie: Decodable, Identifiable {
-  let adult: Bool
-  let backdropPath: String?
+public struct Movie: Decodable, Identifiable, Hashable {
+  public let adult: Bool
+  public let backdropPath: String?
   public let id: Int
-  let genreIds: [Int]
-  let originalLanguage: String
-  let originalTitle: String
-  let overview: String
-  let popularity: Double
-  let posterPath: String?
-  let releaseDate: String
-  let title: String
-  let voteAverage: Double
-  let voteCount: Int
+  public let genreIds: [Int]
+  public let originalLanguage: String
+  public let originalTitle: String
+  public let overview: String
+  public let popularity: Double
+  public let posterPath: String?
+  public let releaseDate: String
+  public let title: String
+  public let voteAverage: Double
+  public let voteCount: Int
 }
 
 extension Movie {
-  var imageUrl: String {
+  public var imageUrl: String {
     guard let path = posterPath else { return . init() }
     return "https://image.tmdb.org/t/p/w500/\(path)"
   }
   
-  var formattedDate: String {
+  public var formattedDate: String {
     let formatter = DateFormatter()
     formatter.dateStyle = .medium
     formatter.dateFormat = "yyyy-MM-dd"

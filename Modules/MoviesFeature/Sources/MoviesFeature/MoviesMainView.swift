@@ -77,7 +77,7 @@ struct ListSection: View {
                 }
               }
               .onTapGesture {
-                router.navigate(to: .details)
+                router.navigate(to: .details(movie.wrappedValue))
               }
           }
         }

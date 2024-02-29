@@ -36,9 +36,8 @@ struct MovieDBApp: App {
   }()
 }
 
-private let moviesView: some View = {
-  let factory = MoviesViewFactory(dependencies: MovieDBApp.dependencies)
-  return factory.makeMainView()
+private let moviesViewsFactory: MoviesViewFactory = {
+  MoviesViewFactory(dependencies: MovieDBApp.dependencies)
 }()
 
 private let seriesView: some View = {
@@ -46,34 +45,22 @@ private let seriesView: some View = {
   return factory.makeMainView()
 }()
 
-private let detailsView: some View = {
-  let factory = DetailsViewFactory(dependencies: MovieDBApp.dependencies)
-  return factory.makeDetailsView()
-}()
+//private func detailsView(movie: Movie) -> some View {
+//  let factory = DetailsViewFactory(dependencies: MovieDBApp.dependencies)
+//  return factory.makeDetailsView(movie: movie)
+//}
 
 struct DiscoverView: View {
   @Binding var path: NavigationPath
   var body: some View {
     NavigationStack(path: $path) {
       TopTabBarView(titles: ["Movies", "TV Series"]) {
-        moviesView
-          .withDetailsRoutes()
-          .navigationDestination(for: MoviesExit.self) { destination in
-            switch destination {
-            case .details:
-              detailsView
-            }
-          }
+        moviesViewsFactory.makeMainView()
+          .withMovieRoutes(dependencies: MovieDBApp.dependencies)
           .tag(0)
         
         seriesView
           .withDetailsRoutes()
-          .navigationDestination(for: SeriesExit.self) { destination in
-            switch destination {
-            case .details:
-              detailsView
-            }
-          }
           .tag(1)
       }
       .navigationTitle("Discover")

@@ -84,6 +84,7 @@ extension NetworkImpl {
   }
 }
 
+
 struct ServerAPIError: Error {
   let statusCode: Int
   let statusMessage: String

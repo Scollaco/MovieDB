@@ -6,8 +6,12 @@ protocol ModuleRouter {
   var appRouter: RouterInterface { get }
 }
 
+public enum MoviesRoute: Hashable {
+  case details(Movie)
+}
+
 public enum MoviesExit: Hashable {
-  case details
+  case details(Movie)
 }
 
 final public class MoviesRouter: ModuleRouter {
@@ -17,7 +21,7 @@ final public class MoviesRouter: ModuleRouter {
     self.appRouter = appRouter
   }
   
-  func navigate(to target: MoviesExit) {
+  func navigate(to target: MoviesRoute) {
     appRouter.navigate(to: target)
   }
   
@@ -27,12 +31,13 @@ final public class MoviesRouter: ModuleRouter {
 }
 
 public extension View {
-  func withMovieRoutes() -> some View {
-        self.navigationDestination(for: MoviesExit.self) { destination in
-            switch destination {
-                case .details:
-                  Text("Details view")
-            }
-        }
+  func withMovieRoutes(dependencies: Dependencies) -> some View {
+    let factory = MoviesViewFactory(dependencies: dependencies)
+    return self.navigationDestination(for: MoviesRoute.self) { destination in
+      switch destination {
+      case .details(let movie):
+        factory.makeMovieDetailsView(movie: movie)
+      }
     }
+  }
 }
