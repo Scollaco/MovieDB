@@ -4,6 +4,7 @@
 
 ## User settings
 xcuserdata/
+*.xcodeproj/xcshareddata/
 
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
@@ -21,6 +22,10 @@ DerivedData/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
+
+## Environment
+Secrets.xcconfig
+.env
 
 ## Obj-C/Swift specific
 *.hmap
