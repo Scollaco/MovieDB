@@ -74,7 +74,7 @@ struct TabView2: View {
   
   var body: some View {
     NavigationStack(path: $path) {
-      Text("\(Environment.authToken)")
+      ContentView2()
         .navigationTitle("Search")
     }
     .tabItem { Label("Search", systemImage: "magnifyingglass") }

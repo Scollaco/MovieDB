@@ -5,7 +5,7 @@ public final class NetworkImpl: NetworkInterface {
     
     private let session: URLSession = URLSession.shared
     private let decoder: JSONDecoder
-    private let authToken: String = "YOUR_AUTH_TOKEN"
+    private let authToken: String = Environment.authToke
     private let host: String = "api.themoviedb.org"
 
     // MARK: - Init

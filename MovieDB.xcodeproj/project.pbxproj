@@ -22,7 +22,6 @@
 		3BC2D24F2B8FA61C00D2762D /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC2D24E2B8FA61C00D2762D /* Utilities */; };
 		3BC2D2532B8FEC3800D2762D /* SeriesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC2D2522B8FEC3800D2762D /* SeriesFeature */; };
 		3BC2D2552B9277D500D2762D /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3BC2D2542B9277D500D2762D /* Secrets.xcconfig */; };
-		3BC2D2572B9278CD00D2762D /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC2D2562B9278CD00D2762D /* Environment.swift */; };
 		3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21DC2B88CABE00130BF5 /* Dependencies */; };
 		3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21DE2B88CABE00130BF5 /* Networking */; };
 		3BCD21E12B88CABE00130BF5 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21E02B88CABE00130BF5 /* Storage */; };
@@ -69,7 +68,6 @@
 		3BC2D24D2B8F6B3200D2762D /* Utilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Utilities; path = ../../Utilities; sourceTree = "<group>"; };
 		3BC2D2512B8FE4EC00D2762D /* SeriesFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SeriesFeature; path = ../../SeriesFeature; sourceTree = "<group>"; };
 		3BC2D2542B9277D500D2762D /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
-		3BC2D2562B9278CD00D2762D /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		3BC2D25A2B928C5900D2762D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3BCD21D92B8795D000130BF5 /* Storage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Storage; path = Modules/Storage; sourceTree = "<group>"; };
 		3BCD21DA2B88CA1600130BF5 /* Dependencies */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Dependencies; path = Modules/Dependencies; sourceTree = "<group>"; };
@@ -158,7 +156,6 @@
 				3B3FACED2B8780B400BE59C8 /* Assets.xcassets */,
 				3B3FACEF2B8780B400BE59C8 /* Preview Content */,
 				3B2764052B8CC448002DB24C /* AppRouter.swift */,
-				3BC2D2562B9278CD00D2762D /* Environment.swift */,
 			);
 			path = MovieDB;
 			sourceTree = "<group>";
@@ -347,7 +344,6 @@
 				3B3FACEC2B8780B100BE59C8 /* ContentView.swift in Sources */,
 				3BCD21E82B88E6CA00130BF5 /* DependencyContainer.swift in Sources */,
 				3B3FACEA2B8780B100BE59C8 /* MovieDBApp.swift in Sources */,
-				3BC2D2572B9278CD00D2762D /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
