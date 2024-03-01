@@ -34,7 +34,7 @@ public final class MoviesMainViewModel: ObservableObject {
   
   @MainActor
   private func fetchPopularMovies() async throws {
-    let popularResponse = try await service.fetchMovies(category: .popular, page: nextPopularPage)
+    let popularResponse = try await service.fetchMovies(section: .popular, page: nextPopularPage)
     nextPopularPage = popularResponse.page + 1
     let movies = popularResponse
       .results
@@ -44,7 +44,7 @@ public final class MoviesMainViewModel: ObservableObject {
   
   @MainActor
   private func fetchNowPlayingMovies() async throws {
-    let nowPlayingResponse = try await service.fetchMovies(category: .nowPlaying, page: nextNowPlayingPage)
+    let nowPlayingResponse = try await service.fetchMovies(section: .nowPlaying, page: nextNowPlayingPage)
     nextNowPlayingPage = nowPlayingResponse.page + 1
     let movies = nowPlayingResponse
       .results
@@ -53,7 +53,7 @@ public final class MoviesMainViewModel: ObservableObject {
   
   @MainActor
   private func fetchTopRatedMovies() async throws {
-    let topRatedResponse = try await service.fetchMovies(category: .topRated, page: nextTopRatedPage)
+    let topRatedResponse = try await service.fetchMovies(section: .topRated, page: nextTopRatedPage)
     nextTopRatedPage = topRatedResponse.page + 1
     let movies = topRatedResponse
       .results
@@ -63,7 +63,7 @@ public final class MoviesMainViewModel: ObservableObject {
   
   @MainActor
   private func fetchUpcomingMovies() async throws {
-    let upcomingMoviesResponse = try await service.fetchMovies(category: .upcoming, page: nextUpcomingPage)
+    let upcomingMoviesResponse = try await service.fetchMovies(section: .upcoming, page: nextUpcomingPage)
     nextUpcomingPage = upcomingMoviesResponse.page + 1
     let movies = upcomingMoviesResponse
       .results
@@ -79,7 +79,7 @@ public final class MoviesMainViewModel: ObservableObject {
     return movieId == targetItem?.id
   }
   
-  func loadMoreData(for category: Category) {
+  func loadMoreData(for category: MovieSection) {
     Task { @MainActor in
       switch category {
       case .nowPlaying:

@@ -56,7 +56,7 @@ struct MoviesMainView: View {
 
 struct ListSection: View {
   let title: String
-  let category: Category
+  let category: MovieSection
   let viewModel: MoviesMainViewModel
   let router: MoviesRouter
   @Binding var items: [Movie]
@@ -125,8 +125,11 @@ struct ImageView: View {
   }
 }
 
-//#Preview {
-//  MoviesMainView()
-//}
-//
+#Preview {
+  MoviesMainView(
+    viewModel:  MoviesMainViewModel(service: MockService()),
+    router: MoviesRouter()
+  )
+}
+
 

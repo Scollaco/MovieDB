@@ -1,26 +1,9 @@
 import Foundation
-@testable import MoviesFeature
 
-final class MockService: Service {
-  func fetchMovies(
-    category: MoviesFeature.Category,
-    page: Int
-  ) async throws -> MoviesFeature.MovieResponse {
-    MovieResponse(
-      page: 1,
-      results: [.mock()]
-    )
-  }
-}
-
-extension Movie: Equatable {
-  public static func == (lhs: Movie, rhs: Movie) -> Bool {
-    lhs.id == rhs.id
-  }
-  
+extension Movie {
   static func mock(
     adult: Bool = true,
-    backdropPath: String = "",
+    backdropPath: String = "https://image.tmdb.org/t/p/w500/mSUnNIjJEkqkWxbklDjWCD2RUdy.jpg",
     id: Int = 1,
     genreIds: [Int] = [],
     originalLanguage: String = "en_US",

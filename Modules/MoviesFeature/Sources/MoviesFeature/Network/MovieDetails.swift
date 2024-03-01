@@ -1,6 +1,32 @@
 import Foundation
 
-public struct MovieDetails: Decodable {
+public struct WatchProviderResponse: Decodable {
+  public let results: WatchProvidersRegion
+}
+
+public struct WatchProvidersRegion: Decodable {
+  public let US: WatchOptions?
+}
+
+public struct WatchOptions: Decodable {
+  public let flatrate: [WatchProvider]?
+  public let rent: [WatchProvider]?
+  public let buy: [WatchProvider]?
+}
+
+public struct WatchProvider: Decodable, Hashable {
+  public let logoPath: String?
+  public let providerId: Int
+  public let providerName: String
+  public let displayPriority: Int
+  
+  public var logoUrl: String {
+    guard let path = logoPath else { return . init() }
+    return "https://image.tmdb.org/t/p/w500/\(path)"
+  }
+}
+
+public struct MovieDetails {
   public struct Genre: Decodable {
     public let id: Int
     public let name: String
@@ -42,7 +68,10 @@ public struct MovieDetails: Decodable {
     case watchProviders = "watch/providers"
     case genres, id, overview, title, tagline, videos, similar, recommendations
   }
-  
+
+}
+
+extension MovieDetails: Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
@@ -58,31 +87,4 @@ public struct MovieDetails: Decodable {
     self.recommendations = try container.decode(MovieResponse.self, forKey: .recommendations)
     self.watchProviders = try container.decode(WatchProviderResponse.self, forKey: .watchProviders)
   }
-}
-
-public struct WatchProviderResponse: Decodable {
-  public let results: WatchProvidersRegion
-}
-
-public struct WatchProvidersRegion: Decodable {
-  public let US: WatchOptions?
-}
-
-public struct WatchOptions: Decodable {
-  public let flatrate: [WatchProvider]?
-  public let rent: [WatchProvider]?
-  public let buy: [WatchProvider]?
-}
-
-public struct WatchProvider: Decodable, Hashable {
-  public let logoPath: String?
-  public let providerId: Int
-  public let providerName: String
-  public let displayPriority: Int
-  
-  public var logoUrl: String {
-    guard let path = logoPath else { return . init() }
-    return "https://image.tmdb.org/t/p/w500/\(path)"
-  }
-  
 }

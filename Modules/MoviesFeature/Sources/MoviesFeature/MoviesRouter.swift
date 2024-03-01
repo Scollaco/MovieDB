@@ -3,7 +3,7 @@ import Dependencies
 import SwiftUI
 
 protocol ModuleRouter {
-  var appRouter: RouterInterface { get }
+  var appRouter: RouterInterface? { get }
 }
 
 public enum MoviesRoute: Hashable {
@@ -15,18 +15,18 @@ public enum MoviesExit: Hashable {
 }
 
 final public class MoviesRouter: ModuleRouter {
-  private(set) var appRouter: RouterInterface
+  private(set) var appRouter: RouterInterface?
   
-  public init(with appRouter: RouterInterface) {
+  public init(with appRouter: RouterInterface? = nil) {
     self.appRouter = appRouter
   }
   
   func navigate(to target: MoviesRoute) {
-    appRouter.navigate(to: target)
+    appRouter?.navigate(to: target)
   }
   
   func pop() {
-    appRouter.pop()
+    appRouter?.pop()
   }
 }
 

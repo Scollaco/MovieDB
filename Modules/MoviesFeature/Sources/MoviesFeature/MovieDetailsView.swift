@@ -132,6 +132,10 @@ struct DetailListSection: View {
   }
 }
 
-//#Preview {
-//  DetailsView(movie: Movie)
-//}
+#Preview {
+  MovieDetailsView(
+    viewModel: MoviesDetailsViewModel(
+      movie: .mock(),
+      service: MockService())
+  )
+}

@@ -2,11 +2,11 @@ import Dependencies
 import Foundation
 
 public protocol Service {
-  func fetchMovies(category: Category, page: Int) async throws -> MovieResponse
+  func fetchMovies(section: MovieSection, page: Int) async throws -> MovieResponse
   func fetchMovieDetails(id: Int) async throws -> MovieDetails
 }
 
-public enum Category: String {
+public enum MovieSection: String {
   case nowPlaying = "now_playing"
   case popular
   case topRated = "top_rated"
@@ -21,11 +21,11 @@ final class MoviesService: Service {
   }
   
   func fetchMovies(
-    category: Category,
+    section: MovieSection,
     page: Int = 1
   ) async throws -> MovieResponse {
     let result = await dependencies.network.request(
-      endpoint: MovieEndpoint(category: category, page: page),
+      endpoint: MovieEndpoint(category: section, page: page),
       type: MovieResponse.self
     )
     switch result {
@@ -57,7 +57,7 @@ fileprivate struct MovieEndpoint: Endpoint {
     .get([URLQueryItem(name: "page", value: "\(page)")])
   }
   let page: Int
-  init(category: Category, page: Int = 1) {
+  init(category: MovieSection, page: Int = 1) {
     self.path.append(category.rawValue)
     self.page = page
   }

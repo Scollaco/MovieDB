@@ -16,6 +16,7 @@ let package = Package(
       .package(url: "Dependencies", from: "1.0.0"),
       .package(url: "UIComponents", from: "1.0.0"),
       .package(url: "Utilities", from: "1.0.0"),
+      .package(url: "github.com/SvenTiigi/YouTubePlayerKit.git", .upToNextMajor(from: "1.7.0")),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -26,6 +27,7 @@ let package = Package(
               .byName(name: "Dependencies"),
               .byName(name: "UIComponents"),
               .byName(name: "Utilities"),
+              .byName(name: "YouTubePlayerKit"),
             ]
         ),
         .testTarget(

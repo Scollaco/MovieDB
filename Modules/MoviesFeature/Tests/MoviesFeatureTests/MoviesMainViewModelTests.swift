@@ -46,4 +46,39 @@ final class MoviesMainViewModelTests: XCTestCase {
     
     XCTAssertEqual(sut.nextPopularPage, 2)
   }
+  
+  func testShouldLoadMoreData_sixOrMoreItemsInArray() {
+    let sut = MoviesMainViewModel(service: MockService())
+    // Item index is < 1
+    XCTAssertFalse(
+      sut.shouldLoadMoreData(
+        1,
+        items: [.mock(id: 1), .mock(id: 2), .mock(id: 3), .mock(id: 4), .mock(id: 5), .mock(id: 6)])
+    )
+    
+    // Item index is == 1
+    XCTAssertTrue(
+      sut.shouldLoadMoreData(
+        2,
+        items: [.mock(id: 1), .mock(id: 2), .mock(id: 3), .mock(id: 4), .mock(id: 5), .mock(id: 6)])
+    )
+  }
+  
+  func testShouldLoadMoreData_lessThanSixItemsInArray() {
+    let sut = MoviesMainViewModel(service: MockService())
+    // Item index is not the last
+    XCTAssertFalse(
+      sut.shouldLoadMoreData(
+        3,
+        items: [.mock(id: 1), .mock(id: 2), .mock(id: 3), .mock(id: 4)])
+    )
+    
+    // Item index is the last
+    XCTAssertTrue(
+      sut.shouldLoadMoreData(
+        4,
+        items: [.mock(id: 1), .mock(id: 2), .mock(id: 3), .mock(id: 4)]
+      )
+    )
+  }
 }
