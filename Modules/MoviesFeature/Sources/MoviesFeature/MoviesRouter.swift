@@ -37,6 +37,7 @@ public extension View {
       switch destination {
       case .details(let movie):
         factory.makeMovieDetailsView(movie: movie)
+          .transition(.scale)
       }
     }
   }

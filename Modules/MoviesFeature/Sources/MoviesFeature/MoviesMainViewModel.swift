@@ -68,9 +68,7 @@ public final class MoviesMainViewModel: ObservableObject {
     let movies = upcomingMoviesResponse
       .results
       .sorted(by: { $0.releaseDate > $1.releaseDate })
-    if let last = movies.last {
-      upcomingMovies.append(contentsOf: [last])
-    }
+      upcomingMovies.append(contentsOf: movies)
   }
   
   func shouldLoadMoreData(_ movieId: Int, items: [Movie]) -> Bool {

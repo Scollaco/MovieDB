@@ -1,6 +1,6 @@
 import SwiftUI
 import UIComponents
-import YouTubePlayerKit
+import AVKit
 
 struct MovieDetailsView: View {
   @ObservedObject private var viewModel: MoviesDetailsViewModel
@@ -13,10 +13,12 @@ struct MovieDetailsView: View {
     ScrollView(showsIndicators: false) {
       VStack(spacing: 10) {
         if let url = $viewModel.details.wrappedValue?.trailerURL {
-          YouTubePlayerView(
-            YouTubePlayer(stringLiteral: url.absoluteString)
-          )
-          .frame(height: 320)
+          VideoPlayerView(videoUrl: url)
+            .frame(height: 230)
+        } else {
+          Text("Trailer unavailable")
+            .font(.title3)
+            .frame(height: 150)
         }
         
         Text($viewModel.details.wrappedValue?.title ?? .init())
@@ -35,32 +37,27 @@ struct MovieDetailsView: View {
         Text($viewModel.details.wrappedValue?.overview ?? .init())
           .font(.footnote)
           .padding()
-          
-        Text("Watch Now")
-          .font(.title3)
-          .bold()
         
-        ScrollView(.horizontal, showsIndicators: false) {
-          HStack {
-            ForEach($viewModel.providers, id: \.providerId) { provider in
-              ProviderCell(provider: provider)
-            }
-          }
+        if !$viewModel.providers.isEmpty {
+          ProvidersSection(items: $viewModel.providers)
         }
-        .padding()
         
         ScrollView(showsIndicators: false) {
+          if !$viewModel.similarMovies.isEmpty {
             DetailListSection(
               title: "Similar Movies",
-              items: $viewModel.similarMovies
+              items: $viewModel.similarMovies.wrappedValue
             )
             .padding(.bottom)
-            
+          }
+       
+          if !$viewModel.recommendatedMovies.isEmpty {
             DetailListSection(
               title: "People Also Watched",
-              items: $viewModel.recommendatedMovies
+              items: $viewModel.recommendatedMovies.wrappedValue
             )
             .padding(.bottom)
+          }
         }
         .padding()
       }
@@ -83,6 +80,25 @@ struct MovieDetailsView: View {
     .onAppear {
       viewModel.fetchMovieDetails()
     }
+  }
+}
+
+struct ProvidersSection: View {
+  @Binding var items: [WatchProvider]
+ 
+  var body: some View {
+    Text("Watch Now")
+      .font(.title3)
+      .bold()
+    
+    ScrollView(.horizontal, showsIndicators: false) {
+      HStack {
+        ForEach($items, id: \.providerId) { provider in
+          ProviderCell(provider: provider)
+        }
+      }
+    }
+    .padding()
   }
 }
 
@@ -109,16 +125,18 @@ struct ProviderCell: View {
 
 struct DetailListSection: View {
   let title: String
-  @Binding var items: [Movie]
-  
-  @State private var scrollPosition: CGFloat = .zero
+  let items: [Movie]
   
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
-          ForEach($items, id: \.id) { movie in
-            ImageView(movie: movie)
+          ForEach(items, id: \.id) { movie in
+            ImageViewCell(
+              imageUrl: movie.imageUrl,
+              title: movie.title,
+              date: movie.formattedDate
+            )
           }
         }
       }

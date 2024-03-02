@@ -5,7 +5,7 @@ public struct MovieResponse: Decodable {
   let results: [Movie]
 }
 
-public struct Movie: Decodable, Identifiable, Hashable {
+public struct Movie: Decodable, Hashable {
   public let adult: Bool
   public let backdropPath: String?
   public let id: Int

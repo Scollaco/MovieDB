@@ -20,7 +20,7 @@ struct MoviesMainView: View {
         category: .nowPlaying,
         viewModel: viewModel,
         router: router,
-        items: $viewModel.nowPlayingMovies
+        items: $viewModel.nowPlayingMovies.wrappedValue
       )
       .padding(.bottom)
       
@@ -29,7 +29,7 @@ struct MoviesMainView: View {
         category: .topRated,
         viewModel: viewModel,
         router: router,
-        items: $viewModel.topRatedMovies
+        items: $viewModel.topRatedMovies.wrappedValue
       )
       .padding(.bottom)
       
@@ -38,7 +38,7 @@ struct MoviesMainView: View {
         category: .popular,
         viewModel: viewModel,
         router: router,
-        items: $viewModel.popularMovies
+        items: $viewModel.popularMovies.wrappedValue
       )
       
       ListSection(
@@ -46,7 +46,7 @@ struct MoviesMainView: View {
         category: .upcoming,
         viewModel: viewModel,
         router: router,
-        items: $viewModel.upcomingMovies
+        items: $viewModel.upcomingMovies.wrappedValue
       )
       .padding(.bottom)
     }
@@ -59,17 +59,17 @@ struct ListSection: View {
   let category: MovieSection
   let viewModel: MoviesMainViewModel
   let router: MoviesRouter
-  @Binding var items: [Movie]
-  
-  @State private var scrollPosition: CGFloat = .zero
-  
+  let items: [Movie]
+    
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
-          ForEach($items, id: \.id) { movie in
-            ImageView(
-              movie: movie
+          ForEach(items, id: \.title) { movie in
+            ImageViewCell(
+              imageUrl: movie.imageUrl,
+              title: movie.title,
+              date: movie.formattedDate
             )
               .onAppear {
                 if viewModel.shouldLoadMoreData(movie.id, items: items) {
@@ -77,7 +77,7 @@ struct ListSection: View {
                 }
               }
               .onTapGesture {
-                router.navigate(to: .details(movie.wrappedValue))
+                router.navigate(to: .details(movie))
               }
           }
         }
@@ -89,39 +89,6 @@ struct ListSection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-  }
-}
-
-struct ImageView: View {
-  @Binding var movie: Movie
-  
-  var body: some View {
-    VStack {
-      if let url = URL(string: movie.imageUrl) {
-        CacheAsyncImage(url: url) { phase in
-          switch phase {
-          case .failure:
-            Image(systemName: "photo") .font(.largeTitle)
-          case .success(let image):
-            image.resizable()
-          default:
-            ProgressView()
-          }
-        }
-        .frame(height: 165)
-        .clipShape(RoundedRectangle(cornerRadius: 5))
-      }
-      
-      Text(movie.title)
-        .font(.footnote)
-        .lineLimit(1)
-        .bold()
-      
-      Text(movie.formattedDate)
-        .font(.caption2)
-        .foregroundStyle(.gray)
-     }
-    .frame(width: 110)
   }
 }
 

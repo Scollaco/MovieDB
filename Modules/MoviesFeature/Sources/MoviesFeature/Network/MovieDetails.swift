@@ -44,7 +44,7 @@ public struct MovieDetails {
   }
   
   public let backdropPath: String?
-  public let genres: [Genre]
+  public let genres: [Genre]?
   public let id: Int
   public let originalTitle: String
   public let title: String
@@ -58,7 +58,7 @@ public struct MovieDetails {
   
   public var trailerURL: URL? {
     let trailer = videos.results.first(where: { $0.type == "Trailer" })
-    return URL(string: "https://youtu.be/\(trailer?.key ?? "")")
+    return URL(string: "https://youtube.com/embed/\(trailer?.key ?? "")")
   }
   
   enum CodingKeys: String, CodingKey{
@@ -75,7 +75,7 @@ extension MovieDetails: Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
-    self.genres = try container.decode([Genre].self, forKey: .genres)
+    self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
     self.id = try container.decode(Int.self, forKey: .id)
     self.originalTitle = try container.decode(String.self, forKey: .originalTitle)
     self.title = try container.decode(String.self, forKey: .title)
