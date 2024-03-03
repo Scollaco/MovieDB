@@ -40,9 +40,8 @@ private let moviesViewsFactory: MoviesViewFactory = {
   MoviesViewFactory(dependencies: MovieDBApp.dependencies)
 }()
 
-private let seriesView: some View = {
-  let factory = SeriesViewFactory(dependencies: MovieDBApp.dependencies)
-  return factory.makeMainView()
+private let seriesViewsFactory: SeriesViewFactory = {
+  SeriesViewFactory(dependencies: MovieDBApp.dependencies)
 }()
 
 //private func detailsView(movie: Movie) -> some View {
@@ -59,8 +58,8 @@ struct DiscoverView: View {
           .withMovieRoutes(dependencies: MovieDBApp.dependencies)
           .tag(0)
         
-        seriesView
-          .withDetailsRoutes()
+        seriesViewsFactory.makeMainView()
+          .withSeriesRoutes(dependencies: MovieDBApp.dependencies)
           .tag(1)
       }
       .navigationTitle("Discover")

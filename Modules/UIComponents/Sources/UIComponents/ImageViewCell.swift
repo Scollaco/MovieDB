@@ -25,7 +25,7 @@ public struct ImageViewCell: View {
         CacheAsyncImage(url: url) { phase in
           switch phase {
           case .failure:
-            Image(systemName: placeholder) .font(.largeTitle)
+            Image(systemName: placeholder)
           case .success(let image):
             image.resizable()
           default:
@@ -34,6 +34,10 @@ public struct ImageViewCell: View {
         }
         .frame(height: 165)
         .clipShape(RoundedRectangle(cornerRadius: 5))
+      } else {
+        Image(systemName: placeholder)
+          .frame(height: 165)
+          .clipShape(RoundedRectangle(cornerRadius: 5))
       }
       
       Text(title)

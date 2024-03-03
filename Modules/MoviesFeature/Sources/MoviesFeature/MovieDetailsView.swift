@@ -15,10 +15,6 @@ struct MovieDetailsView: View {
         if let url = $viewModel.details.wrappedValue?.trailerURL {
           VideoPlayerView(videoUrl: url)
             .frame(height: 230)
-        } else {
-          Text("Trailer unavailable")
-            .font(.title3)
-            .frame(height: 150)
         }
         
         Text($viewModel.details.wrappedValue?.title ?? .init())
@@ -135,7 +131,8 @@ struct DetailListSection: View {
             ImageViewCell(
               imageUrl: movie.imageUrl,
               title: movie.title,
-              date: movie.formattedDate
+              date: movie.formattedDate,
+              placeholder: "movieclapper"
             )
           }
         }

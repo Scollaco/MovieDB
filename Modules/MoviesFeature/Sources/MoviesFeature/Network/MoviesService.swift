@@ -65,7 +65,7 @@ fileprivate struct MovieEndpoint: Endpoint {
 
 fileprivate struct MovieDetailsEndpoint: Endpoint {
   var path: String = "/3/movie/"
-  var additionalHeaders: [String : String]? = nil
+  var additionalHeaders: [String: String]? = nil
   var method: HTTPMethod {
     .get(
       [
