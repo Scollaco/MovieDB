@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -64,7 +64,7 @@
 		3B3FAD0B2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3B3FAD262B8792AB00BE59C8 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Networking; path = Modules/Networking; sourceTree = "<group>"; };
 		3B3FAD272B8793EE00BE59C8 /* UIComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = UIComponents; path = Modules/UIComponents; sourceTree = "<group>"; };
-		3B9BA9ED2B94BE7D00277956 /* SeriesFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SeriesFeature; sourceTree = "<group>"; };
+		3B9BA9F32B94CAA600277956 /* SeriesFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SeriesFeature; path = Modules/SeriesFeature; sourceTree = "<group>"; };
 		3BC2D24D2B8F6B3200D2762D /* Utilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Utilities; path = ../../Utilities; sourceTree = "<group>"; };
 		3BC2D2542B9277D500D2762D /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		3BC2D25A2B928C5900D2762D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		3B3FACDD2B8780B100BE59C8 = {
 			isa = PBXGroup;
 			children = (
-				3B9BA9ED2B94BE7D00277956 /* SeriesFeature */,
+				3B9BA9F32B94CAA600277956 /* SeriesFeature */,
 				3BC2D24D2B8F6B3200D2762D /* Utilities */,
 				3B2764092B8D0843002DB24C /* Details */,
 				3B2764042B8BF35F002DB24C /* Routing */,
@@ -300,8 +300,6 @@
 			);
 			mainGroup = 3B3FACDD2B8780B100BE59C8;
 			packageReferences = (
-				3B27640C2B8E26BD002DB24C /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */,
-				3B9BA9EE2B94BEAA00277956 /* XCLocalSwiftPackageReference "Modules/SeriesFeature" */,
 			);
 			productRefGroup = 3B3FACE72B8780B100BE59C8 /* Products */;
 			projectDirPath = "";
@@ -685,24 +683,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		3B9BA9EE2B94BEAA00277956 /* XCLocalSwiftPackageReference "Modules/SeriesFeature" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Modules/SeriesFeature;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		3B27640C2B8E26BD002DB24C /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SvenTiigi/YouTubePlayerKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.7.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		3B2763CA2B895EC8002DB24C /* MoviesFeature */ = {
