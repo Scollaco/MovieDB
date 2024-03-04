@@ -49,17 +49,33 @@ private let searchViewFactory: SearchViewFactory = {
   SearchViewFactory(dependencies: MovieDBApp.dependencies)
 }()
 
+private let detailsViewFactory: DetailsViewFactory = {
+  DetailsViewFactory(dependencies: MovieDBApp.dependencies)
+}()
+
 struct DiscoverView: View {
   @Binding var path: NavigationPath
   var body: some View {
     NavigationStack(path: $path) {
       TopTabBarView(titles: ["Movies", "TV Series"]) {
         moviesViewsFactory.makeMainView()
-          .withMovieRoutes(dependencies: MovieDBApp.dependencies)
+          .withDetailsRoutes(dependencies: MovieDBApp.dependencies)
+          .navigationDestination(for: MoviesExit.self) { destination in
+            switch destination {
+            case .details(let id, let mediaType):
+              detailsViewFactory.makeDetailsView(id: id, type: mediaType)
+            }
+          }
           .tag(0)
         
         seriesViewsFactory.makeMainView()
-          .withSeriesRoutes(dependencies: MovieDBApp.dependencies)
+          .withDetailsRoutes(dependencies: MovieDBApp.dependencies)
+          .navigationDestination(for: MoviesExit.self) { destination in
+            switch destination {
+            case .details(let id, let mediaType):
+              detailsViewFactory.makeDetailsView(id: id, type: mediaType)
+            }
+          }
           .tag(1)
       }
       .navigationTitle("Discover")

@@ -77,7 +77,7 @@ struct ListSection: View {
                 }
               }
               .onTapGesture {
-                router.navigate(to: .details(movie))
+                router.navigate(to: .details(movie.id, "movie"))
               }
           }
         }
@@ -92,11 +92,11 @@ struct ListSection: View {
   }
 }
 
-#Preview {
-  MoviesMainView(
-    viewModel:  MoviesMainViewModel(service: MockService()),
-    router: MoviesRouter()
-  )
-}
+//#Preview {
+//  MoviesMainView(
+//    viewModel:  MoviesMainViewModel(service: MockService()),
+//    router: MoviesRouter()
+//  )
+//}
 
 

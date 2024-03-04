@@ -25,15 +25,3 @@ final public class SeriesRouter: ModuleRouter {
     appRouter.pop()
   }
 }
-
-public extension View {
-  func withSeriesRoutes(dependencies: Dependencies) -> some View {
-    let factory = SeriesViewFactory(dependencies: dependencies)
-    return navigationDestination(for: SeriesExit.self) { destination in
-      switch destination {
-      case .details(let series):
-        factory.makeSeriesDetailsView(series: series)
-      }
-    }
-  }
-}

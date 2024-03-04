@@ -3,7 +3,6 @@ import Foundation
 
 public protocol Service {
   func fetchMovies(section: MovieSection, page: Int) async throws -> MovieResponse
-  func fetchMovieDetails(id: Int) async throws -> MovieDetails
 }
 
 public enum MovieSection: String {
@@ -35,19 +34,6 @@ final class MoviesService: Service {
       throw(error)
     }
   }
-  
-  func fetchMovieDetails(id: Int) async throws -> MovieDetails {
-    let result = await dependencies.network.request(
-      endpoint: MovieDetailsEndpoint(id: id),
-      type: MovieDetails.self
-    )
-    switch result {
-    case .success(let response):
-      return response
-    case .failure(let error):
-      throw(error)
-    }
-  }
 }
 
 fileprivate struct MovieEndpoint: Endpoint {
@@ -64,23 +50,5 @@ fileprivate struct MovieEndpoint: Endpoint {
   init(category: MovieSection, page: Int = 1) {
     self.path.append(category.rawValue)
     self.page = page
-  }
-}
-
-fileprivate struct MovieDetailsEndpoint: Endpoint {
-  var path: String = "/3/movie/"
-  var additionalHeaders: [String: String]? = nil
-  var method: HTTPMethod {
-    .get(
-      [
-        URLQueryItem(
-          name: "append_to_response",
-          value: "videos,similar,recommendations,watch/providers"
-        )
-      ]
-    )
-  }
-  init(id: Int) {
-    self.path.append("\(id)")
   }
 }

@@ -78,7 +78,7 @@ struct ListSection: View {
                 }
               }
               .onTapGesture {
-                router.navigate(to: .details(series))
+                router.navigate(to: .details(series.id, "tv"))
               }
           }
         }

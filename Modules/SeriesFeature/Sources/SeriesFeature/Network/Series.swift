@@ -1,35 +1,32 @@
 import Foundation
 
-protocol Listable {
-  var name: String { get }
-  var imageUrl: String { get }
-  var id: Int { get }
+public struct SeriesResponse{
+  public let page: Int
+  public let results: [Series]
 }
 
-public struct SeriesResponse: Decodable {
-  let page: Int
-  let results: [Series]
-}
-
-public struct Series: Decodable, Hashable, Listable {
-  let adult: Bool
-  let backdropPath: String?
+public struct Series: Hashable {
+  public let adult: Bool
+  public let backdropPath: String?
   public let id: Int
-  let genreIds: [Int]
-  let originalLanguage: String
-  let originalName: String
-  let overview: String
-  let popularity: Double
-  let posterPath: String?
-  let firstAirDate: String
-  let name: String
-  let voteAverage: Double
-  let voteCount: Int
+  public let genreIds: [Int]
+  public let originalLanguage: String
+  public let originalName: String
+  public let overview: String
+  public let popularity: Double
+  public let posterPath: String?
+  public let firstAirDate: String
+  public let name: String
+  public let voteAverage: Double
+  public let voteCount: Int
 }
 
 extension Series {
-  var imageUrl: String {
+  public var imageUrl: String {
     guard let path = posterPath else { return . init() }
     return "https://image.tmdb.org/t/p/w500/\(path)"
   }
 }
+
+extension Series: Codable {}
+extension SeriesResponse: Codable {}

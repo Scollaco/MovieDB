@@ -1,8 +1,8 @@
 import Foundation
 
 public struct MovieResponse: Decodable {
-  let page: Int
-  let results: [Movie]
+  public let page: Int
+  public let results: [Movie]
 }
 
 public struct Movie: Decodable, Hashable {
