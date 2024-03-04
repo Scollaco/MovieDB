@@ -92,11 +92,9 @@ struct ListSection: View {
   }
 }
 
-//#Preview {
-//  MoviesMainView(
-//    viewModel:  MoviesMainViewModel(service: MockService()),
-//    router: MoviesRouter()
-//  )
-//}
-
-
+#Preview {
+  MoviesMainView(
+    viewModel:  MoviesMainViewModel(service: MockService()),
+    router: MoviesRouter()
+  )
+}

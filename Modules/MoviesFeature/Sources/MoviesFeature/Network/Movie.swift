@@ -3,6 +3,11 @@ import Foundation
 public struct MovieResponse: Decodable {
   public let page: Int
   public let results: [Movie]
+  
+  public init(page: Int, results: [Movie]) {
+    self.page = page
+    self.results = results
+  }
 }
 
 public struct Movie: Decodable, Hashable {

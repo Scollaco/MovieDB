@@ -125,8 +125,9 @@ struct ImageView: View {
   }
 }
 
-//#Preview {
-//  MoviesMainView()
-//}
-//
-
+#Preview {
+  SeriesMainView(
+    viewModel: SeriesMainViewModel(service: MockService()),
+    router: SeriesRouter()
+  )
+}

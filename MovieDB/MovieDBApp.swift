@@ -70,7 +70,7 @@ struct DiscoverView: View {
         
         seriesViewsFactory.makeMainView()
           .withDetailsRoutes(dependencies: MovieDBApp.dependencies)
-          .navigationDestination(for: MoviesExit.self) { destination in
+          .navigationDestination(for: SeriesExit.self) { destination in
             switch destination {
             case .details(let id, let mediaType):
               detailsViewFactory.makeDetailsView(id: id, type: mediaType)
@@ -90,6 +90,13 @@ struct SearchView: View {
   var body: some View {
     NavigationStack(path: $path) {
       searchViewFactory.makeSearchView()
+        .withDetailsRoutes(dependencies: MovieDBApp.dependencies)
+        .navigationDestination(for: SearchExit.self) { destination in
+          switch destination {
+          case .details(let id, let mediaType):
+            detailsViewFactory.makeDetailsView(id: id, type: mediaType)
+          }
+        }
         .navigationTitle("Search")
     }
     .tabItem { Label("Search", systemImage: "magnifyingglass") }

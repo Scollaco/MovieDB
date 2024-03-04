@@ -9,7 +9,7 @@ final class MockService: Service {
   }
 }
 
-extension Series {
+public extension Series {
   static func mock(
     adult: Bool = true,
     backdropPath: String = "",

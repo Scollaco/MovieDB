@@ -6,18 +6,18 @@ protocol ModuleRouter {
   var appRouter: RouterInterface? { get }
 }
 
-public enum SeriesExit: Hashable {
+public enum SearchExit: Hashable {
   case details(Int, String)
 }
 
-final public class SeriesRouter: ModuleRouter {
+final public class SearchRouter: ModuleRouter {
   private(set) var appRouter: RouterInterface?
   
   public init(with appRouter: RouterInterface? = nil) {
     self.appRouter = appRouter
   }
   
-  func navigate(to target: SeriesExit) {
+  func navigate(to target: SearchExit) {
     appRouter?.navigate(to: target)
   }
   

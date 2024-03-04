@@ -1,11 +1,11 @@
 import Foundation
 
-public struct SeriesResponse{
+public struct SeriesResponse: Decodable {
   public let page: Int
   public let results: [Series]
 }
 
-public struct Series: Hashable {
+public struct Series: Decodable, Hashable {
   public let adult: Bool
   public let backdropPath: String?
   public let id: Int
@@ -27,6 +27,3 @@ extension Series {
     return "https://image.tmdb.org/t/p/w500/\(path)"
   }
 }
-
-extension Series: Codable {}
-extension SeriesResponse: Codable {}

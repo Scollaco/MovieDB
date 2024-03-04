@@ -5,7 +5,7 @@ public struct SearchResultResponse: Decodable {
   let results: [SearchResult]
 }
 
-public struct SearchResult: Decodable {
+public struct SearchResult {
   enum MediaType: String {
     case movie
     case tv
@@ -32,18 +32,6 @@ public struct SearchResult: Decodable {
     case voteAverage
   }
   
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.backDropPath = try container.decodeIfPresent(String.self, forKey: .backDropPath)
-    self.id = try container.decode(Int.self, forKey: .id)
-    self.mediaTypeString = try container.decodeIfPresent(String.self, forKey: .mediaType)
-    self.title = try container.decodeIfPresent(String.self, forKey: .title)
-    self.name = try container.decodeIfPresent(String.self, forKey: .name)
-    self.posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath)  
-    self.popularity = try container.decodeIfPresent(Double.self, forKey: .popularity)
-    self.voteAverage = try container.decodeIfPresent(Double.self, forKey: .voteAverage)
-  }
-  
   var mediaType: MediaType {
     guard let type = mediaTypeString else { return .unknown }
     return MediaType(rawValue: type) ?? .unknown
@@ -53,5 +41,19 @@ public struct SearchResult: Decodable {
     let path = posterPath ?? backDropPath
     guard let path = path else { return . init() }
     return "https://image.tmdb.org/t/p/w500/\(path)"
+  }
+}
+
+extension SearchResult: Decodable {
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.backDropPath = try container.decodeIfPresent(String.self, forKey: .backDropPath)
+    self.id = try container.decode(Int.self, forKey: .id)
+    self.mediaTypeString = try container.decodeIfPresent(String.self, forKey: .mediaType)
+    self.title = try container.decodeIfPresent(String.self, forKey: .title)
+    self.name = try container.decodeIfPresent(String.self, forKey: .name)
+    self.posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath)
+    self.popularity = try container.decodeIfPresent(Double.self, forKey: .popularity)
+    self.voteAverage = try container.decodeIfPresent(Double.self, forKey: .voteAverage)
   }
 }

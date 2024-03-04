@@ -11,6 +11,6 @@ public final class SearchViewFactory {
   public func makeSearchView() -> some View {
     let service = SearchService(dependencies: dependencies)
     let viewModel = SearchViewModel(service: service)
-    return SearchView(viewModel: viewModel)
+    return SearchView(viewModel: viewModel, router: SearchRouter(with: dependencies.router))
   }
 }

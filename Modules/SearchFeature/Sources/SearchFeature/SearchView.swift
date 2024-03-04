@@ -6,10 +6,11 @@ import CoreData
 
 struct SearchView: View {
   @ObservedObject private var viewModel: SearchViewModel
-  @State private var searchTerm: String = .init()
+  private var router: SearchRouter
   
-  init(viewModel: SearchViewModel) {
+  init(viewModel: SearchViewModel, router: SearchRouter) {
     self.viewModel = viewModel
+    self.router = router
   }
   
   public var body: some View {
@@ -18,21 +19,37 @@ struct SearchView: View {
       GridItem(.fixed(110)),
       GridItem(.fixed(110))
     ]
+    
     ScrollView {
       LazyVGrid(columns: layout) {
         ForEach($viewModel.results, id: \.id) { result in
           SearchCell(result: result)
+            .onTapGesture {
+              router.navigate(
+                to: .details(result.wrappedValue.id, result.wrappedValue.mediaType.rawValue)
+              )
+            }
         }
       }
-      .searchable(
-        text: $viewModel.debouncedQuery,
-        prompt: "Search movies and series"
-      )
-      .onChange(of: $viewModel.debouncedQuery.wrappedValue) { _ in
-        viewModel.search()
+      Spacer(minLength: 200)
+      VStack {
+        Text("Find movies and series")
+          .font(.title)
+          .bold()
+        Text("Search for titles to find your favorite movies and series.")
+          .multilineTextAlignment(.center)
       }
+      .padding()
+      .foregroundColor(.gray)
     }
     .scrollDismissesKeyboard(.immediately)
+    .searchable(
+      text: $viewModel.debouncedQuery,
+      prompt: "Search movies and series"
+    )
+    .onChange(of: $viewModel.debouncedQuery.wrappedValue) { _ in
+      viewModel.search()
+    }
   }
 }
 
@@ -67,4 +84,11 @@ struct SearchCell: View {
         .font(.footnote)
     }
   }
+}
+
+#Preview {
+  SearchView(
+    viewModel: SearchViewModel(service: MockService()),
+    router: SearchRouter()
+  )
 }
