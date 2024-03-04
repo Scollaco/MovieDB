@@ -19,6 +19,7 @@
 		3B3FAD0A2B8780B400BE59C8 /* MovieDBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FAD092B8780B400BE59C8 /* MovieDBUITests.swift */; };
 		3B3FAD0C2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FAD0B2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift */; };
 		3B9BA9F02B94BEAA00277956 /* SeriesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3B9BA9EF2B94BEAA00277956 /* SeriesFeature */; };
+		3B9BA9F62B94D5D200277956 /* SearchFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3B9BA9F52B94D5D200277956 /* SearchFeature */; };
 		3BC2D24F2B8FA61C00D2762D /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC2D24E2B8FA61C00D2762D /* Utilities */; };
 		3BC2D2552B9277D500D2762D /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3BC2D2542B9277D500D2762D /* Secrets.xcconfig */; };
 		3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21DC2B88CABE00130BF5 /* Dependencies */; };
@@ -65,6 +66,7 @@
 		3B3FAD262B8792AB00BE59C8 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Networking; path = Modules/Networking; sourceTree = "<group>"; };
 		3B3FAD272B8793EE00BE59C8 /* UIComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = UIComponents; path = Modules/UIComponents; sourceTree = "<group>"; };
 		3B9BA9F32B94CAA600277956 /* SeriesFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SeriesFeature; path = Modules/SeriesFeature; sourceTree = "<group>"; };
+		3B9BA9F42B94D24800277956 /* SearchFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SearchFeature; path = Modules/SearchFeature; sourceTree = "<group>"; };
 		3BC2D24D2B8F6B3200D2762D /* Utilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Utilities; path = ../../Utilities; sourceTree = "<group>"; };
 		3BC2D2542B9277D500D2762D /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		3BC2D25A2B928C5900D2762D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				3B27640B2B8D196F002DB24C /* Details in Frameworks */,
 				3BCD21ED2B88ED4600130BF5 /* ImageProvider in Frameworks */,
 				3B2764082B8CC946002DB24C /* Routing in Frameworks */,
+				3B9BA9F62B94D5D200277956 /* SearchFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +117,7 @@
 		3B3FACDD2B8780B100BE59C8 = {
 			isa = PBXGroup;
 			children = (
+				3B9BA9F42B94D24800277956 /* SearchFeature */,
 				3B9BA9F32B94CAA600277956 /* SeriesFeature */,
 				3BC2D24D2B8F6B3200D2762D /* Utilities */,
 				3B2764092B8D0843002DB24C /* Details */,
@@ -226,6 +230,7 @@
 				3B27640A2B8D196F002DB24C /* Details */,
 				3BC2D24E2B8FA61C00D2762D /* Utilities */,
 				3B9BA9EF2B94BEAA00277956 /* SeriesFeature */,
+				3B9BA9F52B94D5D200277956 /* SearchFeature */,
 			);
 			productName = MovieDB;
 			productReference = 3B3FACE62B8780B100BE59C8 /* MovieDB.app */;
@@ -700,6 +705,10 @@
 		3B9BA9EF2B94BEAA00277956 /* SeriesFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SeriesFeature;
+		};
+		3B9BA9F52B94D5D200277956 /* SearchFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SearchFeature;
 		};
 		3BC2D24E2B8FA61C00D2762D /* Utilities */ = {
 			isa = XCSwiftPackageProductDependency;

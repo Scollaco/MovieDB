@@ -6,8 +6,8 @@ protocol ModuleRouter {
   var appRouter: RouterInterface { get }
 }
 
-public enum SeriesRoute: Hashable {
-  case details(Series)
+public enum SeriesExit: Hashable {
+  case details(Int, String)
 }
 
 final public class SeriesRouter: ModuleRouter {
@@ -17,7 +17,7 @@ final public class SeriesRouter: ModuleRouter {
     self.appRouter = appRouter
   }
   
-  func navigate(to target: SeriesRoute) {
+  func navigate(to target: SeriesExit) {
     appRouter.navigate(to: target)
   }
   
@@ -29,7 +29,7 @@ final public class SeriesRouter: ModuleRouter {
 public extension View {
   func withSeriesRoutes(dependencies: Dependencies) -> some View {
     let factory = SeriesViewFactory(dependencies: dependencies)
-    return self.navigationDestination(for: SeriesRoute.self) { destination in
+    return navigationDestination(for: SeriesExit.self) { destination in
       switch destination {
       case .details(let series):
         factory.makeSeriesDetailsView(series: series)

@@ -7,6 +7,7 @@ import Networking
 import Routing
 import SeriesFeature
 import SwiftUI
+import SearchFeature
 import UIComponents
 
 @main
@@ -20,7 +21,7 @@ struct MovieDBApp: App {
     WindowGroup {
       TabView {
         DiscoverView(path: $router.path)
-        TabView2(path: $router.path)
+        SearchView(path: $router.path)
         TabView3(path: $router.path)
       }
       .navigationBarTitleDisplayMode(.large)
@@ -44,10 +45,9 @@ private let seriesViewsFactory: SeriesViewFactory = {
   SeriesViewFactory(dependencies: MovieDBApp.dependencies)
 }()
 
-//private func detailsView(movie: Movie) -> some View {
-//  let factory = DetailsViewFactory(dependencies: MovieDBApp.dependencies)
-//  return factory.makeDetailsView(movie: movie)
-//}
+private let searchViewFactory: SearchViewFactory = {
+  SearchViewFactory(dependencies: MovieDBApp.dependencies)
+}()
 
 struct DiscoverView: View {
   @Binding var path: NavigationPath
@@ -68,12 +68,12 @@ struct DiscoverView: View {
   }
 }
 
-struct TabView2: View {
+struct SearchView: View {
   @Binding var path: NavigationPath
   
   var body: some View {
     NavigationStack(path: $path) {
-      ContentView2()
+      searchViewFactory.makeSearchView()
         .navigationTitle("Search")
     }
     .tabItem { Label("Search", systemImage: "magnifyingglass") }

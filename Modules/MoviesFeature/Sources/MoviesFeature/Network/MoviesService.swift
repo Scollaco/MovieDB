@@ -54,7 +54,11 @@ fileprivate struct MovieEndpoint: Endpoint {
   var path: String = "/3/movie/"
   var additionalHeaders: [String : String]? = nil
   var method: HTTPMethod {
-    .get([URLQueryItem(name: "page", value: "\(page)")])
+    .get(
+      [
+        URLQueryItem(name: "page", value: "\(page)")
+      ]
+    )
   }
   let page: Int
   init(category: MovieSection, page: Int = 1) {
