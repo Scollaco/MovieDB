@@ -32,26 +32,10 @@ struct MovieDBApp: App {
     .init(
       network: NetworkImpl(),
       imageProvider: ImageProviderImpl(),
-      router: AppRouter(path: .init())
+      router: AppRouter()
     )
   }()
 }
-
-private let moviesViewsFactory: MoviesViewFactory = {
-  MoviesViewFactory(dependencies: MovieDBApp.dependencies)
-}()
-
-private let seriesViewsFactory: SeriesViewFactory = {
-  SeriesViewFactory(dependencies: MovieDBApp.dependencies)
-}()
-
-private let searchViewFactory: SearchViewFactory = {
-  SearchViewFactory(dependencies: MovieDBApp.dependencies)
-}()
-
-private let detailsViewFactory: DetailsViewFactory = {
-  DetailsViewFactory(dependencies: MovieDBApp.dependencies)
-}()
 
 struct DiscoverView: View {
   @Binding var path: NavigationPath
@@ -86,7 +70,6 @@ struct DiscoverView: View {
 
 struct SearchView: View {
   @Binding var path: NavigationPath
-  
   var body: some View {
     NavigationStack(path: $path) {
       searchViewFactory.makeSearchView()

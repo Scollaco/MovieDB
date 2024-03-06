@@ -26,9 +26,9 @@
 		3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21DE2B88CABE00130BF5 /* Networking */; };
 		3BCD21E12B88CABE00130BF5 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21E02B88CABE00130BF5 /* Storage */; };
 		3BCD21E32B88CABE00130BF5 /* UIComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21E22B88CABE00130BF5 /* UIComponents */; };
-		3BCD21E82B88E6CA00130BF5 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCD21E72B88E6CA00130BF5 /* DependencyContainer.swift */; };
 		3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21EA2B88EB0B00130BF5 /* Core */; };
 		3BCD21ED2B88ED4600130BF5 /* ImageProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21EC2B88ED4600130BF5 /* ImageProvider */; };
+		3BFAB0232B96C39B005849FE /* ViewFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFAB0222B96C39B005849FE /* ViewFactories.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,8 +73,8 @@
 		3BCD21D92B8795D000130BF5 /* Storage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Storage; path = Modules/Storage; sourceTree = "<group>"; };
 		3BCD21DA2B88CA1600130BF5 /* Dependencies */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Dependencies; path = Modules/Dependencies; sourceTree = "<group>"; };
 		3BCD21E42B88DCBB00130BF5 /* ImageProvider */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ImageProvider; path = Modules/ImageProvider; sourceTree = "<group>"; };
-		3BCD21E72B88E6CA00130BF5 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		3BCD21E92B88E89200130BF5 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Modules/Core; sourceTree = "<group>"; };
+		3BFAB0222B96C39B005849FE /* ViewFactories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFactories.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,7 +154,6 @@
 				3BC2D25B2B93792700D2762D /* App */,
 				3B3FACE92B8780B100BE59C8 /* MovieDBApp.swift */,
 				3B3FACEB2B8780B100BE59C8 /* ContentView.swift */,
-				3BCD21E72B88E6CA00130BF5 /* DependencyContainer.swift */,
 				3B3FACEF2B8780B400BE59C8 /* Preview Content */,
 				3B2764052B8CC448002DB24C /* AppRouter.swift */,
 			);
@@ -189,6 +188,7 @@
 		3BC2D25B2B93792700D2762D /* App */ = {
 			isa = PBXGroup;
 			children = (
+				3BFAB0212B96C372005849FE /* ViewFactories */,
 				3BC2D2542B9277D500D2762D /* Secrets.xcconfig */,
 				3B3FACED2B8780B400BE59C8 /* Assets.xcassets */,
 			);
@@ -200,6 +200,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3BFAB0212B96C372005849FE /* ViewFactories */ = {
+			isa = PBXGroup;
+			children = (
+				3BFAB0222B96C39B005849FE /* ViewFactories.swift */,
+			);
+			path = ViewFactories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -351,8 +359,8 @@
 			files = (
 				3B2764062B8CC448002DB24C /* AppRouter.swift in Sources */,
 				3B3FACEC2B8780B100BE59C8 /* ContentView.swift in Sources */,
-				3BCD21E82B88E6CA00130BF5 /* DependencyContainer.swift in Sources */,
 				3B3FACEA2B8780B100BE59C8 /* MovieDBApp.swift in Sources */,
+				3BFAB0232B96C39B005849FE /* ViewFactories.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

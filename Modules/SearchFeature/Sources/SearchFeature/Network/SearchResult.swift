@@ -44,7 +44,7 @@ public struct SearchResult {
   }
 }
 
-extension SearchResult: Decodable {
+extension SearchResult: Decodable, Hashable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.backDropPath = try container.decodeIfPresent(String.self, forKey: .backDropPath)

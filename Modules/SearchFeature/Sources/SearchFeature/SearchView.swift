@@ -24,6 +24,7 @@ struct SearchView: View {
       LazyVGrid(columns: layout) {
         ForEach($viewModel.results, id: \.id) { result in
           SearchCell(result: result)
+            .tag(result.id.wrappedValue)
             .onTapGesture {
               router.navigate(
                 to: .details(result.wrappedValue.id, result.wrappedValue.mediaType.rawValue)
@@ -57,13 +58,14 @@ struct SearchCell: View {
   @Binding var result: SearchResult
   
   var body: some View {
+    let placeholder = result.mediaType == .movie ? "movieclapper" : "tv"
     VStack {
       if let url = URL(string: result.imageUrl) {
         CacheAsyncImage(url: url) { phase in
           switch phase {
           case .failure:
             Image(
-              systemName: result.mediaType == .movie ? "movieclapper" : "tv"
+              systemName: placeholder
             )
           case .success(let image):
             image.resizable()
@@ -74,14 +76,14 @@ struct SearchCell: View {
         .frame(height: 165)
         .clipShape(RoundedRectangle(cornerRadius: 5))
       } else {
-        Image(
-          systemName: result.mediaType == .movie ? "movieclapper" : "tv"
-        )
-        .frame(height: 165)
-        .clipShape(RoundedRectangle(cornerRadius: 5))
+        Image(systemName: placeholder)
+          .frame(height: 165)
+          .clipShape(RoundedRectangle(cornerRadius: 5))
       }
       Text(result.title ?? result.name ?? "")
         .font(.footnote)
+        .bold()
+        .padding()
     }
   }
 }

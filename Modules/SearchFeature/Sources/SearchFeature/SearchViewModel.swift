@@ -16,7 +16,7 @@ final class SearchViewModel: ObservableObject {
   @MainActor
   func search() {
     $debouncedQuery
-      .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+      .debounce(for: .seconds(0.3), scheduler: RunLoop.main)
       .sink(receiveValue: { [weak self] value in
         Task {
           do {
