@@ -1,7 +1,8 @@
 import Foundation
 import Dependencies
+import SwiftUI
 
-public final class NetworkImpl: NetworkInterface {
+public final class NetworkImpl: NetworkInterface, ObservableObject {
   private let session: URLSession = URLSession.shared
   private let decoder: JSONDecoder
   private let authToken: String = Environment.authToken

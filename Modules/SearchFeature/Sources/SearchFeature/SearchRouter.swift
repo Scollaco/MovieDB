@@ -2,26 +2,35 @@ import Foundation
 import Dependencies
 import SwiftUI
 
-protocol ModuleRouter {
-  var appRouter: RouterInterface? { get }
-}
-
-public enum SearchExit: Hashable {
-  case details(Int, String)
-}
-
-final public class SearchRouter: ModuleRouter {
-  private(set) var appRouter: RouterInterface?
-  
-  public init(with appRouter: RouterInterface? = nil) {
-    self.appRouter = appRouter
+public enum SearchRoutes: Hashable, View {
+  public static func == (lhs: SearchRoutes, rhs: SearchRoutes) -> Bool {
+    lhs.hashValue == rhs.hashValue
   }
   
-  func navigate(to target: SearchExit) {
-    appRouter?.navigate(to: target)
+  public func hash(into hasher: inout Hasher) {
+    switch self {
+    case .details(id: let id, mediaType: let mediaType, dependencies: _):
+      hasher.combine(id)
+      hasher.combine(mediaType)
+    }
   }
   
-  func pop() {
-    appRouter?.pop()
+  case details(
+    id: Int,
+    mediaType: SearchResult.MediaType?,
+    dependencies: Dependencies
+  )
+  
+  public var body: some View {
+    switch self {
+    case .details(let id, let type, let dependencies):
+      let factory = SearchViewFactory(dependencies: dependencies)
+      return factory.makeSearchDetailsView(
+        id: id,
+        mediaType: type,
+        dependencies: dependencies
+      )
+      .navigationLinkValues(SearchRoutes.self)
+    }
   }
 }

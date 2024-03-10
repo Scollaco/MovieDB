@@ -1,5 +1,6 @@
-import Foundation
 import Dependencies
+import Foundation
+import Networking
 import Utilities
 import UIComponents
 import SwiftUI
@@ -7,20 +8,21 @@ import CoreData
 
 struct MoviesMainView: View {
   @ObservedObject private var viewModel: MoviesMainViewModel
-  private var router: MoviesRouter
+  private let dependencies: Dependencies
   
-  init(viewModel: MoviesMainViewModel, router: MoviesRouter) {
+  init(viewModel: MoviesMainViewModel, dependencies: Dependencies) {
     self.viewModel = viewModel
-    self.router = router
+    self.dependencies = dependencies
   }
+  
   public var body: some View {
     ScrollView(showsIndicators: false) {
       ListSection(
         title: "Now Playing",
         category: .nowPlaying,
         viewModel: viewModel,
-        router: router,
-        items: $viewModel.nowPlayingMovies.wrappedValue
+        items: $viewModel.nowPlayingMovies.wrappedValue,
+        dependencies: dependencies
       )
       .padding(.bottom)
       
@@ -28,8 +30,8 @@ struct MoviesMainView: View {
         title: "Top Rated",
         category: .topRated,
         viewModel: viewModel,
-        router: router,
-        items: $viewModel.topRatedMovies.wrappedValue
+        items: $viewModel.topRatedMovies.wrappedValue,
+        dependencies: dependencies
       )
       .padding(.bottom)
       
@@ -37,16 +39,16 @@ struct MoviesMainView: View {
         title: "Popular",
         category: .popular,
         viewModel: viewModel,
-        router: router,
-        items: $viewModel.popularMovies.wrappedValue
+        items: $viewModel.popularMovies.wrappedValue,
+        dependencies: dependencies
       )
       
       ListSection(
         title: "Upcoming",
         category: .upcoming,
         viewModel: viewModel,
-        router: router,
-        items: $viewModel.upcomingMovies.wrappedValue
+        items: $viewModel.upcomingMovies.wrappedValue,
+        dependencies: dependencies
       )
       .padding(.bottom)
     }
@@ -58,27 +60,28 @@ struct ListSection: View {
   let title: String
   let category: MovieSection
   let viewModel: MoviesMainViewModel
-  let router: MoviesRouter
   let items: [Movie]
-    
+  let dependencies: Dependencies
+  
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach(items, id: \.title) { movie in
-            ImageViewCell(
-              imageUrl: movie.imageUrl,
-              title: movie.title,
-              date: movie.formattedDate
-            )
-              .onAppear {
-                if viewModel.shouldLoadMoreData(movie.id, items: items) {
-                  viewModel.loadMoreData(for: category)
+            NavigationLink(
+              value: MoviesRoutes.details(id: movie.id, dependencies: dependencies),
+              label: {
+                ImageViewCell(
+                  imageUrl: movie.imageUrl,
+                  title: movie.title,
+                  date: movie.formattedDate
+                )
+                .onAppear {
+                  if viewModel.shouldLoadMoreData(movie.id, items: items) {
+                    viewModel.loadMoreData(for: category)
+                  }
                 }
-              }
-              .onTapGesture {
-                router.navigate(to: .details(movie.id, "movie"))
-              }
+              })
           }
         }
       }
@@ -92,9 +95,8 @@ struct ListSection: View {
   }
 }
 
-#Preview {
-  MoviesMainView(
-    viewModel:  MoviesMainViewModel(service: MockService()),
-    router: MoviesRouter()
-  )
-}
+//#Preview {
+//  MoviesMainView(
+//    viewModel: MoviesMainViewModel(service: MockService())
+//  )
+//}

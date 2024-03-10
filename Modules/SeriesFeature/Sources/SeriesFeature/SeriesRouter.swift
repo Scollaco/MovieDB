@@ -2,26 +2,25 @@ import Foundation
 import Dependencies
 import SwiftUI
 
-protocol ModuleRouter {
-  var appRouter: RouterInterface? { get }
-}
-
-public enum SeriesExit: Hashable {
-  case details(Int, String)
-}
-
-final public class SeriesRouter: ModuleRouter {
-  private(set) var appRouter: RouterInterface?
-  
-  public init(with appRouter: RouterInterface? = nil) {
-    self.appRouter = appRouter
+public enum SeriesRoutes: Hashable, View {
+  public static func == (lhs: SeriesRoutes, rhs: SeriesRoutes) -> Bool {
+    lhs.hashValue == rhs.hashValue
   }
   
-  func navigate(to target: SeriesExit) {
-    appRouter?.navigate(to: target)
+  public func hash(into hasher: inout Hasher) {
+    switch self {
+    case .details(id: let id, dependencies: _):
+      hasher.combine(id)
+    }
   }
   
-  func pop() {
-    appRouter?.pop()
+  case details(id: Int, dependencies: Dependencies)
+  
+  public var body: some View {
+    switch self {
+    case .details(let id, let dependencies):
+      let factory = SeriesViewFactory(dependencies: dependencies)
+      return factory.makeSeriesDetailsView(id: id)
+    }
   }
 }

@@ -6,10 +6,9 @@ public struct SearchResultResponse: Decodable {
 }
 
 public struct SearchResult {
-  enum MediaType: String {
+  public enum MediaType: String {
     case movie
     case tv
-    case unknown
   }
   
   var backDropPath: String?
@@ -32,9 +31,12 @@ public struct SearchResult {
     case voteAverage
   }
   
-  var mediaType: MediaType {
-    guard let type = mediaTypeString else { return .unknown }
-    return MediaType(rawValue: type) ?? .unknown
+  var mediaType: MediaType? {
+    guard let type = mediaTypeString else {
+      assertionFailure("Unknown type")
+      return nil
+    }
+    return MediaType(rawValue: type)
   }
   
   var imageUrl: String {

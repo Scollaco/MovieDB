@@ -7,11 +7,11 @@ import CoreData
 
 struct SeriesMainView: View {
   @ObservedObject private var viewModel: SeriesMainViewModel
-  private var router: SeriesRouter
-  
-  init(viewModel: SeriesMainViewModel, router: SeriesRouter) {
+  private let dependencies: Dependencies
+
+  init(viewModel: SeriesMainViewModel, dependencies: Dependencies) {
     self.viewModel = viewModel
-    self.router = router
+    self.dependencies = dependencies
   }
   public var body: some View {
     ScrollView(showsIndicators: false) {
@@ -19,8 +19,8 @@ struct SeriesMainView: View {
         title: "Airing today",
         category: .airingToday,
         viewModel: viewModel,
-        router: router,
-        items: $viewModel.airingTodaySeries.wrappedValue
+        items: $viewModel.airingTodaySeries.wrappedValue,
+        dependencies: dependencies
       )
       .padding(.bottom)
       
@@ -28,8 +28,8 @@ struct SeriesMainView: View {
         title: "Top rated",
         category: .topRated,
         viewModel: viewModel,
-        router: router,
-        items: $viewModel.topRatedSeries.wrappedValue
+        items: $viewModel.topRatedSeries.wrappedValue,
+        dependencies: dependencies
       )
       .padding(.bottom)
       
@@ -37,16 +37,16 @@ struct SeriesMainView: View {
         title: "Popular",
         category: .popular,
         viewModel: viewModel,
-        router: router,
-        items: $viewModel.popularSeries.wrappedValue
+        items: $viewModel.popularSeries.wrappedValue,
+        dependencies: dependencies
       )
       
       ListSection(
         title: "On the air",
         category: .onTheAir,
         viewModel: viewModel,
-        router: router,
-        items: $viewModel.onTheAirSeries.wrappedValue
+        items: $viewModel.onTheAirSeries.wrappedValue,
+        dependencies: dependencies
       )
       .padding(.bottom)
     }
@@ -58,9 +58,9 @@ struct ListSection: View {
   let title: String
   let category: Category
   let viewModel: SeriesMainViewModel
-  let router: SeriesRouter
   let items: [Series]
-  
+  let dependencies: Dependencies
+
   @State private var scrollPosition: CGFloat = .zero
   
   var body: some View {
@@ -68,17 +68,21 @@ struct ListSection: View {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach(items, id: \.id) { series in
-            ImageViewCell(
-              imageUrl: series.imageUrl,
-              title: series.name
-            )
+            NavigationLink(
+              value: SeriesRoutes.details(
+                id: series.id,
+                dependencies: dependencies
+              ),
+              label: {
+                ImageViewCell(
+                  imageUrl: series.imageUrl,
+                  title: series.name
+                )
+              })
               .onAppear {
                 if viewModel.shouldLoadMoreData(series.id, items: items) {
                   viewModel.loadMoreData(for: category)
                 }
-              }
-              .onTapGesture {
-                router.navigate(to: .details(series.id, "tv"))
               }
           }
         }
@@ -125,9 +129,8 @@ struct ImageView: View {
   }
 }
 
-#Preview {
-  SeriesMainView(
-    viewModel: SeriesMainViewModel(service: MockService()),
-    router: SeriesRouter()
-  )
-}
+//#Preview {
+//  SeriesMainView(
+//    viewModel: SeriesMainViewModel(service: MockService())
+//  )
+//}

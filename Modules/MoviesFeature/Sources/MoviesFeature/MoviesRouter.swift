@@ -2,26 +2,25 @@ import Foundation
 import Dependencies
 import SwiftUI
 
-protocol ModuleRouter {
-  var appRouter: RouterInterface? { get }
-}
-
-public enum MoviesExit: Hashable {
-  case details(Int, String)
-}
-
-final public class MoviesRouter: ModuleRouter {
-  private(set) var appRouter: RouterInterface?
-  
-  public init(with appRouter: RouterInterface? = nil) {
-    self.appRouter = appRouter
+public enum MoviesRoutes: Hashable, View {
+  public static func == (lhs: MoviesRoutes, rhs: MoviesRoutes) -> Bool {
+    lhs.hashValue == rhs.hashValue
   }
   
-  func navigate(to target: MoviesExit) {
-    appRouter?.navigate(to: target)
+  public func hash(into hasher: inout Hasher) {
+    switch self {
+    case .details(id: let id, dependencies: _):
+      hasher.combine(id)
+    }
   }
   
-  func pop() {
-    appRouter?.pop()
+  case details(id: Int, dependencies: Dependencies)
+
+  public var body: some View {
+    switch self {
+    case .details(let id, let dependencies):
+      let factory = MoviesViewFactory(dependencies: dependencies)
+      return factory.makeMovieDetailsView(id: id)
+    }
   }
 }

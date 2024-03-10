@@ -1,65 +1,46 @@
 import Core
 import Dependencies
 import Details
-import ImageProvider
 import MoviesFeature
 import Networking
 import Routing
+import SearchFeature
 import SeriesFeature
 import SwiftUI
-import SearchFeature
 import UIComponents
 
 @main
 struct MovieDBApp: App {
-  @ObservedObject var router: AppRouter
-  init() {
-    self.router = MovieDBApp.dependencies.router as! AppRouter
-  }
+  init() {}
   
   var body: some Scene {
     WindowGroup {
       TabView {
-        DiscoverView(path: $router.path)
-        SearchView(path: $router.path)
-        TabView3(path: $router.path)
+        DiscoverView()
+        SearchView()
+        TabView3()
       }
+      .environmentObject(NetworkImpl())
       .navigationBarTitleDisplayMode(.large)
     }
   }
   
   static let dependencies: ConcreteDependencies = {
     .init(
-      network: NetworkImpl(),
-      imageProvider: ImageProviderImpl(),
-      router: AppRouter()
+      network: NetworkImpl()
     )
   }()
 }
 
 struct DiscoverView: View {
-  @Binding var path: NavigationPath
   var body: some View {
-    NavigationStack(path: $path) {
+    NavigationStack {
       TopTabBarView(titles: ["Movies", "TV Series"]) {
         moviesViewsFactory.makeMainView()
-          .withDetailsRoutes(dependencies: MovieDBApp.dependencies)
-          .navigationDestination(for: MoviesExit.self) { destination in
-            switch destination {
-            case .details(let id, let mediaType):
-              detailsViewFactory.makeDetailsView(id: id, type: mediaType)
-            }
-          }
           .tag(0)
         
         seriesViewsFactory.makeMainView()
-          .withDetailsRoutes(dependencies: MovieDBApp.dependencies)
-          .navigationDestination(for: SeriesExit.self) { destination in
-            switch destination {
-            case .details(let id, let mediaType):
-              detailsViewFactory.makeDetailsView(id: id, type: mediaType)
-            }
-          }
+          .navigationLinkValues(SeriesRoutes.self)
           .tag(1)
       }
       .navigationTitle("Discover")
@@ -69,28 +50,17 @@ struct DiscoverView: View {
 }
 
 struct SearchView: View {
-  @Binding var path: NavigationPath
   var body: some View {
-    NavigationStack(path: $path) {
       searchViewFactory.makeSearchView()
-        .withDetailsRoutes(dependencies: MovieDBApp.dependencies)
-        .navigationDestination(for: SearchExit.self) { destination in
-          switch destination {
-          case .details(let id, let mediaType):
-            detailsViewFactory.makeDetailsView(id: id, type: mediaType)
-          }
-        }
+        .navigationLinkValues(SearchRoutes.self)
         .navigationTitle("Search")
-    }
-    .tabItem { Label("Search", systemImage: "magnifyingglass") }
+        .tabItem { Label("Search", systemImage: "magnifyingglass") }
   }
 }
 
-struct TabView3: View {
-  @Binding var path: NavigationPath
-  
+struct TabView3: View {  
   var body: some View {
-    NavigationStack(path: $path) {
+    NavigationStack {
       ContentView()
         .navigationTitle("Watchlist")
     }

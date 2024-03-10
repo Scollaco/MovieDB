@@ -11,6 +11,12 @@ public final class SeriesViewFactory {
   public func makeMainView() -> some View {
     let service = SeriesService(dependencies: dependencies)
     let viewModel = SeriesMainViewModel(service: service)
-    return SeriesMainView(viewModel: viewModel, router: SeriesRouter(with: dependencies.router))
+    return SeriesMainView(viewModel: viewModel, dependencies: dependencies)
+  }
+  
+  public func makeSeriesDetailsView(id: Int) -> some View {
+    let service = SeriesDetailsService(dependencies: dependencies)
+    let viewModel = SeriesDetailsViewModel(id: id, service: service)
+    return SeriesDetailsView(viewModel: viewModel, dependencies: dependencies)
   }
 }

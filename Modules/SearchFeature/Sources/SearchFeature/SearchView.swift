@@ -6,11 +6,11 @@ import CoreData
 
 struct SearchView: View {
   @ObservedObject private var viewModel: SearchViewModel
-  private var router: SearchRouter
+  private let dependencies: Dependencies
   
-  init(viewModel: SearchViewModel, router: SearchRouter) {
+  init(viewModel: SearchViewModel, dependencies: Dependencies) {
     self.viewModel = viewModel
-    self.router = router
+    self.dependencies = dependencies
   }
   
   public var body: some View {
@@ -23,13 +23,16 @@ struct SearchView: View {
     ScrollView {
       LazyVGrid(columns: layout) {
         ForEach($viewModel.results, id: \.id) { result in
-          SearchCell(result: result)
-            .tag(result.id.wrappedValue)
-            .onTapGesture {
-              router.navigate(
-                to: .details(result.wrappedValue.id, result.wrappedValue.mediaType.rawValue)
-              )
-            }
+          NavigationLink(
+            value: SearchRoutes.details(
+              id: result.wrappedValue.id,
+              mediaType: result.wrappedValue.mediaType,
+              dependencies: dependencies
+            ),
+            label: {
+              SearchCell(result: result)
+                .tag(result.id.wrappedValue)
+            })
         }
       }
       Spacer(minLength: 200)
@@ -88,9 +91,8 @@ struct SearchCell: View {
   }
 }
 
-#Preview {
-  SearchView(
-    viewModel: SearchViewModel(service: MockService()),
-    router: SearchRouter()
-  )
-}
+//#Preview {
+//  SearchView(
+//    viewModel: SearchViewModel(service: MockService())
+//  )
+//}
