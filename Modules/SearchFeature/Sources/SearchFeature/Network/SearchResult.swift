@@ -34,10 +34,13 @@ public struct SearchResult {
   
   var mediaType: MediaType {
     guard let type = mediaTypeString else {
-      assertionFailure("Unknown type")
       return .unknown
     }
     return MediaType(rawValue: type) ?? .unknown
+  }
+  
+  var placeholderImage: String {
+    mediaType == .movie ? "movieclapper" : "tv"
   }
   
   var imageUrl: String {

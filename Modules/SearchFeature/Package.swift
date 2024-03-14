@@ -34,6 +34,8 @@ let package = Package(
         ),
         .testTarget(
             name: "SearchFeatureTests",
-            dependencies: ["SearchFeature"]),
+            dependencies: [
+              "SearchFeature"
+            ]),
     ]
 )

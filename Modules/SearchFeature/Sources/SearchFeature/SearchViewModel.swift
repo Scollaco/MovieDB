@@ -7,7 +7,7 @@ final class SearchViewModel: ObservableObject {
   
   @Published var results: [SearchResult] = []
   @Published var debouncedQuery: String = .init()
-  
+  @Published var searchLabelIsVisible: Bool = true
   
   public init(service: Service) {
     self.service = service
@@ -36,5 +36,6 @@ final class SearchViewModel: ObservableObject {
     let sortedResults = response
       .results
     results = sortedResults
+    searchLabelIsVisible = results.isEmpty
   }
 }

@@ -41,15 +41,17 @@ public struct SearchView: View {
         }
       }
       Spacer(minLength: 200)
-      VStack {
-        Text("Find movies and series")
-          .font(.title)
-          .bold()
-        Text("Search for titles to find your favorite movies and series.")
-          .multilineTextAlignment(.center)
+      if viewModel.searchLabelIsVisible {
+        VStack {
+          Text("Find movies and series")
+            .font(.title)
+            .bold()
+          Text("Search for titles to find your favorite movies and series.")
+            .multilineTextAlignment(.center)
+        }
+        .padding()
+        .foregroundColor(.gray)
       }
-      .padding()
-      .foregroundColor(.gray)
     }
     .scrollDismissesKeyboard(.immediately)
     .searchable(
@@ -66,14 +68,13 @@ struct SearchCell: View {
   @Binding var result: SearchResult
   
   var body: some View {
-    let placeholder = result.mediaType == .movie ? "movieclapper" : "tv"
     VStack {
       if let url = URL(string: result.imageUrl) {
         CacheAsyncImage(url: url) { phase in
           switch phase {
           case .failure:
             Image(
-              systemName: placeholder
+              systemName: result.placeholderImage
             )
           case .success(let image):
             image.resizable()
@@ -84,7 +85,7 @@ struct SearchCell: View {
         .frame(height: 165)
         .clipShape(RoundedRectangle(cornerRadius: 5))
       } else {
-        Image(systemName: placeholder)
+        Image(systemName: result.placeholderImage)
           .frame(height: 165)
           .clipShape(RoundedRectangle(cornerRadius: 5))
       }
