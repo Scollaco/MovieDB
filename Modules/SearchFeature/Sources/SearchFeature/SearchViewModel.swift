@@ -30,7 +30,7 @@ final class SearchViewModel: ObservableObject {
   }
   
   @MainActor
-  private func performSearch(query: String) async throws  {
+  func performSearch(query: String) async throws  {
     let response = try await service.search(
       query: query, page: 1)
     let sortedResults = response

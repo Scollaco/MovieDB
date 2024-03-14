@@ -31,7 +31,7 @@ final class MoviesMainViewModelTests: XCTestCase {
     let expectation = XCTestExpectation(description: "Make API calls.")
     sut.loadMoreData(for: .upcoming)
     expectation.fulfill()
-    await  fulfillment(of: [expectation], timeout: 5.0)
+    await fulfillment(of: [expectation], timeout: 5.0)
     
     XCTAssertEqual(sut.nextUpcomingPage, 2)
   }
@@ -42,7 +42,7 @@ final class MoviesMainViewModelTests: XCTestCase {
     let expectation = XCTestExpectation(description: "Make API calls.")
     sut.loadMoreData(for: .popular)
     expectation.fulfill()
-    await  fulfillment(of: [expectation], timeout: 5.0)
+    await fulfillment(of: [expectation], timeout: 5.0)
     
     XCTAssertEqual(sut.nextPopularPage, 2)
   }
