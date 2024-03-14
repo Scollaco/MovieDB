@@ -1,5 +1,6 @@
 import Dependencies
 import Foundation
+import Routing
 import SwiftUI
 import MoviesFeature
 import SeriesFeature
@@ -10,29 +11,32 @@ public final class SearchViewFactory {
     self.dependencies = dependencies
   }
   
-  public func makeSearchView() -> some View {
+  public func makeSearchView() -> SearchView {
     let service = SearchService(dependencies: dependencies)
     let viewModel = SearchViewModel(service: service)
-    return SearchView(viewModel: viewModel, dependencies: dependencies)
+    let coordinator = SearchCoordinator(dependencies: dependencies)
+    return SearchView(
+      viewModel: viewModel,
+      dependencies: dependencies,
+      coordinator: coordinator
+    )
   }
   
-  @ViewBuilder
   func makeSearchDetailsView(
     id: Int,
-    mediaType: SearchResult.MediaType?,
+    mediaType: MediaType,
     dependencies: Dependencies
-  ) -> some View {
+  ) -> any View {
     switch mediaType {
     case .movie:
-      let service = MovieDetailsService(dependencies: dependencies)
-      let viewModel = MovieDetailsViewModel(id: id, service: service)
-      MovieDetailsView(viewModel: viewModel, dependencies: dependencies)
+      let factory = MoviesViewFactory(dependencies: dependencies)
+      return factory.makeMovieDetailsView(id: id)
     case .tv:
-      let service = SeriesDetailsService(dependencies: dependencies)
-      let viewModel = SeriesDetailsViewModel(id: id, service: service)
-      SeriesDetailsView(viewModel: viewModel, dependencies: dependencies)
-    case .none:
-      EmptyView()
+      let factory = SeriesViewFactory(dependencies: dependencies)
+      return factory.makeSeriesDetailsView(id: id)
+    case .unknown:
+      assertionFailure("Unknown type")
+      return EmptyView()
     }
   }
 }

@@ -1,21 +1,31 @@
+import Core
+import Networking
 import MoviesFeature
 import SeriesFeature
 import SearchFeature
 import Details
 import Foundation
 
-let moviesViewsFactory: MoviesViewFactory = {
-  MoviesViewFactory(dependencies: MovieDBApp.dependencies)
-}()
+final class RootViewFactories {
+  static let dependencies: ConcreteDependencies = {
+    .init(
+      network: NetworkImpl()
+    )
+  }()
+  
+  static let moviesViewsFactory: MoviesViewFactory = {
+    MoviesViewFactory(dependencies: dependencies)
+  }()
 
-let seriesViewsFactory: SeriesViewFactory = {
-  SeriesViewFactory(dependencies: MovieDBApp.dependencies)
-}()
+  static let seriesViewsFactory: SeriesViewFactory = {
+    SeriesViewFactory(dependencies: dependencies)
+  }()
 
-let searchViewFactory: SearchViewFactory = {
-  SearchViewFactory(dependencies: MovieDBApp.dependencies)
-}()
+  static let searchViewFactory: SearchViewFactory = {
+    SearchViewFactory(dependencies: dependencies)
+  }()
 
-let detailsViewFactory: DetailsViewFactory = {
-  DetailsViewFactory(dependencies: MovieDBApp.dependencies)
-}()
+  static let detailsViewFactory: DetailsViewFactory = {
+    DetailsViewFactory(dependencies: dependencies)
+  }()
+}

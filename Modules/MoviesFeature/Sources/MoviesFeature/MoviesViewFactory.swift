@@ -1,4 +1,5 @@
 import Dependencies
+import Routing
 import Foundation
 import SwiftUI
 
@@ -8,18 +9,25 @@ public final class MoviesViewFactory {
   
   public init(dependencies: Dependencies) {
     self.dependencies = dependencies
-    self.coordinator = MoviesCoordinator(dependencies: dependencies)
+    coordinator = MoviesCoordinator(dependencies: dependencies)
   }
   
+  @ViewBuilder
   public func makeMainView() -> some View {
     let service = MoviesService(dependencies: dependencies)
     let viewModel = MoviesMainViewModel(service: service)
-    return MoviesMainView(viewModel: viewModel, dependencies: dependencies)
+    MoviesMainView(
+      viewModel: viewModel,
+      dependencies: dependencies,
+      coordinator: coordinator
+    )
   }
   
+  @ViewBuilder
   public func makeMovieDetailsView(id: Int) -> some View {
     let service = MovieDetailsService(dependencies: dependencies)
     let viewModel = MovieDetailsViewModel(id: id, service: service)
-    return MovieDetailsView(viewModel: viewModel, dependencies: dependencies)
+    let coordinator = MoviesCoordinator(dependencies: dependencies)
+    MovieDetailsView(viewModel: viewModel, dependencies: dependencies, coordinator: coordinator)
   }
 }

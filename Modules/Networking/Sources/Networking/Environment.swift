@@ -2,7 +2,7 @@ import Foundation
 
 public enum Environment {
   enum Keys {
-    static let authToken = "AUTH_TOKEN"
+    static let apiKey = "API_KEY"
   }
   
   private static let infoDictionary: [String: Any] = {
@@ -12,8 +12,8 @@ public enum Environment {
     return dict
   }()
   
-  static let authToken: String = {
-    guard let token = Environment.infoDictionary[Keys.authToken] as? String else {
+  static let apiKey: String = {
+    guard let token = Environment.infoDictionary[Keys.apiKey] as? String else {
       fatalError("Token not found on plist")
     }
     return token

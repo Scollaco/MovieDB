@@ -1,16 +1,23 @@
 import Foundation
 import Dependencies
+import Routing
 import UIComponents
 import SwiftUI
 import CoreData
 
-struct SearchView: View {
+public struct SearchView: View {
   @ObservedObject private var viewModel: SearchViewModel
   private let dependencies: Dependencies
-  
-  init(viewModel: SearchViewModel, dependencies: Dependencies) {
+  public weak var coordinator: SearchCoordinator?
+
+  init(
+    viewModel: SearchViewModel,
+    dependencies: Dependencies,
+    coordinator: SearchCoordinator
+  ) {
     self.viewModel = viewModel
     self.dependencies = dependencies
+    self.coordinator = coordinator
   }
   
   public var body: some View {
@@ -23,16 +30,14 @@ struct SearchView: View {
     ScrollView {
       LazyVGrid(columns: layout) {
         ForEach($viewModel.results, id: \.id) { result in
-          NavigationLink(
-            value: SearchRoutes.details(
-              id: result.wrappedValue.id,
-              mediaType: result.wrappedValue.mediaType,
-              dependencies: dependencies
-            ),
-            label: {
               SearchCell(result: result)
                 .tag(result.id.wrappedValue)
-            })
+                .onTapGesture {
+                  coordinator?.goToDetails(
+                    id: result.id.wrappedValue,
+                    type: result.wrappedValue.mediaType
+                  )
+                }
         }
       }
       Spacer(minLength: 200)

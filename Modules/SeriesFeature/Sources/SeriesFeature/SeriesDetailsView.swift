@@ -7,10 +7,16 @@ import AVKit
 public struct SeriesDetailsView: View {
   @ObservedObject private var viewModel: SeriesDetailsViewModel
   private let dependencies: Dependencies
+  private weak var coordinator: SeriesCoordinator?
   
-  public init(viewModel: SeriesDetailsViewModel, dependencies: Dependencies) {
+  public init(
+    viewModel: SeriesDetailsViewModel,
+    dependencies: Dependencies,
+    coordinator: SeriesCoordinator?
+  ) {
     self.viewModel = viewModel
     self.dependencies = dependencies
+    self.coordinator = coordinator
   }
   
   public var body: some View {
@@ -47,25 +53,28 @@ public struct SeriesDetailsView: View {
             DetailListSection(
               title: "Seasons",
               items: $viewModel.seasons.wrappedValue,
-              dependencies: dependencies
+              dependencies: dependencies,
+              coordinator: coordinator
             )
             .padding(.bottom)
           }
-       
+          
           if !$viewModel.similarSeries.isEmpty {
             DetailListSection(
               title: "Similar Series",
               items: $viewModel.similarSeries.wrappedValue,
-              dependencies: dependencies
+              dependencies: dependencies,
+              coordinator: coordinator
             )
             .padding(.bottom)
           }
-       
+          
           if !$viewModel.recommendatedSeries.isEmpty {
             DetailListSection(
               title: "People Also Watched",
               items: $viewModel.recommendatedSeries.wrappedValue,
-              dependencies: dependencies
+              dependencies: dependencies,
+              coordinator: coordinator
             )
           }
         }
@@ -95,7 +104,7 @@ public struct SeriesDetailsView: View {
 
 struct ProvidersSection: View {
   @Binding var items: [WatchProvider]
- 
+  
   var body: some View {
     Text("Watch Now")
       .font(.title3)
@@ -116,26 +125,26 @@ struct DetailListSection: View {
   let title: String
   let items: [Listable]
   let dependencies: Dependencies
-
+  let coordinator: SeriesCoordinator?
+  @State private var isPresenting = false
+  
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach(items, id: \.id) { series in
-            NavigationModal(
-              .sheet,
-              value: SeriesRoutes.details(
-                id: series.id,
-                dependencies: dependencies
-              ),
-              data: SeriesRoutes.self,
-              label: {
-                ImageViewCell(
-                  imageUrl: series.imageUrl,
-                  title: series.name,
-                  placeholder: "tv"
-                )
-              })
+            Button(action: {
+              isPresenting = true
+            }, label: {
+              ImageViewCell(
+                imageUrl: series.imageUrl,
+                title: series.name,
+                placeholder: "tv"
+              )
+            })
+            .sheet(isPresented: $isPresenting) {
+              coordinator?.get(page: .details(id: series.id))
+            }
           }
         }
       }

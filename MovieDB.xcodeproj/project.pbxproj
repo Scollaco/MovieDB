@@ -28,6 +28,8 @@
 		3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 3BCD21EA2B88EB0B00130BF5 /* Core */; };
 		3BFAB0232B96C39B005849FE /* ViewFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFAB0222B96C39B005849FE /* ViewFactories.swift */; };
 		3BFAB06E2B9BB394005849FE /* RootNavigationLinkValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFAB06D2B9BB394005849FE /* RootNavigationLinkValues.swift */; };
+		3BFAB1642BA11B62005849FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFAB1632BA11B62005849FE /* AppDelegate.swift */; };
+		3BFAB1662BA11B6F005849FE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFAB1652BA11B6F005849FE /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +75,8 @@
 		3BCD21E92B88E89200130BF5 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Modules/Core; sourceTree = "<group>"; };
 		3BFAB0222B96C39B005849FE /* ViewFactories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFactories.swift; sourceTree = "<group>"; };
 		3BFAB06D2B9BB394005849FE /* RootNavigationLinkValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootNavigationLinkValues.swift; sourceTree = "<group>"; };
+		3BFAB1632BA11B62005849FE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3BFAB1652BA11B6F005849FE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +190,8 @@
 				3BFAB0212B96C372005849FE /* ViewFactories */,
 				3BC2D2542B9277D500D2762D /* Secrets.xcconfig */,
 				3B3FACED2B8780B400BE59C8 /* Assets.xcassets */,
+				3BFAB1632BA11B62005849FE /* AppDelegate.swift */,
+				3BFAB1652BA11B6F005849FE /* SceneDelegate.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -355,7 +361,9 @@
 				3B3FACEC2B8780B100BE59C8 /* ContentView.swift in Sources */,
 				3B3FACEA2B8780B100BE59C8 /* MovieDBApp.swift in Sources */,
 				3BFAB0232B96C39B005849FE /* ViewFactories.swift in Sources */,
+				3BFAB1642BA11B62005849FE /* AppDelegate.swift in Sources */,
 				3BFAB06E2B9BB394005849FE /* RootNavigationLinkValues.swift in Sources */,
+				3BFAB1662BA11B6F005849FE /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,17 +2,24 @@ import Dependencies
 import Foundation
 import Networking
 import Utilities
+import Routing
 import UIComponents
 import SwiftUI
 import CoreData
 
-struct MoviesMainView: View {
+public struct MoviesMainView: View {
   @ObservedObject private var viewModel: MoviesMainViewModel
   private let dependencies: Dependencies
+  private weak var coordinator: MoviesCoordinator?
   
-  init(viewModel: MoviesMainViewModel, dependencies: Dependencies) {
+  init(
+    viewModel: MoviesMainViewModel,
+    dependencies: Dependencies,
+    coordinator: MoviesCoordinator
+  ) {
     self.viewModel = viewModel
     self.dependencies = dependencies
+    self.coordinator = coordinator
   }
   
   public var body: some View {
@@ -22,7 +29,8 @@ struct MoviesMainView: View {
         category: .nowPlaying,
         viewModel: viewModel,
         items: $viewModel.nowPlayingMovies.wrappedValue,
-        dependencies: dependencies
+        dependencies: dependencies,
+        coordinator: coordinator
       )
       .padding(.bottom)
       
@@ -31,7 +39,8 @@ struct MoviesMainView: View {
         category: .topRated,
         viewModel: viewModel,
         items: $viewModel.topRatedMovies.wrappedValue,
-        dependencies: dependencies
+        dependencies: dependencies,
+        coordinator: coordinator
       )
       .padding(.bottom)
       
@@ -40,7 +49,8 @@ struct MoviesMainView: View {
         category: .popular,
         viewModel: viewModel,
         items: $viewModel.popularMovies.wrappedValue,
-        dependencies: dependencies
+        dependencies: dependencies,
+        coordinator: coordinator
       )
       
       ListSection(
@@ -48,7 +58,8 @@ struct MoviesMainView: View {
         category: .upcoming,
         viewModel: viewModel,
         items: $viewModel.upcomingMovies.wrappedValue,
-        dependencies: dependencies
+        dependencies: dependencies,
+        coordinator: coordinator
       )
       .padding(.bottom)
     }
@@ -62,26 +73,26 @@ struct ListSection: View {
   let viewModel: MoviesMainViewModel
   let items: [Movie]
   let dependencies: Dependencies
+  let coordinator: MoviesCoordinator?
   
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach(items, id: \.title) { movie in
-            NavigationLink(
-              value: MoviesRoutes.details(id: movie.id, dependencies: dependencies),
-              label: {
                 ImageViewCell(
                   imageUrl: movie.imageUrl,
                   title: movie.title,
                   date: movie.formattedDate
                 )
+                .onTapGesture {
+                  coordinator?.goToDetails(id: movie.id)
+                }
                 .onAppear {
                   if viewModel.shouldLoadMoreData(movie.id, items: items) {
                     viewModel.loadMoreData(for: category)
                   }
                 }
-              })
           }
         }
       }

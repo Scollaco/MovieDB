@@ -1,4 +1,3 @@
-import Core
 import Dependencies
 import Details
 import MoviesFeature
@@ -11,50 +10,75 @@ import UIComponents
 
 @main
 struct MovieDBApp: App {
-  init() {}
-  
   var body: some Scene {
     WindowGroup {
       TabView {
-        DiscoverView()
-        SearchView()
+        DiscoverView(
+          moviesCoordinator: MoviesCoordinator(
+            dependencies: RootViewFactories.dependencies
+          ), 
+          seriesCoordinator: SeriesCoordinator(
+            dependencies: RootViewFactories.dependencies
+          )
+        )
+        SearchView(
+          searchCoordinator: SearchCoordinator(
+            dependencies: RootViewFactories.dependencies
+          )
+        )
         TabView3()
       }
-      .environmentObject(NetworkImpl())
       .navigationBarTitleDisplayMode(.large)
     }
   }
-  
-  static let dependencies: ConcreteDependencies = {
-    .init(
-      network: NetworkImpl()
-    )
-  }()
 }
 
 struct DiscoverView: View {
+  @ObservedObject var moviesCoordinator: MoviesCoordinator
+  @ObservedObject var seriesCoordinator: SeriesCoordinator
+
   var body: some View {
     NavigationStack {
       TopTabBarView(titles: ["Movies", "TV Series"]) {
-        moviesViewsFactory.makeMainView()
-          .tag(0)
+        NavigationStack(path: $moviesCoordinator.path) {
+          moviesCoordinator.get(page: .home)
+            .navigationDestination(for: Page.self) {
+              moviesCoordinator.get(page: $0)
+            }
+        }
+        .tag(0)
         
-        seriesViewsFactory.makeMainView()
-          .navigationLinkValues(SeriesRoutes.self)
-          .tag(1)
+        NavigationStack(path: $seriesCoordinator.path) {
+          seriesCoordinator.get(page: .home)
+            .navigationDestination(for: Page.self) {
+              seriesCoordinator.get(page: $0)
+            }
+        }
+        .tag(1)
       }
       .navigationTitle("Discover")
     }
-    .tabItem { Label("Discover", systemImage: "movieclapper") }
+    .tabItem {
+      Label("Discover", systemImage: "movieclapper")
+    }
   }
 }
 
 struct SearchView: View {
+  @ObservedObject var searchCoordinator: SearchCoordinator
+
   var body: some View {
-      searchViewFactory.makeSearchView()
-        .navigationLinkValues(SearchRoutes.self)
-        .navigationTitle("Search")
-        .tabItem { Label("Search", systemImage: "magnifyingglass") }
+    NavigationStack {
+      NavigationStack(path: $searchCoordinator.path) {
+        searchCoordinator.get(page: .home)
+          .navigationDestination(for: Page.self) {
+            searchCoordinator.get(page: $0)
+          }
+          .navigationTitle("Search")
+      }
+      .tag(2)
+    }
+    .tabItem { Label("Search", systemImage: "magnifyingglass") }
   }
 }
 

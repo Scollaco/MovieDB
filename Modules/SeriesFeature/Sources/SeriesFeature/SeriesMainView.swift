@@ -1,17 +1,22 @@
-import Foundation
 import Dependencies
-import Utilities
-import UIComponents
+import Routing
 import SwiftUI
-import CoreData
+import UIComponents
+import Utilities
 
 struct SeriesMainView: View {
   @ObservedObject private var viewModel: SeriesMainViewModel
   private let dependencies: Dependencies
+  private weak var coordinator: SeriesCoordinator?
 
-  init(viewModel: SeriesMainViewModel, dependencies: Dependencies) {
+  init(
+    viewModel: SeriesMainViewModel,
+    dependencies: Dependencies,
+    coordinator: SeriesCoordinator
+  ) {
     self.viewModel = viewModel
     self.dependencies = dependencies
+    self.coordinator = coordinator
   }
   public var body: some View {
     ScrollView(showsIndicators: false) {
@@ -20,7 +25,8 @@ struct SeriesMainView: View {
         category: .airingToday,
         viewModel: viewModel,
         items: $viewModel.airingTodaySeries.wrappedValue,
-        dependencies: dependencies
+        dependencies: dependencies,
+        coordinator: coordinator
       )
       .padding(.bottom)
       
@@ -29,7 +35,8 @@ struct SeriesMainView: View {
         category: .topRated,
         viewModel: viewModel,
         items: $viewModel.topRatedSeries.wrappedValue,
-        dependencies: dependencies
+        dependencies: dependencies,
+        coordinator: coordinator
       )
       .padding(.bottom)
       
@@ -38,7 +45,8 @@ struct SeriesMainView: View {
         category: .popular,
         viewModel: viewModel,
         items: $viewModel.popularSeries.wrappedValue,
-        dependencies: dependencies
+        dependencies: dependencies,
+        coordinator: coordinator
       )
       
       ListSection(
@@ -46,7 +54,8 @@ struct SeriesMainView: View {
         category: .onTheAir,
         viewModel: viewModel,
         items: $viewModel.onTheAirSeries.wrappedValue,
-        dependencies: dependencies
+        dependencies: dependencies,
+        coordinator: coordinator
       )
       .padding(.bottom)
     }
@@ -60,6 +69,7 @@ struct ListSection: View {
   let viewModel: SeriesMainViewModel
   let items: [Series]
   let dependencies: Dependencies
+  let coordinator: SeriesCoordinator?
 
   @State private var scrollPosition: CGFloat = .zero
   
@@ -68,22 +78,18 @@ struct ListSection: View {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach(items, id: \.id) { series in
-            NavigationLink(
-              value: SeriesRoutes.details(
-                id: series.id,
-                dependencies: dependencies
-              ),
-              label: {
-                ImageViewCell(
-                  imageUrl: series.imageUrl,
-                  title: series.name
-                )
-              })
-              .onAppear {
-                if viewModel.shouldLoadMoreData(series.id, items: items) {
-                  viewModel.loadMoreData(for: category)
-                }
+            ImageViewCell(
+              imageUrl: series.imageUrl,
+              title: series.name
+            )
+            .onTapGesture {
+              coordinator?.goToDetails(id: series.id)
+            }
+            .onAppear {
+              if viewModel.shouldLoadMoreData(series.id, items: items) {
+                viewModel.loadMoreData(for: category)
               }
+            }
           }
         }
       }

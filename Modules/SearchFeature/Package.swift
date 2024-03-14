@@ -15,6 +15,9 @@ let package = Package(
     dependencies: [
       .package(url: "Dependencies", from: "1.0.0"),
       .package(url: "UIComponents", from: "1.0.0"),
+      .package(url: "Routing", from: "1.0.0"),
+      .package(url: "MoviesFeature", from: "1.0.0"),
+      .package(url: "SeriesFeature", from: "1.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -24,6 +27,9 @@ let package = Package(
             dependencies: [
               .byName(name: "Dependencies"),
               .byName(name: "UIComponents"),
+              .byName(name: "Routing"),
+              .byName(name: "MoviesFeature"),
+              .byName(name: "SeriesFeature"),
             ]
         ),
         .testTarget(

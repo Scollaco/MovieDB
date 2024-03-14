@@ -7,10 +7,16 @@ import AVKit
 public struct MovieDetailsView: View {
   @ObservedObject private var viewModel: MovieDetailsViewModel
   private let dependencies: Dependencies
+  private weak var coordinator: MoviesCoordinator?
   
-  public init(viewModel: MovieDetailsViewModel, dependencies: Dependencies) {
+  public init(
+    viewModel: MovieDetailsViewModel,
+    dependencies: Dependencies,
+    coordinator: MoviesCoordinator
+  ) {
     self.viewModel = viewModel
     self.dependencies = dependencies
+    self.coordinator = coordinator
   }
   
   public var body: some View {
@@ -50,7 +56,8 @@ public struct MovieDetailsView: View {
             MovieDetailListSection(
               title: "Similar Movies",
               items: $viewModel.similarMovies.wrappedValue,
-              dependencies: dependencies
+              dependencies: dependencies,
+              coordinator: coordinator
             )
             .padding(.bottom)
           }
@@ -59,7 +66,8 @@ public struct MovieDetailsView: View {
             MovieDetailListSection(
               title: "People Also Watched",
               items: $viewModel.recommendatedMovies.wrappedValue,
-              dependencies: dependencies
+              dependencies: dependencies,
+              coordinator: coordinator
             )
             .padding(.bottom)
           }
@@ -112,24 +120,27 @@ struct MovieDetailListSection: View {
   let title: String
   let items: [Movie]
   let dependencies: Dependencies
-
+  let coordinator: MoviesCoordinator?
+  @State private var isPresenting = false
+  
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach(items, id: \.id) { movie in
-            NavigationModal(
-              .sheet,
-              value: MoviesRoutes.details(id: movie.id, dependencies: dependencies),
-              data: MoviesRoutes.self,
-              label: {
-                ImageViewCell(
-                  imageUrl: movie.imageUrl,
-                  title: movie.title,
-                  date: movie.formattedDate,
-                  placeholder: "movieclapper"
-                )
-              })
+            Button(action: {
+              isPresenting = true
+            }, label: {
+              ImageViewCell(
+                imageUrl: movie.imageUrl,
+                title: movie.title,
+                date: movie.formattedDate,
+                placeholder: "movieclapper"
+              )
+            })
+            .sheet(isPresented: $isPresenting) {
+              coordinator?.get(page: .details(id: movie.id))
+            }
           }
         }
       }
