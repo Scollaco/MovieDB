@@ -21,7 +21,6 @@ final class SeriesMainViewModelTests: XCTestCase {
     sut.loadMoreData(for: .topRated)
     expectation.fulfill()
     await fulfillment(of: [expectation], timeout: 5.0)
-    
     XCTAssertEqual(sut.nextTopRatedPage, 2)
   }
   
@@ -32,7 +31,6 @@ final class SeriesMainViewModelTests: XCTestCase {
     sut.loadMoreData(for: .onTheAir)
     expectation.fulfill()
     await  fulfillment(of: [expectation], timeout: 5.0)
-    
     XCTAssertEqual(sut.nextOnTheAirPage, 2)
   }
   
@@ -42,8 +40,7 @@ final class SeriesMainViewModelTests: XCTestCase {
     let expectation = XCTestExpectation(description: "Make API calls.")
     sut.loadMoreData(for: .popular)
     expectation.fulfill()
-    await  fulfillment(of: [expectation], timeout: 5.0)
-    
+    await fulfillment(of: [expectation], timeout: 5.0)
     XCTAssertEqual(sut.nextPopularPage, 2)
   }
   

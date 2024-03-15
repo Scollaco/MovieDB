@@ -77,8 +77,8 @@ extension Genre {
 }
 
 extension VideoResponse {
-  static func mock() -> VideoResponse {
-    VideoResponse(results: [.mock()])
+  static func mock(videos: [Video] = []) -> VideoResponse {
+    VideoResponse(results: videos)
   }
 }
 

@@ -31,9 +31,10 @@ public struct SeriesDetailsView: View {
           .font(.title2)
           .bold()
           .multilineTextAlignment(.center)
+          .padding(.top)
         
-        if let tagline = $viewModel.seriesDetails.wrappedValue?.tagline, !tagline.isEmpty {
-          Text(tagline)
+        if viewModel.taglineIsVisible {
+          Text($viewModel.seriesDetails.wrappedValue?.tagline ?? .init())
             .font(.caption)
             .bold()
             .padding(.horizontal)
@@ -44,12 +45,12 @@ public struct SeriesDetailsView: View {
           .font(.footnote)
           .padding()
         
-        if !$viewModel.providers.isEmpty {
+        if !viewModel.providersSectionIsVisible {
           ProvidersSection(items: $viewModel.providers)
         }
         
         ScrollView(showsIndicators: false) {
-          if !$viewModel.seasons.isEmpty {
+          if viewModel.seasonsSectionIsVisible {
             DetailListSection(
               title: "Seasons",
               items: $viewModel.seasons.wrappedValue,
@@ -59,7 +60,7 @@ public struct SeriesDetailsView: View {
             .padding(.bottom)
           }
           
-          if !$viewModel.similarSeries.isEmpty {
+          if viewModel.similarSectionIsVisible {
             DetailListSection(
               title: "Similar Series",
               items: $viewModel.similarSeries.wrappedValue,
@@ -69,10 +70,10 @@ public struct SeriesDetailsView: View {
             .padding(.bottom)
           }
           
-          if !$viewModel.recommendatedSeries.isEmpty {
+          if viewModel.recommendedSectionIsVisible {
             DetailListSection(
               title: "People Also Watched",
-              items: $viewModel.recommendatedSeries.wrappedValue,
+              items: $viewModel.recommendedSeries.wrappedValue,
               dependencies: dependencies,
               coordinator: coordinator
             )
