@@ -25,7 +25,7 @@ public struct Movie: Decodable, Hashable {
   public let voteAverage: Double
   public let voteCount: Int
 }
-
+  
 extension Movie {
   public var imageUrl: String {
     guard let path = posterPath else { return . init() }
