@@ -1,5 +1,4 @@
 import Foundation
-import MoviesFeature
 
 public struct MovieDetails {
   public let backdropPath: String?

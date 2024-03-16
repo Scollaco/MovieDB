@@ -2,7 +2,7 @@ import CoreData
 import Storage
 
 final class MovieRepository {
-  private let repository: CoreDataRepository<MovieManagedObject>
+  private let repository: CoreDataRepository<MovieEntity>
   
   init() {
     repository = CoreDataRepository()
@@ -11,12 +11,12 @@ final class MovieRepository {
 
 extension MovieRepository: MovieRepositoryInterface {
   // Get a gook using a predicate
-  @discardableResult func getMovies(predicate: NSPredicate?) -> Result<[Movie], Error> {
+  @discardableResult func getMovies(predicate: NSPredicate?) -> Result<[MovieDetails], Error> {
     let result = repository.get(predicate: predicate, sortDescriptors: nil)
     switch result {
     case .success(let moviesMO):
       // Transform the NSManagedObject objects to domain objects
-      let movies = moviesMO.map { moviesMO -> Movie in
+      let movies = moviesMO.map { moviesMO -> MovieDetails in
         return moviesMO.toDomainModel()
       }
       
@@ -27,19 +27,15 @@ extension MovieRepository: MovieRepositoryInterface {
     }
   }
   // Creates a book on the persistance layer.
-  @discardableResult func create(movie: Movie) -> Result<Bool, Error> {
+  @discardableResult func create(movie: MovieDetails) -> Result<Bool, Error> {
     let result = repository.create()
     switch result {
     case .success(let movieMO):
       movieMO.backdropPath = movie.backdropPath
       movieMO.id = movie.id
       movieMO.originalTitle = movie.originalTitle
-      movieMO.popularity = movie.popularity
-      movieMO.posterPath = movie.posterPath
       movieMO.title = movie.title
       movieMO.releaseDate = movie.releaseDate
-      movieMO.voteAverage = movie.voteAverage
-      movieMO.voteCount = movie.voteCount
       try? repository.context.save()
       return .success(true)
     case .failure(let error):

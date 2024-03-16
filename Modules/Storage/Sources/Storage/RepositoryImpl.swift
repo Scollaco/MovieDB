@@ -12,7 +12,7 @@ public final class CoreDataRepository<T: NSManagedObject>: Repository {
   public typealias Entity = T
     
   /// The NSManagedObjectContext instance to be used for performing the operations.
-  public let context = PersistenceController().container.viewContext
+  public let context = PersistenceController.shared.container.viewContext
   
   public init() {}
   
@@ -37,8 +37,6 @@ public final class CoreDataRepository<T: NSManagedObject>: Repository {
       return .failure(error)
     }
   }
-  
-  
   
   /// Creates a NSManagedObject entity.
   /// - Returns: A result consisting of either a NSManagedObject entity or an Error.

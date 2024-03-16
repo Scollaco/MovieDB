@@ -1,4 +1,5 @@
 import Dependencies
+import Storage
 import SwiftUI
 import UIComponents
 import Routing
@@ -8,15 +9,18 @@ public struct MovieDetailsView: View {
   @ObservedObject private var viewModel: MovieDetailsViewModel
   private let dependencies: Dependencies
   private weak var coordinator: MoviesCoordinator?
+  private let repository: MovieRepositoryInterface
   
-  public init(
+  init(
     viewModel: MovieDetailsViewModel,
     dependencies: Dependencies,
-    coordinator: MoviesCoordinator
+    coordinator: MoviesCoordinator,
+    repository: MovieRepositoryInterface
   ) {
     self.viewModel = viewModel
     self.dependencies = dependencies
     self.coordinator = coordinator
+    self.repository = repository
   }
   
   public var body: some View {
@@ -77,13 +81,9 @@ public struct MovieDetailsView: View {
     }
     .toolbar {
       Button(action: {
-        
-      }, label: {
-        Image.init(systemName: "square.and.arrow.up")
-      }
-      )
-      Button(action: {
-        
+        if let details = viewModel.movieDetails {
+          _ = repository.create(movie: details)
+        }
       }, label: {
         Image.init(systemName: "bookmark")
       }

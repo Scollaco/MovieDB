@@ -6,7 +6,6 @@ import SwiftUI
 public final class MoviesViewFactory {
   var dependencies: Dependencies
   var coordinator: MoviesCoordinator
-  
   public init(dependencies: Dependencies) {
     self.dependencies = dependencies
     coordinator = MoviesCoordinator(dependencies: dependencies)
@@ -28,6 +27,11 @@ public final class MoviesViewFactory {
     let service = MovieDetailsService(dependencies: dependencies)
     let viewModel = MovieDetailsViewModel(id: id, service: service)
     let coordinator = MoviesCoordinator(dependencies: dependencies)
-    MovieDetailsView(viewModel: viewModel, dependencies: dependencies, coordinator: coordinator)
+    MovieDetailsView(
+      viewModel: viewModel,
+      dependencies: dependencies,
+      coordinator: coordinator,
+      repository: MovieRepository()
+    )
   }
 }
