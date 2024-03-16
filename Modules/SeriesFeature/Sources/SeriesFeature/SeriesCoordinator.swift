@@ -43,7 +43,11 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
       mainView
     case .details(let id):
       let service = SeriesDetailsService(dependencies: dependencies)
-      let viewModel = SeriesDetailsViewModel(id: id, service: service)
+      let viewModel = SeriesDetailsViewModel(
+        id: id,
+        service: service,
+        repository: SeriesRepository()
+      )
       SeriesDetailsView(
         viewModel: viewModel,
         dependencies: dependencies,

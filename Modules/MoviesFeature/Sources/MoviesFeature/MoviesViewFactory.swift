@@ -25,13 +25,12 @@ public final class MoviesViewFactory {
   @ViewBuilder
   public func makeMovieDetailsView(id: Int) -> some View {
     let service = MovieDetailsService(dependencies: dependencies)
-    let viewModel = MovieDetailsViewModel(id: id, service: service)
+    let viewModel = MovieDetailsViewModel(id: id, service: service, repository: MovieRepository())
     let coordinator = MoviesCoordinator(dependencies: dependencies)
     MovieDetailsView(
       viewModel: viewModel,
       dependencies: dependencies,
-      coordinator: coordinator,
-      repository: MovieRepository()
+      coordinator: coordinator
     )
   }
 }

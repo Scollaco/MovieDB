@@ -9,18 +9,15 @@ public struct MovieDetailsView: View {
   @ObservedObject private var viewModel: MovieDetailsViewModel
   private let dependencies: Dependencies
   private weak var coordinator: MoviesCoordinator?
-  private let repository: MovieRepositoryInterface
   
   init(
     viewModel: MovieDetailsViewModel,
     dependencies: Dependencies,
-    coordinator: MoviesCoordinator,
-    repository: MovieRepositoryInterface
+    coordinator: MoviesCoordinator
   ) {
     self.viewModel = viewModel
     self.dependencies = dependencies
     self.coordinator = coordinator
-    self.repository = repository
   }
   
   public var body: some View {
@@ -81,11 +78,9 @@ public struct MovieDetailsView: View {
     }
     .toolbar {
       Button(action: {
-        if let details = viewModel.movieDetails {
-          _ = repository.create(movie: details)
-        }
+        viewModel.addMovieToWatchlist()
       }, label: {
-        Image.init(systemName: "bookmark")
+        Image.init(systemName: viewModel.watchlistIconName)
       }
       )
     }

@@ -1,5 +1,4 @@
 import Foundation
-import SeriesFeature
 
 extension Series: Listable {}
 

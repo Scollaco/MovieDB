@@ -43,12 +43,15 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
       mainView
     case .details(let id):
       let service = MovieDetailsService(dependencies: dependencies)
-      let viewModel = MovieDetailsViewModel(id: id, service: service)
+      let viewModel = MovieDetailsViewModel(
+        id: id,
+        service: service,
+        repository: MovieRepository()
+      )
       MovieDetailsView(
         viewModel: viewModel,
         dependencies: dependencies,
-        coordinator: self,
-        repository: MovieRepository()
+        coordinator: self
       )
     }
   }

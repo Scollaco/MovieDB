@@ -9,7 +9,7 @@ public struct SeriesDetailsView: View {
   private let dependencies: Dependencies
   private weak var coordinator: SeriesCoordinator?
   
-  public init(
+  init(
     viewModel: SeriesDetailsViewModel,
     dependencies: Dependencies,
     coordinator: SeriesCoordinator?
@@ -83,15 +83,9 @@ public struct SeriesDetailsView: View {
     }
     .toolbar {
       Button(action: {
-        
+        viewModel.addSeriesToWatchlist()
       }, label: {
-        Image.init(systemName: "square.and.arrow.up")
-      }
-      )
-      Button(action: {
-        
-      }, label: {
-        Image.init(systemName: "bookmark")
+        Image.init(systemName: viewModel.watchlistIconName)
       }
       )
     }

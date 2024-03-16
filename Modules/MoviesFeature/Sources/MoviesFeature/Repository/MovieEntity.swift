@@ -36,5 +36,3 @@ extension MovieEntity {
         NSFetchRequest<MovieEntity>(entityName: "MovieEntity")
     }
 }
-
-extension MovieEntity : Identifiable {}
