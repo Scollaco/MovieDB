@@ -11,6 +11,7 @@ struct PersistenceController {
   static let shared = PersistenceController()
   
   let container: NSPersistentContainer
+  let privateContext = NSManagedObjectContext(.privateQueue)
   
   init(inMemory: Bool = false) {
     let bundle = Bundle.module
@@ -48,6 +49,13 @@ struct PersistenceController {
         try context.save()
       } catch let error as NSError {
         NSLog("Unresolved error saving context: \(error), \(error.userInfo)")
+      }
+    }
+    if privateContext.hasChanges {
+      do {
+        try privateContext.save()
+      } catch let error as NSError {
+        NSLog("Unresolved error saving private context: \(error), \(error.userInfo)")
       }
     }
   }

@@ -12,6 +12,7 @@ final class SeriesRepository {
 
 extension SeriesRepository: SeriesRepositoryInterface {
   // Get a gook using a predicate
+  @MainActor 
   @discardableResult func getSeries(predicate: NSPredicate?) -> Result<[SeriesDetails], Error> {
     let result = repository.get(predicate: predicate, sortDescriptors: nil)
     switch result {
@@ -42,5 +43,15 @@ extension SeriesRepository: SeriesRepositoryInterface {
       // Return the Core Data error.
       return .failure(error)
     }
+  }
+  
+  func delete(series: SeriesDetails) {
+    guard let seriesEntity = repository.get(with: series.id) else { return }
+    _ = repository.delete(entity: seriesEntity)
+  }
+  
+  func getSeries(with id: Int) -> SeriesDetails? {
+    let seriesEntity = repository.get(with: id)
+    return seriesEntity?.toDomainModel()
   }
 }

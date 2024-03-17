@@ -85,7 +85,7 @@ public struct SeriesDetailsView: View {
       Button(action: {
         viewModel.addSeriesToWatchlist()
       }, label: {
-        Image.init(systemName: viewModel.watchlistIconName)
+        Image(systemName: viewModel.watchlistIconName)
       }
       )
     }

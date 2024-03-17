@@ -1,6 +1,11 @@
 import Foundation
 
 final class MovieDetailsViewModel: ObservableObject {
+  enum Icon: String {
+    case bookmark = "bookmark.circle"
+    case bookmarkFill = "bookmark.circle.fill"
+  }
+  
   private let service: DetailsService
   private let id: Int
   private let repository: MovieRepositoryInterface
@@ -9,7 +14,7 @@ final class MovieDetailsViewModel: ObservableObject {
   @Published var providers: [WatchProvider] = []
   @Published var similarMovies: [Movie] = []
   @Published var recommendatedMovies: [Movie] = []
-  @Published var watchlistIconName: String = .init()
+  @Published var watchlistIconName: String = Icon.bookmark.rawValue
   
   init(
     id: Int,
@@ -19,7 +24,6 @@ final class MovieDetailsViewModel: ObservableObject {
     self.service = service
     self.id = id
     self.repository = repository
-    watchlistIconName = isWatchlisted ? "bookmark.fill" : "bookmark"
     fetchMovieDetails()
   }
   
@@ -30,6 +34,7 @@ final class MovieDetailsViewModel: ObservableObject {
         similarMovies = movieDetails?.similar.results ?? []
         recommendatedMovies = movieDetails?.recommendations.results ?? []
         generateProviders(for: movieDetails?.watchProviders)
+        watchlistIconName = isWatchlisted ? Icon.bookmarkFill.rawValue : Icon.bookmark.rawValue
       } catch {
         print(error)
       }
@@ -47,28 +52,18 @@ final class MovieDetailsViewModel: ObservableObject {
     guard let movie = movieDetails else { return }
     guard !isWatchlisted else {
       _ = repository.delete(movie: movie)
-      watchlistIconName = "bookmark"
+      watchlistIconName = Icon.bookmark.rawValue
       return
     }
     _ = repository.create(movie: movie)
-    watchlistIconName = "bookmark.fill"
+    watchlistIconName = Icon.bookmarkFill.rawValue
   }
   
   private var isWatchlisted: Bool {
-    guard let movieDetails = movieDetails else {
+    guard let movieDetails = movieDetails,
+          let _ = repository.getMovie(with: movieDetails.id) else {
       return false
     }
-    
-    let result = repository.getMovies(
-      predicate: NSPredicate(
-        format: "id == %@", String(describing: movieDetails.id)
-      )
-    )
-    switch result {
-    case .success(let movie):
-      return movie.isEmpty ? false : true
-    case .failure:
-      return false
-    }
+    return true
   }
 }

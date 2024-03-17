@@ -80,7 +80,7 @@ public struct MovieDetailsView: View {
       Button(action: {
         viewModel.addMovieToWatchlist()
       }, label: {
-        Image.init(systemName: viewModel.watchlistIconName)
+        Image(systemName: viewModel.watchlistIconName)
       }
       )
     }

@@ -1,6 +1,11 @@
 import Foundation
 
 final class SeriesDetailsViewModel: ObservableObject {
+  enum Icon: String {
+    case bookmark = "bookmark.circle"
+    case bookmarkFill = "bookmark.circle.fill"
+  }
+  
   private let service: DetailsService
   private let id: Int
   private let repository: SeriesRepositoryInterface
@@ -10,7 +15,8 @@ final class SeriesDetailsViewModel: ObservableObject {
   @Published var providers: [WatchProvider] = []
   @Published var similarSeries: [Series] = []
   @Published var recommendatedSeries: [Series] = []
-  
+  @Published var watchlistIconName: String = Icon.bookmark.rawValue
+
   init(
     id: Int,
     service: DetailsService,
@@ -31,6 +37,7 @@ final class SeriesDetailsViewModel: ObservableObject {
         recommendatedSeries = seriesDetails?.recommendations?.results ?? []
         seasons = seriesDetails?.seasons ?? []
         generateProviders(for: seriesDetails?.watchProviders)
+        watchlistIconName = isWatchlisted ? Icon.bookmarkFill.rawValue : Icon.bookmark.rawValue
       } catch {
         print(error)
       }
@@ -46,24 +53,20 @@ final class SeriesDetailsViewModel: ObservableObject {
   
   func addSeriesToWatchlist() {
     guard let series = seriesDetails else { return }
+    guard !isWatchlisted else {
+      _ = repository.delete(series: series)
+      watchlistIconName = Icon.bookmark.rawValue
+      return
+    }
     _ = repository.create(series: series)
+    watchlistIconName = Icon.bookmarkFill.rawValue
   }
   
-  var watchlistIconName: String {
-    guard let seriesDetails = seriesDetails else {
-      return "bookmark"
+  private var isWatchlisted: Bool {
+    guard let seriesDetails = seriesDetails,
+          let _ = repository.getSeries(with: seriesDetails.id) else {
+      return false
     }
-    
-    let result = repository.getSeries(
-      predicate: NSPredicate(
-        format: "id == %@", String(describing: seriesDetails.id)
-      )
-    )
-    switch result {
-    case .success(let series):
-      return series.isEmpty ? "bookmark" : "bookmark.fill"
-    case .failure:
-      return "bookmark"
-    }
+    return true
   }
 }

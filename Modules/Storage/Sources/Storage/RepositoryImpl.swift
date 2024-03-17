@@ -13,6 +13,7 @@ public final class CoreDataRepository<T: NSManagedObject>: Repository {
     
   /// The NSManagedObjectContext instance to be used for performing the operations.
   public let context = PersistenceController.shared.container.viewContext
+  public let privateContext = PersistenceController.shared.privateContext
   
   public init() {}
   
@@ -35,6 +36,23 @@ public final class CoreDataRepository<T: NSManagedObject>: Repository {
       }
     } catch {
       return .failure(error)
+    }
+  }
+  
+  /// Gets a NSManagedObject by ID.
+  /// - Parameters:
+  ///   - id: The id of the object to be fetched.
+  /// - Returns: A NSManagedObject, if found.
+  public func get(with id: Int) -> Entity? {
+    let result = get(
+      predicate: NSPredicate(format: "id == %i", id),
+      sortDescriptors: nil
+    )
+    switch result {
+    case .success(let movie):
+      return movie.first
+    case .failure:
+      return nil
     }
   }
   

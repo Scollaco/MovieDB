@@ -12,7 +12,7 @@ final class MovieRepository {
 extension MovieRepository: MovieRepositoryInterface {
   // Get a gook using a predicate
   @discardableResult func getMovies(predicate: NSPredicate?) -> Result<[MovieDetails], Error> {
-    let result = getMoviesEntities(predicate: predicate)
+    let result = repository.get(predicate: predicate, sortDescriptors: nil)
     switch result {
     case .success(let moviesMO):
       // Transform the NSManagedObject objects to domain objects
@@ -45,45 +45,12 @@ extension MovieRepository: MovieRepositoryInterface {
   }
   
   func delete(movie: MovieDetails) {
-    let result = getMoviesEntities(
-      predicate: NSPredicate(
-        format: "id == %@", String(describing: movie.id)
-      )
-    )
-    
-    switch result {
-    case .success(let entities):
-      if let entity = entities.first {
-        _ = repository.delete(entity: entity)
-      }
-    case .failure:
-      return
-    }
+    guard let movieEntity = repository.get(with: movie.id) else { return }
+    _ = repository.delete(entity: movieEntity)
   }
   
   func getMovie(with id: Int) -> MovieDetails? {
-    let result = getMovies(
-      predicate: NSPredicate(
-        format: "id == %@", String(describing: id)
-      )
-    )
-    switch result {
-    case .success(let movie):
-      return movie.first
-    case .failure:
-      return nil
-    }
-  }
-  
-  @discardableResult
-  private func getMoviesEntities(predicate: NSPredicate?) -> Result<[MovieEntity], Error> {
-    let result = repository.get(predicate: predicate, sortDescriptors: nil)
-    switch result {
-    case .success(let moviesMO):
-      return .success(moviesMO)
-    case .failure(let error):
-      // Return the Core Data error.
-      return .failure(error)
-    }
+    let movieEntity = repository.get(with: id)
+    return movieEntity?.toDomainModel()
   }
 }
