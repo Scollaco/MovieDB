@@ -1,18 +1,21 @@
 import CoreData
 import Storage
 
-final class MovieRepository {
+public final class MovieRepository {
   private let repository: CoreDataRepository<MovieEntity>
   
-  init() {
+  public init() {
     repository = CoreDataRepository()
   }
 }
 
 extension MovieRepository: MovieRepositoryInterface {
   // Get a gook using a predicate
-  @discardableResult func getMovies(predicate: NSPredicate?) -> Result<[MovieDetails], Error> {
-    let result = repository.get(predicate: predicate, sortDescriptors: nil)
+  @discardableResult public func getMovies(
+    predicate: NSPredicate? = nil,
+    sortDescriptors: [NSSortDescriptor]? = nil
+  ) -> Result<[MovieDetails], Error> {
+    let result = repository.get(predicate: predicate, sortDescriptors: sortDescriptors)
     switch result {
     case .success(let moviesMO):
       // Transform the NSManagedObject objects to domain objects
@@ -27,11 +30,13 @@ extension MovieRepository: MovieRepositoryInterface {
   }
   
   // Creates a book on the persistance layer.
-  @discardableResult func create(movie: MovieDetails) -> Result<Bool, Error> {
+  @discardableResult public func create(movie: MovieDetails) -> Result<Bool, Error> {
     let result = repository.create()
     switch result {
     case .success(let movieEntity):
       movieEntity.backdropPath = movie.backdropPath
+      movieEntity.posterPath = movie.posterPath
+      movieEntity.overview = movie.overview
       movieEntity.id = movie.id
       movieEntity.originalTitle = movie.originalTitle
       movieEntity.title = movie.title
@@ -44,12 +49,12 @@ extension MovieRepository: MovieRepositoryInterface {
     }
   }
   
-  func delete(movie: MovieDetails) {
+  public func delete(movie: MovieDetails) {
     guard let movieEntity = repository.get(with: movie.id) else { return }
     _ = repository.delete(entity: movieEntity)
   }
   
-  func getMovie(with id: Int) -> MovieDetails? {
+  public func getMovie(with id: Int) -> MovieDetails? {
     let movieEntity = repository.get(with: id)
     return movieEntity?.toDomainModel()
   }

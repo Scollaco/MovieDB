@@ -2,10 +2,10 @@ import CoreData
 import Dependencies
 import Storage
 
-final class SeriesRepository {
+public final class SeriesRepository {
   private let repository:  CoreDataRepository<SeriesEntity>
   
-  init() {
+  public init() {
     repository = CoreDataRepository<SeriesEntity>()
   }
 }
@@ -13,8 +13,11 @@ final class SeriesRepository {
 extension SeriesRepository: SeriesRepositoryInterface {
   // Get a gook using a predicate
   @MainActor 
-  @discardableResult func getSeries(predicate: NSPredicate?) -> Result<[SeriesDetails], Error> {
-    let result = repository.get(predicate: predicate, sortDescriptors: nil)
+  @discardableResult public func getSeries(
+    predicate: NSPredicate? = nil,
+    sortDescriptors: [NSSortDescriptor]? = nil
+  ) -> Result<[SeriesDetails], Error> {
+    let result = repository.get(predicate: predicate, sortDescriptors: sortDescriptors)
     switch result {
     case .success(let seriesEntity):
       // Transform the NSManagedObject objects to domain objects
@@ -28,7 +31,7 @@ extension SeriesRepository: SeriesRepositoryInterface {
     }
   }
   // Creates a book on the persistance layer.
-  @discardableResult func create(series: SeriesDetails) -> Result<Bool, Error> {
+  @discardableResult public func create(series: SeriesDetails) -> Result<Bool, Error> {
     let result = repository.create()
     switch result {
     case .success(let seriesEntity):
@@ -45,12 +48,12 @@ extension SeriesRepository: SeriesRepositoryInterface {
     }
   }
   
-  func delete(series: SeriesDetails) {
+  public func delete(series: SeriesDetails) {
     guard let seriesEntity = repository.get(with: series.id) else { return }
     _ = repository.delete(entity: seriesEntity)
   }
   
-  func getSeries(with id: Int) -> SeriesDetails? {
+  public func getSeries(with id: Int) -> SeriesDetails? {
     let seriesEntity = repository.get(with: id)
     return seriesEntity?.toDomainModel()
   }

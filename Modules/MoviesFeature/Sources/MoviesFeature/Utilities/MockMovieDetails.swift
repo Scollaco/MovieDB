@@ -1,8 +1,10 @@
 import Foundation
+import Core
 
 extension MovieDetails {
   static func mock(
     backdropPath: String? = "https://image.tmdb.org/t/p/w500/mSUnNIjJEkqkWxbklDjWCD2RUdy.jpg",
+    posterPath: String = "https://image.tmdb.org/t/p/w500/mSUnNIjJEkqkWxbklDjWCD2RUdy.jpg",
     genres: [Genre] = [.mock()],
     id: Int = 1,
     originalTitle: String = "Original",
@@ -13,10 +15,12 @@ extension MovieDetails {
     videos: VideoResponse = .mock(),
     similar: MovieResponse = .init(page: 1, results: []),
     recommendations: MovieResponse = .init(page: 1, results: []),
-    watchProviders: WatchProviderResponse = .mock()
+    watchProviders: WatchProviderResponse = .mock(),
+    reviews: [Review]? = []
   ) -> MovieDetails {
     MovieDetails(
       backdropPath: backdropPath,
+      posterPath: posterPath,
       genres: genres,
       id: id,
       originalTitle: originalTitle,
@@ -27,7 +31,8 @@ extension MovieDetails {
       videos: videos,
       similar: similar,
       recommendations: recommendations,
-      watchProviders: watchProviders
+      watchProviders: watchProviders,
+      reviews: reviews
     )
   }
 }

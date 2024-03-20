@@ -41,7 +41,7 @@ public struct ImageViewCell: View {
       }
       
       Text(title)
-        .foregroundStyle(.primary)
+        .tint(.primary)
         .font(.footnote)
         .lineLimit(1)
         .bold()

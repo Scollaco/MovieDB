@@ -14,8 +14,10 @@ final class MovieDetailsViewModel: ObservableObject {
   @Published var providers: [WatchProvider] = []
   @Published var similarMovies: [Movie] = []
   @Published var recommendatedMovies: [Movie] = []
+  @Published var reviews: [Review] = []
   @Published var watchlistIconName: String = Icon.bookmark.rawValue
-  
+  @Published var reviewsSectionIsVisible: Bool = false
+
   init(
     id: Int,
     service: DetailsService,
@@ -35,6 +37,8 @@ final class MovieDetailsViewModel: ObservableObject {
         recommendatedMovies = movieDetails?.recommendations.results ?? []
         generateProviders(for: movieDetails?.watchProviders)
         watchlistIconName = isWatchlisted ? Icon.bookmarkFill.rawValue : Icon.bookmark.rawValue
+        reviews = movieDetails?.reviews ?? []
+        reviewsSectionIsVisible = !reviews.isEmpty
       } catch {
         print(error)
       }

@@ -44,6 +44,25 @@ public struct SeriesDetailsView: View {
           .font(.footnote)
           .padding()
         
+        if $viewModel.reviewsSectionIsVisible.wrappedValue {
+          NavigationLink(destination: {
+            coordinator?.get(page: .reviews(id: viewModel.seriesDetails?.id))
+          }, label: {
+            HStack {
+              Text("Reviews")
+                .bold()
+              Text("(\($viewModel.reviews.count))")
+              Spacer()
+              Image.init(systemName: "chevron.forward")
+            }
+            .padding()
+            .background(.quinary)
+            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .tint(.primary)
+          })
+          .padding(.horizontal)
+        }
+        
         if !$viewModel.providers.isEmpty {
           ProvidersSection(items: $viewModel.providers)
         }

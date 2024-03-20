@@ -22,8 +22,8 @@ public struct SeriesDetails {
   
   public let backdropPath: String?
   public let createdBy: [Creator]
-  public let firstAirDate: String
-  public let lastAirDate: String
+  public let firstAirDate: String?
+  public let lastAirDate: String?
   public let genres: [Genre]?
   public let id: Int
   public let numberOfEpisodes: Int
@@ -38,7 +38,8 @@ public struct SeriesDetails {
   public let recommendations: SeriesResponse?
   public let similar: SeriesResponse?
   public let watchProviders: WatchProviderResponse?
-  
+  public let reviews: [Review]?
+
   public var trailerURL: URL? {
     guard let videos = videos?.results,
           !videos.isEmpty else {
@@ -65,6 +66,7 @@ public struct SeriesDetails {
     case releaseDate
     case tagline
     case recommendations
+    case reviews
     case similar
     case watchProviders = "watch/providers"
   }
@@ -81,8 +83,8 @@ extension SeriesDetails: Decodable {
     self.originalName = try container.decode(String.self, forKey: .originalName)
     self.name = try container.decode(String.self, forKey: .name)
     self.overview = try container.decode(String.self, forKey: .overview)
-    self.firstAirDate = try container.decode(String.self, forKey: .firstAirDate)
-    self.lastAirDate = try container.decode(String.self, forKey: .lastAirDate)
+    self.firstAirDate = try container.decodeIfPresent(String.self, forKey: .firstAirDate)
+    self.lastAirDate = try container.decodeIfPresent(String.self, forKey: .lastAirDate)
     self.numberOfEpisodes = try container.decode(Int.self, forKey: .numberOfEpisodes)
     self.numberOfSeasons = try container.decode(Int.self, forKey: .numberOfSeasons)
     self.tagline = try container.decodeIfPresent(String.self, forKey: .tagline)
@@ -91,6 +93,7 @@ extension SeriesDetails: Decodable {
     self.recommendations = try container.decodeIfPresent(SeriesResponse.self, forKey: .recommendations)
     self.watchProviders = try container.decodeIfPresent(WatchProviderResponse.self, forKey: .watchProviders)
     self.releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate)
+    self.reviews = try container.decodeIfPresent(ReviewsResponse.self, forKey: .reviews)?.results
   }
 }
 
@@ -140,4 +143,23 @@ public struct WatchProvider: Decodable, Hashable {
     guard let path = logoPath else { return . init() }
     return "https://image.tmdb.org/t/p/w500/\(path)"
   }
+}
+
+public struct ReviewsResponse: Decodable {
+  public let page: Int?
+  public let results: [Review]?
+}
+
+public struct Review: Decodable {
+  public struct AuthorDetails: Decodable {
+    public let name: String?
+    public let username: String?
+    public let avatarPath: String?
+    public let rating: Int?
+  }
+  public let author: String?
+  public let authorDetails: AuthorDetails?
+  public let content: String?
+  public let createdAt: String?
+  public let updatedAt: String?
 }

@@ -6,6 +6,7 @@ import Routing
 import SearchFeature
 import SeriesFeature
 import SwiftUI
+import WatchlistFeature
 import UIComponents
 
 @main
@@ -85,7 +86,7 @@ struct SearchView: View {
 struct TabView3: View {  
   var body: some View {
     NavigationStack {
-      ContentView()
+      WatchlistView()
         .navigationTitle("Watchlist")
     }
     .tabItem { Label("Watchlist", systemImage: "bookmark") }

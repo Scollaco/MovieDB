@@ -33,7 +33,7 @@ fileprivate struct DetailsEndpoint: Endpoint {
       [
         URLQueryItem(
           name: "append_to_response",
-          value: "videos,similar,recommendations,watch/providers"
+          value: "videos,similar,recommendations,watch/providers,reviews"
         )
       ]
     )

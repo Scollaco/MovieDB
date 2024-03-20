@@ -25,6 +25,10 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
     path.append(Page.details(id: id))
   }
   
+  func goToReviews(id: Int) {
+    path.append(Page.reviews(id: id))
+  }
+  
   private lazy var mainView: some View = {
     let service = SeriesService(dependencies: dependencies)
     let viewModel = SeriesMainViewModel(service: service)
@@ -53,6 +57,8 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
         dependencies: dependencies,
         coordinator: self
       )
+    case .reviews(let id):
+      Text("Series reviews \(id ?? 0)")
     }
   }
 }
@@ -60,6 +66,7 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
 public enum Page: Identifiable, Hashable {
   case home
   case details(id: Int)
+  case reviews(id: Int?)
   
   public var id: String {
     ID(describing: self)

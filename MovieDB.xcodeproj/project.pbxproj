@@ -17,6 +17,7 @@
 		3B3FAD002B8780B400BE59C8 /* MovieDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FACFF2B8780B400BE59C8 /* MovieDBTests.swift */; };
 		3B3FAD0A2B8780B400BE59C8 /* MovieDBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FAD092B8780B400BE59C8 /* MovieDBUITests.swift */; };
 		3B3FAD0C2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3FAD0B2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift */; };
+		3B881BB22BA7228C00D01052 /* WatchlistFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3B881BB12BA7228C00D01052 /* WatchlistFeature */; };
 		3B9BA9F02B94BEAA00277956 /* SeriesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3B9BA9EF2B94BEAA00277956 /* SeriesFeature */; };
 		3B9BA9F62B94D5D200277956 /* SearchFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 3B9BA9F52B94D5D200277956 /* SearchFeature */; };
 		3BC2D24F2B8FA61C00D2762D /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC2D24E2B8FA61C00D2762D /* Utilities */; };
@@ -65,6 +66,7 @@
 		3B3FAD0B2B8780B400BE59C8 /* MovieDBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3B3FAD262B8792AB00BE59C8 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Networking; path = Modules/Networking; sourceTree = "<group>"; };
 		3B3FAD272B8793EE00BE59C8 /* UIComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = UIComponents; path = Modules/UIComponents; sourceTree = "<group>"; };
+		3B881BB02BA718F200D01052 /* WatchlistFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = WatchlistFeature; path = Modules/WatchlistFeature; sourceTree = "<group>"; };
 		3B9BA9F32B94CAA600277956 /* SeriesFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SeriesFeature; path = Modules/SeriesFeature; sourceTree = "<group>"; };
 		3B9BA9F42B94D24800277956 /* SearchFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SearchFeature; path = Modules/SearchFeature; sourceTree = "<group>"; };
 		3BC2D24D2B8F6B3200D2762D /* Utilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Utilities; path = ../../Utilities; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				3BCD21E32B88CABE00130BF5 /* UIComponents in Frameworks */,
 				3BCD21E12B88CABE00130BF5 /* Storage in Frameworks */,
 				3BCD21DF2B88CABE00130BF5 /* Networking in Frameworks */,
+				3B881BB22BA7228C00D01052 /* WatchlistFeature in Frameworks */,
 				3BCD21EB2B88EB0B00130BF5 /* Core in Frameworks */,
 				3BCD21DD2B88CABE00130BF5 /* Dependencies in Frameworks */,
 				3BC2D24F2B8FA61C00D2762D /* Utilities in Frameworks */,
@@ -118,6 +121,7 @@
 		3B3FACDD2B8780B100BE59C8 = {
 			isa = PBXGroup;
 			children = (
+				3B881BB02BA718F200D01052 /* WatchlistFeature */,
 				3B9BA9F42B94D24800277956 /* SearchFeature */,
 				3B9BA9F32B94CAA600277956 /* SeriesFeature */,
 				3BC2D24D2B8F6B3200D2762D /* Utilities */,
@@ -240,6 +244,7 @@
 				3BC2D24E2B8FA61C00D2762D /* Utilities */,
 				3B9BA9EF2B94BEAA00277956 /* SeriesFeature */,
 				3B9BA9F52B94D5D200277956 /* SearchFeature */,
+				3B881BB12BA7228C00D01052 /* WatchlistFeature */,
 			);
 			productName = MovieDB;
 			productReference = 3B3FACE62B8780B100BE59C8 /* MovieDB.app */;
@@ -712,6 +717,10 @@
 		3B27640A2B8D196F002DB24C /* Details */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Details;
+		};
+		3B881BB12BA7228C00D01052 /* WatchlistFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WatchlistFeature;
 		};
 		3B9BA9EF2B94BEAA00277956 /* SeriesFeature */ = {
 			isa = XCSwiftPackageProductDependency;
