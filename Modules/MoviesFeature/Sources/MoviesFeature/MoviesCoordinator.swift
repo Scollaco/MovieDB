@@ -1,4 +1,5 @@
 import Dependencies
+import Reviews
 import SwiftUI
 import Routing
 
@@ -59,7 +60,8 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
         coordinator: self
       )
     case .reviews(id: let id):
-      Text("Reviews screen. ID: \(id ?? 0)")
+      let reviewsCoordinator = ReviewsCoordinator(dependencies: dependencies)
+      reviewsCoordinator.get(page: .home(mediaType: "movie", id: id))
     }
   }
 }
@@ -67,7 +69,7 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
 public enum Page: Identifiable, Hashable {
   case home
   case details(id: Int)
-  case reviews(id: Int?)
+  case reviews(id: Int)
   
   public var id: String {
     ID(describing: self)

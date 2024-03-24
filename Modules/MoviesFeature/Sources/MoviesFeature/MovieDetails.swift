@@ -55,12 +55,6 @@ extension MovieDetails: Decodable {
   }
 }
 
-public protocol Listable {
-  var name: String { get }
-  var imageUrl: String { get }
-  var id: Int { get }
-}
-
 public struct VideoResponse: Decodable {
   public let results: [Video]
 }

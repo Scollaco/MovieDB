@@ -24,6 +24,8 @@ public struct Movie: Decodable, Hashable {
   public let title: String
   public let voteAverage: Double
   public let voteCount: Int
+  // Listable protocol requirement
+  public var name: String { title }
 }
   
 extension Movie {

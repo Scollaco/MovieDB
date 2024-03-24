@@ -40,13 +40,14 @@ public struct SeriesDetailsView: View {
             .multilineTextAlignment(.center)
         }
         
-        Text($viewModel.seriesDetails.wrappedValue?.overview ?? .init())
+        ExpandableText(text: $viewModel.seriesDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
           .font(.footnote)
           .padding()
         
-        if $viewModel.reviewsSectionIsVisible.wrappedValue {
+        if $viewModel.reviewsSectionIsVisible.wrappedValue,
+           let id = viewModel.seriesDetails?.id{
           NavigationLink(destination: {
-            coordinator?.get(page: .reviews(id: viewModel.seriesDetails?.id))
+            coordinator?.get(page: .reviews(id: id))
           }, label: {
             HStack {
               Text("Reviews")
@@ -56,7 +57,7 @@ public struct SeriesDetailsView: View {
               Image.init(systemName: "chevron.forward")
             }
             .padding()
-            .background(.quinary)
+            .background(.gray.opacity(0.1))
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .tint(.primary)
           })
@@ -146,18 +147,7 @@ struct DetailListSection: View {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach(items, id: \.id) { series in
-            Button(action: {
-              isPresenting = true
-            }, label: {
-              ImageViewCell(
-                imageUrl: series.imageUrl,
-                title: series.name,
-                placeholder: "tv"
-              )
-            })
-            .sheet(isPresented: $isPresenting) {
-              coordinator?.get(page: .details(id: series.id))
-            }
+            BottomSheet(series: series, coordinator: coordinator)
           }
         }
       }
@@ -166,6 +156,27 @@ struct DetailListSection: View {
         .font(.title2)
         .bold()
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+  }
+}
+
+struct BottomSheet: View {
+  @State private var isPresenting = false
+  var series: Listable
+  let coordinator: SeriesCoordinator?
+
+  var body: some View {
+    Button(action: {
+      isPresenting.toggle()
+    }, label: {
+      ImageViewCell(
+        imageUrl: series.imageUrl,
+        title: series.name,
+        placeholder: "tv"
+      )
+    })
+    .sheet(isPresented: $isPresenting) {
+      coordinator?.get(page: .details(id: series.id))
     }
   }
 }

@@ -1,19 +1,18 @@
-import Dependencies
-import Storage
 import SwiftUI
 import UIComponents
 import Routing
+import Dependencies
 import AVKit
 
-public struct MovieDetailsView: View {
-  @ObservedObject private var viewModel: MovieDetailsViewModel
+public struct MoviesDetailsView: View {
+  @ObservedObject private var viewModel: DetailsViewModel
   private let dependencies: Dependencies
-  private weak var coordinator: MoviesCoordinator?
-  
-  init(
-    viewModel: MovieDetailsViewModel,
+  public weak var coordinator: DetailsCoordinator?
+
+  public init(
+    viewModel: DetailsViewModel,
     dependencies: Dependencies,
-    coordinator: MoviesCoordinator
+    coordinator: DetailsCoordinator
   ) {
     self.viewModel = viewModel
     self.dependencies = dependencies
@@ -45,25 +44,6 @@ public struct MovieDetailsView: View {
           .font(.footnote)
           .padding()
         
-        if $viewModel.reviewsSectionIsVisible.wrappedValue,
-           let id = viewModel.movieDetails?.id {
-          NavigationLink(destination: {
-            coordinator?.get(page: .reviews(id: id))
-          }, label: {
-            HStack {
-              Text("Reviews")
-                .bold()
-              Spacer()
-              Image.init(systemName: "chevron.forward")
-            }
-            .padding()
-            .background(.gray.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 5))
-            .tint(.primary)
-          })
-          .padding(.horizontal)
-        }
-        
         if !$viewModel.providers.isEmpty {
           ProvidersSection(
             items: $viewModel.providers,
@@ -75,19 +55,19 @@ public struct MovieDetailsView: View {
           if !$viewModel.similarMovies.isEmpty {
             MovieDetailListSection(
               title: "Similar Movies",
+              items: $viewModel.similarMovies.wrappedValue,
               dependencies: dependencies,
-              coordinator: coordinator,
-              items: $viewModel.similarMovies
+              coordinator: coordinator
             )
             .padding(.bottom)
           }
-       
+          
           if !$viewModel.recommendatedMovies.isEmpty {
             MovieDetailListSection(
               title: "People Also Watched",
+              items: $viewModel.recommendatedMovies.wrappedValue,
               dependencies: dependencies,
-              coordinator: coordinator,
-              items: $viewModel.recommendatedMovies
+              coordinator: coordinator
             )
             .padding(.bottom)
           }
@@ -97,9 +77,15 @@ public struct MovieDetailsView: View {
     }
     .toolbar {
       Button(action: {
-        viewModel.addMovieToWatchlist()
+        
       }, label: {
-        Image(systemName: viewModel.watchlistIconName)
+        Image.init(systemName: "square.and.arrow.up")
+      }
+      )
+      Button(action: {
+        
+      }, label: {
+        Image(systemName: "bookmark")
       }
       )
     }
@@ -110,38 +96,30 @@ public struct MovieDetailsView: View {
   }
 }
 
-struct ProvidersSection: View {
-  @Binding var items: [WatchProvider]
-  let dependencies: Dependencies
-
-  var body: some View {
-    Text("Watch Now")
-      .font(.title3)
-      .bold()
-    
-    ScrollView(.horizontal, showsIndicators: false) {
-      HStack {
-        ForEach($items, id: \.providerId) { provider in
-          ProviderCell(url: provider.wrappedValue.logoUrl)
-        }
-      }
-    }
-    .padding()
-  }
-}
-
 struct MovieDetailListSection: View {
   let title: String
+  let items: [Details]
   let dependencies: Dependencies
-  let coordinator: MoviesCoordinator?
-  @Binding var items: [Movie]
+  let coordinator: DetailsCoordinator?
+  
+  @State private var isPresenting = false
   
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
-          ForEach($items, id: \.id) { movie in
-            BottomSheet(movie: movie.wrappedValue, coordinator: coordinator)
+          ForEach(items, id: \.id) { details in
+            Button(action: {
+              isPresenting = true
+            }, label: {
+              ImageViewCell(
+                imageUrl: details.imageUrl,
+                title: details.title,
+                date: "details.formattedDate",
+                placeholder: "movieclapper"
+              )
+            })
+            .sheet(isPresented: $isPresenting) {}
           }
         }
       }
@@ -152,28 +130,6 @@ struct MovieDetailListSection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-  }
-}
-
-struct BottomSheet: View {
-  @State private var isPresenting = false
-  var movie: Movie
-  let coordinator: MoviesCoordinator?
-
-  var body: some View {
-    Button(action: {
-      isPresenting.toggle()
-    }, label: {
-      ImageViewCell(
-        imageUrl: movie.imageUrl,
-        title: movie.title,
-        date: movie.formattedDate,
-        placeholder: "movieclapper"
-      )
-    })
-    .sheet(isPresented: $isPresenting) {
-      coordinator?.get(page: .details(id: movie.id))
-    }
   }
 }
 
