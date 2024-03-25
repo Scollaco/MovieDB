@@ -35,7 +35,7 @@ extension MovieRepository: MovieRepositoryInterface {
     switch result {
     case .success(let movieEntity):
       movieEntity.backdropPath = movie.backdropPath
-      movieEntity.posterPath = movie.posterPath
+      movieEntity.posterPath = ""
       movieEntity.overview = movie.overview
       movieEntity.id = movie.id
       movieEntity.originalTitle = movie.originalTitle

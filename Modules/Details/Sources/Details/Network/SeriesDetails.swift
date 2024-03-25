@@ -36,7 +36,8 @@ public struct SeriesDetails {
   public let recommendations: SeriesResponse?
   public let similar: SeriesResponse?
   public let watchProviders: WatchProviderResponse?
-  
+  public let reviews: [Review]?
+
   public var trailerURL: URL? {
     guard let videos = videos?.results,
           !videos.isEmpty else {
@@ -45,7 +46,12 @@ public struct SeriesDetails {
     let trailer = videos.first(where: { $0.type == "Trailer" })
     return URL(string: "https://youtube.com/embed/\(trailer?.key ?? "")")
   }
-
+  
+  public var imageUrl: String {
+    guard let path = backdropPath else { return . init() }
+    return "https://image.tmdb.org/t/p/w500/\(path)"
+  }
+  
   enum CodingKeys: String, CodingKey{
     case backdropPath
     case createdBy
@@ -64,6 +70,7 @@ public struct SeriesDetails {
     case tagline
     case recommendations
     case similar
+    case reviews
     case watchProviders = "watch/providers"
   }
 }
@@ -89,6 +96,7 @@ extension SeriesDetails: Decodable {
     self.recommendations = try container.decodeIfPresent(SeriesResponse.self, forKey: .recommendations)
     self.watchProviders = try container.decodeIfPresent(WatchProviderResponse.self, forKey: .watchProviders)
     self.releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate)
+    self.reviews = try container.decodeIfPresent(ReviewsResponse.self, forKey: .reviews)?.results
   }
 }
 

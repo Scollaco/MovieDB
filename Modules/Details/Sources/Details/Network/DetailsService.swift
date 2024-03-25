@@ -8,7 +8,7 @@ public protocol Service {
 
 public final class DetailsService: Service {
   private let dependencies: Dependencies
-  init(dependencies: Dependencies) {
+  public init(dependencies: Dependencies) {
     self.dependencies = dependencies
   }
   

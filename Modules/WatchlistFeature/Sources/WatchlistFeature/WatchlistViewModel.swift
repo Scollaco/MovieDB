@@ -1,5 +1,4 @@
-import MoviesFeature
-import SeriesFeature
+import Details
 import Storage
 import SwiftUI
 

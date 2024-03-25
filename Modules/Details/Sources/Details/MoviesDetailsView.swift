@@ -4,13 +4,13 @@ import Routing
 import Dependencies
 import AVKit
 
-public struct MoviesDetailsView: View {
-  @ObservedObject private var viewModel: DetailsViewModel
+struct MoviesDetailsView: View {
+  @ObservedObject private var viewModel: MovieDetailsViewModel
   private let dependencies: Dependencies
-  public weak var coordinator: DetailsCoordinator?
+  weak var coordinator: DetailsCoordinator?
 
-  public init(
-    viewModel: DetailsViewModel,
+  init(
+    viewModel: MovieDetailsViewModel,
     dependencies: Dependencies,
     coordinator: DetailsCoordinator
   ) {
@@ -40,15 +40,12 @@ public struct MoviesDetailsView: View {
             .multilineTextAlignment(.center)
         }
         
-        ExpandableText(text: $viewModel.movieDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
+        Text($viewModel.movieDetails.wrappedValue?.overview ?? .init())
           .font(.footnote)
           .padding()
         
         if !$viewModel.providers.isEmpty {
-          ProvidersSection(
-            items: $viewModel.providers,
-            dependencies: dependencies
-          )
+          ProvidersSection(items: $viewModel.providers)
         }
         
         ScrollView(showsIndicators: false) {
@@ -108,18 +105,27 @@ struct MovieDetailListSection: View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
-          ForEach(items, id: \.id) { details in
+          ForEach(items, id: \.id) { movie in
             Button(action: {
               isPresenting = true
             }, label: {
               ImageViewCell(
-                imageUrl: details.imageUrl,
-                title: details.title,
-                date: "details.formattedDate",
+                imageUrl: movie.imageUrl,
+                title: movie.title ?? "",
                 placeholder: "movieclapper"
               )
             })
-            .sheet(isPresented: $isPresenting) {}
+            .sheet(isPresented: $isPresenting) {
+              VStack {
+                  Image(systemName: "smiley")
+                      .resizable()
+                      .scaledToFit()
+                      .frame(height: 68)
+                  
+                  Text("I'm modal sheet with multiple sizes!")
+                      .padding(.top)
+              }
+            }
           }
         }
       }

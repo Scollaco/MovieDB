@@ -1,4 +1,4 @@
-import MoviesFeature
+import Foundation
 
 extension MovieDetails {
   static func mock(
@@ -13,7 +13,8 @@ extension MovieDetails {
     videos: VideoResponse = .mock(),
     similar: MovieResponse = .init(page: 1, results: []),
     recommendations: MovieResponse = .init(page: 1, results: []),
-    watchProviders: WatchProviderResponse = .mock()
+    watchProviders: WatchProviderResponse = .mock(),
+    reviews: [Review] = []
   ) -> MovieDetails {
     MovieDetails(
       backdropPath: backdropPath,
@@ -27,7 +28,8 @@ extension MovieDetails {
       videos: videos,
       similar: similar,
       recommendations: recommendations,
-      watchProviders: watchProviders
+      watchProviders: watchProviders,
+      reviews: reviews
     )
   }
 }

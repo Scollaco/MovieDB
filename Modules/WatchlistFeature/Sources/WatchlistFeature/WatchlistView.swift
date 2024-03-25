@@ -1,6 +1,5 @@
 import SwiftUI
-import MoviesFeature
-import SeriesFeature
+import Details
 import UIComponents
 
 public struct WatchlistView: View {

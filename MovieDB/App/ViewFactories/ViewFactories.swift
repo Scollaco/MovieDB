@@ -24,8 +24,4 @@ final class RootViewFactories {
   static let searchViewFactory: SearchViewFactory = {
     SearchViewFactory(dependencies: dependencies)
   }()
-
-  static let detailsViewFactory: DetailsViewFactory = {
-    DetailsViewFactory(dependencies: dependencies)
-  }()
 }

@@ -26,37 +26,35 @@ public final class DetailsCoordinator: Coordinator, ObservableObject {
   }
  
   func goToMoviesDetails(id: Int) {
-    path.append(Page.moviesDetails(id: id))
+    path.append(Page.movieDetails(id: id))
   }
   
   func goToReviews(id: Int, mediaType: String) {
     path.append(Page.reviews(id: id, type: mediaType))
   }
-
+  
   // MARK: - View providers
   @ViewBuilder
   public func get(page: Page) -> some View {
     switch page {
     case .seriesDetails(let id):
       let service = DetailsService(dependencies: dependencies)
-      let viewModel = DetailsViewModel(
-        id: id, 
-        mediaType: "tv",
+      let viewModel = SeriesDetailsViewModel(
+        id: id,
         service: service,
-        repository: DetailsRepository()
+        repository: SeriesRepository()
       )
       SeriesDetailsView(
         viewModel: viewModel,
         dependencies: dependencies,
         coordinator: self
       )
-    case .moviesDetails(id: let id):
+    case .movieDetails(id: let id):
       let service = DetailsService(dependencies: dependencies)
-      let viewModel = DetailsViewModel(
+      let viewModel = MovieDetailsViewModel(
         id: id,
-        mediaType: "movie",
         service: service,
-        repository: DetailsRepository()
+        repository: MovieRepository()
       )
       MoviesDetailsView(
         viewModel: viewModel,
@@ -72,7 +70,7 @@ public final class DetailsCoordinator: Coordinator, ObservableObject {
 
 public enum Page: Identifiable, Hashable {
   case seriesDetails(id: Int)
-  case moviesDetails(id: Int)
+  case movieDetails(id: Int)
   case reviews(id: Int, type: String)
   public var id: String {
     ID(describing: self)

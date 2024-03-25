@@ -18,7 +18,7 @@ let package = Package(
       .package(url: "Utilities", from: "1.0.0"),
       .package(url: "Storage", from: "1.0.0"),
       .package(url: "Core", from: "1.0.0"),
-      .package(url: "Reviews", from: "1.0.0"),
+      .package(url: "Details", from: "1.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -31,7 +31,7 @@ let package = Package(
               .byName(name: "Utilities"),
               .byName(name: "Storage"),
               .byName(name: "Core"),
-              .byName(name: "Reviews"),
+              .byName(name: "Details"),
             ]
         ),
         .testTarget(

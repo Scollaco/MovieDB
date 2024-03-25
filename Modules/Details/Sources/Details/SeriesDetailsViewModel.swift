@@ -13,8 +13,8 @@ final class SeriesDetailsViewModel: ObservableObject {
   @Published var seriesDetails: SeriesDetails?
   @Published var seasons: [SeriesDetails.Season] = []
   @Published var providers: [WatchProvider] = []
-  @Published var similarSeries: [Series] = []
-  @Published var recommendatedSeries: [Series] = []
+  @Published var similarSeries: [Details] = []
+  @Published var recommendatedSeries: [Details] = []
   @Published var reviews: [Review] = []
   @Published var watchlistIconName: String = Icon.bookmark.rawValue
   @Published var reviewsSectionIsVisible: Bool = false

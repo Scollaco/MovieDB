@@ -23,17 +23,18 @@ public final class SeriesViewFactory {
   
   @ViewBuilder
   public func makeSeriesDetailsView(id: Int) -> some View {
-    let service = SeriesDetailsService(dependencies: dependencies)
-    let viewModel = SeriesDetailsViewModel(
-      id: id,
-      service: service,
-      repository: SeriesRepository()
-    )
-    let coordinator = SeriesCoordinator(dependencies: dependencies)
-    SeriesDetailsView(
-      viewModel: viewModel,
-      dependencies: dependencies,
-      coordinator: coordinator
-    )
+    EmptyView()
+//    let service = SeriesDetailsService(dependencies: dependencies)
+//    let viewModel = SeriesDetailsViewModel(
+//      id: id,
+//      service: service,
+//      repository: SeriesRepository()
+//    )
+//    let coordinator = SeriesCoordinator(dependencies: dependencies)
+//    SeriesDetailsView(
+//      viewModel: viewModel,
+//      dependencies: dependencies,
+//      coordinator: coordinator
+//    )
   }
 }

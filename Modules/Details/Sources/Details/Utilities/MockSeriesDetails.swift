@@ -1,4 +1,4 @@
-import SeriesFeature
+import Foundation
 
 extension SeriesDetails {
   static func mock(
@@ -20,7 +20,8 @@ extension SeriesDetails {
     videos: VideoResponse = .mock(),
     similar: SeriesResponse? = nil,
     recommendations: SeriesResponse? = nil,
-    watchProviders: WatchProviderResponse = .mock(results: .mock())
+    watchProviders: WatchProviderResponse = .mock(results: .mock()),
+    reviews: [Review]? = []
   ) -> SeriesDetails {
     SeriesDetails(
       backdropPath: backdropPath,
@@ -40,7 +41,8 @@ extension SeriesDetails {
       videos: videos,
       recommendations: recommendations,
       similar: similar,
-      watchProviders: watchProviders
+      watchProviders: watchProviders,
+      reviews: reviews
     )
   }
 }

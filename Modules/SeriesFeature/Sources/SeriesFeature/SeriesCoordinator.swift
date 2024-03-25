@@ -1,5 +1,5 @@
 import Dependencies
-import Reviews
+import Details
 import Routing
 import SwiftUI
 
@@ -25,11 +25,7 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
   func goToDetails(id: Int) {
     path.append(Page.details(id: id))
   }
-  
-  func goToReviews(id: Int) {
-    path.append(Page.reviews(id: id))
-  }
-  
+
   private lazy var mainView: some View = {
     let service = SeriesService(dependencies: dependencies)
     let viewModel = SeriesMainViewModel(service: service)
@@ -47,20 +43,8 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
     case .home:
       mainView
     case .details(let id):
-      let service = SeriesDetailsService(dependencies: dependencies)
-      let viewModel = SeriesDetailsViewModel(
-        id: id,
-        service: service,
-        repository: SeriesRepository()
-      )
-      SeriesDetailsView(
-        viewModel: viewModel,
-        dependencies: dependencies,
-        coordinator: self
-      )
-    case .reviews(id: let id):
-      let reviewsCoordinator = ReviewsCoordinator(dependencies: dependencies)
-      reviewsCoordinator.get(page: .home(mediaType: "tv", id: id))
+      let detailsCoordinator = DetailsCoordinator(dependencies: dependencies)
+      detailsCoordinator.get(page: .seriesDetails(id: id))
     }
   }
 }
@@ -68,7 +52,6 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
 public enum Page: Identifiable, Hashable {
   case home
   case details(id: Int)
-  case reviews(id: Int)
   
   public var id: String {
     ID(describing: self)

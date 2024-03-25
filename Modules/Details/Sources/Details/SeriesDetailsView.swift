@@ -5,12 +5,12 @@ import Routing
 import AVKit
 
 public struct SeriesDetailsView: View {
-  @ObservedObject private var viewModel: DetailsViewModel
+  @ObservedObject private var viewModel: SeriesDetailsViewModel
   private let dependencies: Dependencies
   private weak var coordinator: DetailsCoordinator?
   
   init(
-    viewModel: DetailsViewModel,
+    viewModel: SeriesDetailsViewModel,
     dependencies: Dependencies,
     coordinator: DetailsCoordinator?
   ) {
@@ -47,7 +47,7 @@ public struct SeriesDetailsView: View {
         if $viewModel.reviewsSectionIsVisible.wrappedValue,
            let id = viewModel.seriesDetails?.id{
           NavigationLink(destination: {
-            coordinator?.get(page: .reviews(id: id))
+            coordinator?.get(page: .reviews(id: id, type: "tv"))
           }, label: {
             HStack {
               Text("Reviews")
@@ -70,11 +70,9 @@ public struct SeriesDetailsView: View {
         
         ScrollView(showsIndicators: false) {
           if !$viewModel.seasons.isEmpty {
-            DetailListSection(
+            SeasonListSection(
               title: "Seasons",
-              items: $viewModel.seasons.wrappedValue,
-              dependencies: dependencies,
-              coordinator: coordinator
+              items: $viewModel.seasons.wrappedValue
             )
             .padding(.bottom)
           }
@@ -116,9 +114,34 @@ public struct SeriesDetailsView: View {
   }
 }
 
+struct SeasonListSection: View {
+  let title: String
+  let items: [SeriesDetails.Season]
+  var body: some View {
+    Section {
+      ScrollView(.horizontal, showsIndicators: false) {
+        LazyHStack {
+          ForEach(items, id: \.id) { season in
+            ImageViewCell(
+              imageUrl: season.imageUrl,
+              title: season.name,
+              placeholder: "tv"
+            )
+          }
+        }
+      }
+    }  header: {
+      Text(title)
+        .font(.title2)
+        .bold()
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+  }
+}
+
 struct DetailListSection: View {
   let title: String
-  let items: [Listable]
+  let items: [Details]
   let dependencies: Dependencies
   let coordinator: DetailsCoordinator?
   @State private var isPresenting = false
@@ -127,8 +150,8 @@ struct DetailListSection: View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
-          ForEach(items, id: \.id) { series in
-            BottomSheet(series: series, coordinator: coordinator)
+          ForEach(items, id: \.id) { item in
+            BottomSheet(item: item, coordinator: coordinator)
           }
         }
       }
@@ -143,7 +166,7 @@ struct DetailListSection: View {
 
 struct BottomSheet: View {
   @State private var isPresenting = false
-  var series: Listable
+  var item: Details
   let coordinator: DetailsCoordinator?
 
   var body: some View {
@@ -151,13 +174,13 @@ struct BottomSheet: View {
       isPresenting.toggle()
     }, label: {
       ImageViewCell(
-        imageUrl: series.imageUrl,
-        title: series.name,
+        imageUrl: item.imageUrl,
+        title: item.title ?? item.name ?? "",
         placeholder: "tv"
       )
     })
     .sheet(isPresented: $isPresenting) {
-      coordinator?.get(page: .seriesDetails(id: series.id))
+      coordinator?.get(page: .seriesDetails(id: item.id))
     }
   }
 }

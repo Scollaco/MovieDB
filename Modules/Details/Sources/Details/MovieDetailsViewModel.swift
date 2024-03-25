@@ -12,8 +12,8 @@ final class MovieDetailsViewModel: ObservableObject {
 
   @Published var movieDetails: MovieDetails?
   @Published var providers: [WatchProvider] = []
-  @Published var similarMovies: [Movie] = []
-  @Published var recommendatedMovies: [Movie] = []
+  @Published var similarMovies: [Details] = []
+  @Published var recommendatedMovies: [Details] = []
   @Published var reviews: [Review] = []
   @Published var watchlistIconName: String = Icon.bookmark.rawValue
   @Published var reviewsSectionIsVisible: Bool = false

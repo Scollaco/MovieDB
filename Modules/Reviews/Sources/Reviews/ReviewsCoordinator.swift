@@ -1,23 +1,13 @@
 import Dependencies
 import SwiftUI
-import Routing
 
-public final class ReviewsCoordinator: Coordinator, ObservableObject {
+public final class ReviewsCoordinator: ObservableObject {
   @Published public var path = NavigationPath()
   let dependencies: Dependencies
   // MARK: - Navigation
   
   public init(dependencies: Dependencies) {
     self.dependencies = dependencies
-  }
-  
-  public func popToRoot() {
-    path.removeLast(path.count)
-  }
-  
-  public func dismiss() {
-    guard path.count > 0 else { return }
-    path.removeLast()
   }
   
   // MARK: - View providers

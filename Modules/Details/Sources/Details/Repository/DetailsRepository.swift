@@ -10,7 +10,7 @@ public final class DetailsRepository {
   }
 }
 
-extension DetailsRepository: DetailsRepositoryInterface {
+extension DetailsRepository {
   // Get a gook using a predicate
   @MainActor
   @discardableResult public func getAll(
@@ -48,8 +48,8 @@ extension DetailsRepository: DetailsRepositoryInterface {
     }
   }
   
-  public func delete(object: Details) {
-    guard let detailsEntity = repository.get(with: object.id) else { return }
+  public func delete(objectId: Int) {
+    guard let detailsEntity = repository.get(with: objectId) else { return }
     _ = repository.delete(entity: detailsEntity)
   }
   

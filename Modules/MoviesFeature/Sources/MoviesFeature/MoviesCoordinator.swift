@@ -1,5 +1,5 @@
 import Dependencies
-import Reviews
+import Details
 import SwiftUI
 import Routing
 
@@ -26,11 +26,6 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
     path.append(Page.details(id: id))
   }
   
-  func goToReviews(id: Int?) {
-    guard let id = id else { return }
-    path.append(Page.reviews(id: id))
-  }
-  
   private lazy var mainView: some View = {
     let service = MoviesService(dependencies: dependencies)
     let viewModel = MoviesMainViewModel(service: service)
@@ -48,20 +43,8 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
     case .home:
       mainView
     case .details(let id):
-      let service = MovieDetailsService(dependencies: dependencies)
-      let viewModel = MovieDetailsViewModel(
-        id: id,
-        service: service,
-        repository: MovieRepository()
-      )
-      MovieDetailsView(
-        viewModel: viewModel,
-        dependencies: dependencies,
-        coordinator: self
-      )
-    case .reviews(id: let id):
-      let reviewsCoordinator = ReviewsCoordinator(dependencies: dependencies)
-      reviewsCoordinator.get(page: .home(mediaType: "movie", id: id))
+      let detailsCoordinator = DetailsCoordinator(dependencies: dependencies)
+      detailsCoordinator.get(page: .movieDetails(id: id))
     }
   }
 }
@@ -69,7 +52,6 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
 public enum Page: Identifiable, Hashable {
   case home
   case details(id: Int)
-  case reviews(id: Int)
   
   public var id: String {
     ID(describing: self)

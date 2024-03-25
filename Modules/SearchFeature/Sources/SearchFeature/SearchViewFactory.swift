@@ -2,8 +2,7 @@ import Dependencies
 import Foundation
 import Routing
 import SwiftUI
-import MoviesFeature
-import SeriesFeature
+import Details
 
 public final class SearchViewFactory {
   var dependencies: Dependencies
@@ -29,11 +28,11 @@ public final class SearchViewFactory {
   ) -> any View {
     switch mediaType {
     case .movie:
-      let factory = MoviesViewFactory(dependencies: dependencies)
-      return factory.makeMovieDetailsView(id: id)
+      let detailsCoordinator = DetailsCoordinator(dependencies: dependencies)
+      return detailsCoordinator.get(page: .movieDetails(id: id))
     case .tv:
-      let factory = SeriesViewFactory(dependencies: dependencies)
-      return factory.makeSeriesDetailsView(id: id)
+      let detailsCoordinator = DetailsCoordinator(dependencies: dependencies)
+      return detailsCoordinator.get(page: .seriesDetails(id: id))
     case .unknown:
       assertionFailure("Unknown type")
       return EmptyView()
