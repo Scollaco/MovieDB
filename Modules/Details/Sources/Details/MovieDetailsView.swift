@@ -1,14 +1,15 @@
+import Dependencies
+import Storage
 import SwiftUI
 import UIComponents
 import Routing
-import Dependencies
 import AVKit
 
-struct MoviesDetailsView: View {
+public struct MovieDetailsView: View {
   @ObservedObject private var viewModel: MovieDetailsViewModel
   private let dependencies: Dependencies
-  weak var coordinator: DetailsCoordinator?
-
+  private weak var coordinator: DetailsCoordinator?
+  
   init(
     viewModel: MovieDetailsViewModel,
     dependencies: Dependencies,
@@ -40,9 +41,28 @@ struct MoviesDetailsView: View {
             .multilineTextAlignment(.center)
         }
         
-        Text($viewModel.movieDetails.wrappedValue?.overview ?? .init())
+        ExpandableText(text: $viewModel.movieDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
           .font(.footnote)
           .padding()
+        
+        if $viewModel.reviewsSectionIsVisible.wrappedValue,
+           let id = viewModel.movieDetails?.id {
+          NavigationLink(destination: {
+            coordinator?.get(page: .reviews(id: id, type: "movie"))
+          }, label: {
+            HStack {
+              Text("Reviews")
+                .bold()
+              Spacer()
+              Image.init(systemName: "chevron.forward")
+            }
+            .padding()
+            .background(.gray.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .tint(.primary)
+          })
+          .padding(.horizontal)
+        }
         
         if !$viewModel.providers.isEmpty {
           ProvidersSection(items: $viewModel.providers)
@@ -52,19 +72,19 @@ struct MoviesDetailsView: View {
           if !$viewModel.similarMovies.isEmpty {
             MovieDetailListSection(
               title: "Similar Movies",
-              items: $viewModel.similarMovies.wrappedValue,
               dependencies: dependencies,
-              coordinator: coordinator
+              coordinator: coordinator,
+              items: $viewModel.similarMovies
             )
             .padding(.bottom)
           }
-          
+       
           if !$viewModel.recommendatedMovies.isEmpty {
             MovieDetailListSection(
               title: "People Also Watched",
-              items: $viewModel.recommendatedMovies.wrappedValue,
               dependencies: dependencies,
-              coordinator: coordinator
+              coordinator: coordinator,
+              items: $viewModel.recommendatedMovies
             )
             .padding(.bottom)
           }
@@ -74,15 +94,9 @@ struct MoviesDetailsView: View {
     }
     .toolbar {
       Button(action: {
-        
+        viewModel.addMovieToWatchlist()
       }, label: {
-        Image.init(systemName: "square.and.arrow.up")
-      }
-      )
-      Button(action: {
-        
-      }, label: {
-        Image(systemName: "bookmark")
+        Image(systemName: viewModel.watchlistIconName)
       }
       )
     }
@@ -95,37 +109,16 @@ struct MoviesDetailsView: View {
 
 struct MovieDetailListSection: View {
   let title: String
-  let items: [Details]
   let dependencies: Dependencies
   let coordinator: DetailsCoordinator?
-  
-  @State private var isPresenting = false
+  @Binding var items: [Details]
   
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
-          ForEach(items, id: \.id) { movie in
-            Button(action: {
-              isPresenting = true
-            }, label: {
-              ImageViewCell(
-                imageUrl: movie.imageUrl,
-                title: movie.title ?? "",
-                placeholder: "movieclapper"
-              )
-            })
-            .sheet(isPresented: $isPresenting) {
-              VStack {
-                  Image(systemName: "smiley")
-                      .resizable()
-                      .scaledToFit()
-                      .frame(height: 68)
-                  
-                  Text("I'm modal sheet with multiple sizes!")
-                      .padding(.top)
-              }
-            }
+          ForEach($items, id: \.id) { movie in
+            MoviesBottomSheet(movie: movie.wrappedValue, coordinator: coordinator)
           }
         }
       }
@@ -136,6 +129,27 @@ struct MovieDetailListSection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+  }
+}
+
+struct MoviesBottomSheet: View {
+  @State private var isPresenting = false
+  var movie: Details
+  let coordinator: DetailsCoordinator?
+
+  var body: some View {
+    Button(action: {
+      isPresenting.toggle()
+    }, label: {
+      ImageViewCell(
+        imageUrl: movie.imageUrl,
+        title: movie.title ?? "",
+        placeholder: "movieclapper"
+      )
+    })
+    .sheet(isPresented: $isPresenting) {
+      coordinator?.get(page: .movieDetails(id: movie.id))
+    }
   }
 }
 

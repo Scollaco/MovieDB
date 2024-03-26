@@ -38,7 +38,7 @@ public final class DetailsCoordinator: Coordinator, ObservableObject {
   public func get(page: Page) -> some View {
     switch page {
     case .seriesDetails(let id):
-      let service = DetailsService(dependencies: dependencies)
+      let service = SeriesDetailsService(dependencies: dependencies)
       let viewModel = SeriesDetailsViewModel(
         id: id,
         service: service,
@@ -50,13 +50,13 @@ public final class DetailsCoordinator: Coordinator, ObservableObject {
         coordinator: self
       )
     case .movieDetails(id: let id):
-      let service = DetailsService(dependencies: dependencies)
+      let service = MovieDetailsService(dependencies: dependencies)
       let viewModel = MovieDetailsViewModel(
         id: id,
         service: service,
         repository: MovieRepository()
       )
-      MoviesDetailsView(
+      MovieDetailsView(
         viewModel: viewModel,
         dependencies: dependencies,
         coordinator: self

@@ -36,6 +36,10 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
     )
   }()
   
+  private lazy var detailsCoordinator: DetailsCoordinator = {
+    DetailsCoordinator(dependencies: dependencies)
+  }()
+  
   // MARK: - View providers
   @ViewBuilder
   public func get(page: Page) -> some View {
@@ -43,7 +47,6 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
     case .home:
       mainView
     case .details(let id):
-      let detailsCoordinator = DetailsCoordinator(dependencies: dependencies)
       detailsCoordinator.get(page: .seriesDetails(id: id))
     }
   }

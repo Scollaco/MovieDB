@@ -74,6 +74,7 @@ public struct Review: Decodable {
     public let avatarPath: String?
     public let rating: Int?
   }
+  public let id: String
   public let author: String?
   public let authorDetails: AuthorDetails?
   public let content: String?

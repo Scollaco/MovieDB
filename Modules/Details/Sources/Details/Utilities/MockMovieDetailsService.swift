@@ -1,9 +1,6 @@
 import Foundation
 
-final class MockService: Service {
-  func fetchSeriesDetails(id: Int) async throws -> SeriesDetails {
-    SeriesDetails.mock()
-  }
+final class MockMovieDetailsService: MovieDetailsServiceInterface {
   func fetchMovieDetails(id: Int) async throws -> MovieDetails {
     MovieDetails.mock()
   }

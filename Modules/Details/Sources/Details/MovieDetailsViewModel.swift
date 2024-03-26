@@ -6,7 +6,7 @@ final class MovieDetailsViewModel: ObservableObject {
     case bookmarkFill = "bookmark.circle.fill"
   }
   
-  private let service: DetailsService
+  private let service: MovieDetailsServiceInterface
   private let id: Int
   private let repository: MovieRepositoryInterface
 
@@ -20,7 +20,7 @@ final class MovieDetailsViewModel: ObservableObject {
 
   init(
     id: Int,
-    service: DetailsService,
+    service: MovieDetailsServiceInterface,
     repository: MovieRepositoryInterface
   ) {
     self.service = service
