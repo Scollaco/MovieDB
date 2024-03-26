@@ -18,6 +18,7 @@ final class SeriesDetailsViewModel: ObservableObject {
   @Published var reviews: [Review] = []
   @Published var watchlistIconName: String = Icon.bookmark.rawValue
   @Published var reviewsSectionIsVisible: Bool = false
+  @Published var overviewIsVisible: Bool = false
 
   init(
     id: Int,
@@ -42,6 +43,7 @@ final class SeriesDetailsViewModel: ObservableObject {
         watchlistIconName = isWatchlisted ? Icon.bookmarkFill.rawValue : Icon.bookmark.rawValue
         reviews = seriesDetails?.reviews ?? []
         reviewsSectionIsVisible = !reviews.isEmpty
+        overviewIsVisible = seriesDetails?.overview != nil && !(seriesDetails?.overview.isEmpty ?? true)
       } catch {
         print(error)
       }

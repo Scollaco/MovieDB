@@ -56,4 +56,9 @@ final class WatchlistViewModel: ObservableObject {
     moviesRepository.delete(movie: movie)
     fetchMovies()
   }
+  
+  func delete(series: SeriesDetails) {
+    seriesRepository.delete(series: series)
+    fetchSeries()
+  }
 }

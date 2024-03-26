@@ -3,6 +3,7 @@ import Foundation
 extension MovieDetails {
   static func mock(
     backdropPath: String? = "https://image.tmdb.org/t/p/w500/mSUnNIjJEkqkWxbklDjWCD2RUdy.jpg",
+    posterPath: String? = "https://image.tmdb.org/t/p/w500/mSUnNIjJEkqkWxbklDjWCD2RUdy.jpg",
     genres: [Genre] = [.mock()],
     id: Int = 1,
     originalTitle: String = "Original",
@@ -18,6 +19,7 @@ extension MovieDetails {
   ) -> MovieDetails {
     MovieDetails(
       backdropPath: backdropPath,
+      posterPath: posterPath,
       genres: genres,
       id: id,
       originalTitle: originalTitle,

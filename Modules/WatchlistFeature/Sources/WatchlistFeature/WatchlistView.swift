@@ -17,20 +17,14 @@ public struct WatchlistView: View {
           ScrollView(showsIndicators: false) {
             VStack {
               ForEach($viewModel.movies, id: \.title) { movie in
-                HStack(alignment: .top) {
-                  ImageViewCell(
-                    imageUrl: movie.wrappedValue.imageUrl,
-                    title: movie.wrappedValue.title
-                  )
-                  Text(movie.wrappedValue.overview)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                  Button {
+                WatchlistItem(
+                  imageUrl: movie.wrappedValue.imageUrl,
+                  title: movie.wrappedValue.title,
+                  overview: movie.wrappedValue.overview,
+                  action: {
                     viewModel.delete(movie: movie.wrappedValue)
-                  } label: {
-                    Image(systemName: "bookmark.fill")
                   }
-                }
+                )
               }
             }
           }
@@ -42,9 +36,58 @@ public struct WatchlistView: View {
         }
         .padding()
       }
+      
+      if viewModel.seriesSectionIsVisible {
+        Section {
+          ScrollView(showsIndicators: false) {
+            VStack {
+              ForEach($viewModel.series, id: \.name) { series in
+                WatchlistItem(
+                  imageUrl: series.wrappedValue.imageUrl,
+                  title: series.wrappedValue.name,
+                  overview: series.wrappedValue.overview,
+                  action: {
+                    viewModel.delete(series: series.wrappedValue)
+                  }
+                )
+              }
+            }
+          }
+        } header: {
+          Text("Series")
+            .font(.title2)
+            .bold()
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding()
+      }
     }
     .onAppear {
       viewModel.fetchData()
+    }
+  }
+}
+
+struct WatchlistItem: View {
+  let imageUrl: String
+  let title: String
+  let overview: String
+  let action: () -> Void
+  
+  var body: some View {
+    HStack(alignment: .top) {
+      ImageViewCell(
+        imageUrl: imageUrl,
+        title: title
+      )
+      Text(overview)
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+      Button {
+        action()
+      } label: {
+        Image(systemName: "bookmark.fill")
+      }
     }
   }
 }

@@ -3,6 +3,7 @@ import Foundation
 extension SeriesDetails {
   static func mock(
     backdropPath: String? = "https://image.tmdb.org/t/p/w500/mSUnNIjJEkqkWxbklDjWCD2RUdy.jpg",
+    posterPath: String? = "https://image.tmdb.org/t/p/w500/mSUnNIjJEkqkWxbklDjWCD2RUdy.jpg",
     createdBy: [Creator] = [.mock()],
     firstAirDate: String = "2021-11-21",
     lastAirDate: String = "2023-11-21",
@@ -25,6 +26,7 @@ extension SeriesDetails {
   ) -> SeriesDetails {
     SeriesDetails(
       backdropPath: backdropPath,
+      posterPath: posterPath,
       createdBy: createdBy,
       firstAirDate: firstAirDate,
       lastAirDate: lastAirDate,

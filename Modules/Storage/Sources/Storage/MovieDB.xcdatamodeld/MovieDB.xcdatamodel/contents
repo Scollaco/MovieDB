@@ -22,5 +22,6 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="originalName" optional="YES" attributeType="String"/>
         <attribute name="overview" optional="YES" attributeType="String"/>
+        <attribute name="posterPath" optional="YES" attributeType="String"/>
     </entity>
 </model>

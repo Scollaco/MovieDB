@@ -17,6 +17,7 @@ extension MovieEntity: DomainModel {
   func toDomainModel() -> MovieDetails {
     MovieDetails(
       backdropPath: backdropPath,
+      posterPath: posterPath,
       genres: nil,
       id: id,
       originalTitle: originalTitle,

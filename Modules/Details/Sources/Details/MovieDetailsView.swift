@@ -41,9 +41,11 @@ public struct MovieDetailsView: View {
             .multilineTextAlignment(.center)
         }
         
-        ExpandableText(text: $viewModel.movieDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
-          .font(.footnote)
-          .padding()
+        if $viewModel.overviewIsVisible.wrappedValue {
+          ExpandableText(text: $viewModel.movieDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
+            .font(.footnote)
+            .padding()
+        }
         
         if $viewModel.reviewsSectionIsVisible.wrappedValue,
            let id = viewModel.movieDetails?.id {
@@ -116,7 +118,7 @@ struct MovieDetailListSection: View {
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
-        LazyHStack {
+        HStack {
           ForEach($items, id: \.id) { movie in
             MoviesBottomSheet(movie: movie.wrappedValue, coordinator: coordinator)
           }

@@ -36,6 +36,7 @@ extension SeriesRepository: SeriesRepositoryInterface {
     switch result {
     case .success(let seriesEntity):
       seriesEntity.backdropPath = series.backdropPath
+      seriesEntity.posterPath = series.posterPath
       seriesEntity.id = series.id
       seriesEntity.originalName = series.originalName
       seriesEntity.name = series.name

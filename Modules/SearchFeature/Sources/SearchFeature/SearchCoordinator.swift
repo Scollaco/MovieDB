@@ -38,6 +38,14 @@ public final class SearchCoordinator: Coordinator, ObservableObject {
     )
   }()
   
+  private lazy var moviesCoordinator: MoviesCoordinator = {
+    MoviesCoordinator(dependencies: dependencies)
+  }()
+
+  private lazy var seriesCoordinator: SeriesCoordinator = {
+    SeriesCoordinator(dependencies: dependencies)
+  }()
+  
   // MARK: - View providers
   @ViewBuilder
   public func get(page: Page) -> some View {
@@ -47,10 +55,8 @@ public final class SearchCoordinator: Coordinator, ObservableObject {
     case .details(let id, let type):
       switch type {
       case .movie:
-        let moviesCoordinator = MoviesCoordinator(dependencies: dependencies)
         moviesCoordinator.get(page: .details(id: id))
       case .tv:
-        let seriesCoordinator = SeriesCoordinator(dependencies: dependencies)
         seriesCoordinator.get(page: .details(id: id))
       case .unknown:
         EmptyView()

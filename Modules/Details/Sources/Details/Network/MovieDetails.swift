@@ -2,6 +2,7 @@ import Foundation
 
 public struct MovieDetails {
   public let backdropPath: String?
+  public let posterPath: String?
   public let genres: [Genre]?
   public let id: Int
   public let originalTitle: String
@@ -21,12 +22,13 @@ public struct MovieDetails {
   }
   
   public var imageUrl: String {
-    guard let path = backdropPath else { return . init() }
+    guard let path = posterPath else { return . init() }
     return "https://image.tmdb.org/t/p/w500/\(path)"
   }
   
   enum CodingKeys: String, CodingKey{
     case backdropPath
+    case posterPath
     case originalTitle
     case releaseDate
     case watchProviders = "watch/providers"
@@ -38,6 +40,7 @@ extension MovieDetails: Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
+    self.posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath)
     self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
     self.id = try container.decode(Int.self, forKey: .id)
     self.originalTitle = try container.decode(String.self, forKey: .originalTitle)

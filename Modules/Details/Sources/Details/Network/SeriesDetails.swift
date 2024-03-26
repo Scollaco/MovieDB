@@ -19,6 +19,7 @@ public struct SeriesDetails {
   }
   
   public let backdropPath: String?
+  public let posterPath: String?
   public let createdBy: [Creator]
   public let firstAirDate: String
   public let lastAirDate: String
@@ -48,12 +49,13 @@ public struct SeriesDetails {
   }
   
   public var imageUrl: String {
-    guard let path = backdropPath else { return . init() }
+    guard let path = posterPath else { return . init() }
     return "https://image.tmdb.org/t/p/w500/\(path)"
   }
   
   enum CodingKeys: String, CodingKey{
     case backdropPath
+    case posterPath
     case createdBy
     case firstAirDate
     case lastAirDate
@@ -79,6 +81,7 @@ extension SeriesDetails: Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
+    self.posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath)
     self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
     self.createdBy = try container.decode([Creator].self, forKey: .createdBy)
     self.id = try container.decode(Int.self, forKey: .id)

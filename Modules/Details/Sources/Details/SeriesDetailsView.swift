@@ -31,6 +31,7 @@ public struct SeriesDetailsView: View {
           .font(.title2)
           .bold()
           .multilineTextAlignment(.center)
+          .padding()
         
         if let tagline = $viewModel.seriesDetails.wrappedValue?.tagline, !tagline.isEmpty {
           Text(tagline)
@@ -40,9 +41,11 @@ public struct SeriesDetailsView: View {
             .multilineTextAlignment(.center)
         }
         
-        ExpandableText(text: $viewModel.seriesDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
-          .font(.footnote)
-          .padding()
+        if $viewModel.overviewIsVisible.wrappedValue {
+          ExpandableText(text: $viewModel.seriesDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
+            .font(.footnote)
+            .padding()
+        }
         
         if $viewModel.reviewsSectionIsVisible.wrappedValue,
            let id = viewModel.seriesDetails?.id{
@@ -149,7 +152,7 @@ struct DetailListSection: View {
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
-        LazyHStack {
+        HStack {
           ForEach(items, id: \.id) { item in
             BottomSheet(item: item, coordinator: coordinator)
           }

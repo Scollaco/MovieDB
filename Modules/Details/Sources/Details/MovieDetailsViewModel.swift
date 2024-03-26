@@ -17,6 +17,7 @@ final class MovieDetailsViewModel: ObservableObject {
   @Published var reviews: [Review] = []
   @Published var watchlistIconName: String = Icon.bookmark.rawValue
   @Published var reviewsSectionIsVisible: Bool = false
+  @Published var overviewIsVisible: Bool = false
 
   init(
     id: Int,
@@ -39,6 +40,7 @@ final class MovieDetailsViewModel: ObservableObject {
         watchlistIconName = isWatchlisted ? Icon.bookmarkFill.rawValue : Icon.bookmark.rawValue
         reviews = movieDetails?.reviews ?? []
         reviewsSectionIsVisible = !reviews.isEmpty
+        overviewIsVisible = movieDetails?.overview != nil && !(movieDetails?.overview.isEmpty ?? true)
       } catch {
         print(error)
       }
