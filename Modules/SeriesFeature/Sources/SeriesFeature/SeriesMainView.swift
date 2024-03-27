@@ -18,7 +18,8 @@ struct SeriesMainView: View {
     self.dependencies = dependencies
     self.coordinator = coordinator
   }
-  public var body: some View {
+  
+  var body: some View {
     ScrollView(showsIndicators: false) {
       ListSection(
         title: "Airing today",

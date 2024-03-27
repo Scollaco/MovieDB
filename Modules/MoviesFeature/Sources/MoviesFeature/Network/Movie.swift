@@ -1,40 +1,38 @@
 import Foundation
 
-public struct MovieResponse: Decodable {
-  public let page: Int
-  public let results: [Movie]
+struct MovieResponse: Decodable {
+  let page: Int
+  let results: [Movie]
   
-  public init(page: Int, results: [Movie]) {
+  init(page: Int, results: [Movie]) {
     self.page = page
     self.results = results
   }
 }
 
-public struct Movie: Decodable, Hashable {
-  public let adult: Bool
-  public let backdropPath: String?
-  public let id: Int
-  public let genreIds: [Int]
-  public let originalLanguage: String
-  public let originalTitle: String
-  public let overview: String
-  public let popularity: Double
-  public let posterPath: String?
-  public let releaseDate: String
-  public let title: String
-  public let voteAverage: Double
-  public let voteCount: Int
-  // Listable protocol requirement
-  public var name: String { title }
+struct Movie: Decodable, Hashable {
+  let adult: Bool
+  let backdropPath: String?
+  let id: Int
+  let genreIds: [Int]
+  let originalLanguage: String
+  let originalTitle: String
+  let overview: String
+  let popularity: Double
+  let posterPath: String?
+  let releaseDate: String
+  let title: String
+  let voteAverage: Double
+  let voteCount: Int
 }
   
 extension Movie {
-  public var imageUrl: String {
+  var imageUrl: String {
     guard let path = posterPath else { return . init() }
     return "https://image.tmdb.org/t/p/w500/\(path)"
   }
   
-  public var formattedDate: String {
+  var formattedDate: String {
     let formatter = DateFormatter()
     formatter.dateStyle = .medium
     formatter.dateFormat = "yyyy-MM-dd"

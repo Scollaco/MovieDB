@@ -1,11 +1,11 @@
 import Dependencies
 import Foundation
 
-public protocol Service {
+protocol Service {
   func fetchMovies(section: MovieSection, page: Int) async throws -> MovieResponse
 }
 
-public enum MovieSection: String {
+enum MovieSection: String {
   case nowPlaying = "now_playing"
   case popular
   case topRated = "top_rated"

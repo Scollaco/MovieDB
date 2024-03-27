@@ -1,3 +1,4 @@
+import Core
 import Dependencies
 import Details
 import MoviesFeature
@@ -16,21 +17,25 @@ struct MovieDBApp: App {
       TabView {
         DiscoverView(
           moviesCoordinator: MoviesCoordinator(
-            dependencies: RootViewFactories.dependencies
-          ), 
+            dependencies: Self.makeDependencies()
+          ),
           seriesCoordinator: SeriesCoordinator(
-            dependencies: RootViewFactories.dependencies
+            dependencies: Self.makeDependencies()
           )
         )
         SearchView(
           searchCoordinator: SearchCoordinator(
-            dependencies: RootViewFactories.dependencies
+            dependencies: Self.makeDependencies()
           )
         )
         TabView3()
       }
       .navigationBarTitleDisplayMode(.large)
     }
+  }
+  
+  private static func makeDependencies() -> Dependencies {
+    ConcreteDependencies(network: NetworkImpl())
   }
 }
 

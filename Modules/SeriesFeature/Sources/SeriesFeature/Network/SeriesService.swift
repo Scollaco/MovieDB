@@ -1,11 +1,11 @@
 import Dependencies
 import Foundation
 
-public protocol Service {
+protocol Service {
   func fetchSeries(category: Category, page: Int) async throws -> SeriesResponse
 }
 
-public enum Category: String {
+enum Category: String {
   case airingToday = "airing_today"
   case popular
   case topRated = "top_rated"

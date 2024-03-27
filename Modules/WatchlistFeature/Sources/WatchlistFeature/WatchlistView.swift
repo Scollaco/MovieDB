@@ -22,7 +22,9 @@ public struct WatchlistView: View {
                   title: movie.wrappedValue.title,
                   overview: movie.wrappedValue.overview,
                   action: {
-                    viewModel.delete(movie: movie.wrappedValue)
+                    withAnimation {
+                      viewModel.delete(movie: movie.wrappedValue)
+                    }
                   }
                 )
               }
@@ -41,13 +43,15 @@ public struct WatchlistView: View {
         Section {
           ScrollView(showsIndicators: false) {
             VStack {
-              ForEach($viewModel.series, id: \.name) { series in
+              ForEach($viewModel.series, id: \.id) { series in
                 WatchlistItem(
                   imageUrl: series.wrappedValue.imageUrl,
                   title: series.wrappedValue.name,
                   overview: series.wrappedValue.overview,
                   action: {
-                    viewModel.delete(series: series.wrappedValue)
+                    withAnimation {
+                      viewModel.delete(series: series.wrappedValue)
+                    }
                   }
                 )
               }

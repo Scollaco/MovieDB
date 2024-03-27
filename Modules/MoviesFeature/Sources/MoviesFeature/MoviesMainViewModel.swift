@@ -1,7 +1,7 @@
 import Foundation
 import Utilities
 
-public final class MoviesMainViewModel: ObservableObject {
+final class MoviesMainViewModel: ObservableObject {
   private let service: Service
 
   @Published var nowPlayingMovies: [Movie] = []
@@ -14,7 +14,7 @@ public final class MoviesMainViewModel: ObservableObject {
   private(set) var nextTopRatedPage = 1
   private(set) var nextUpcomingPage = 1
   
-  public init(service: Service) {
+  init(service: Service) {
     self.service = service
     fetchMovies()
   }
