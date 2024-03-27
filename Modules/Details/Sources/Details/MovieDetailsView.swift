@@ -5,7 +5,7 @@ import UIComponents
 import Routing
 import AVKit
 
-public struct MovieDetailsView: View {
+struct MovieDetailsView: View {
   @ObservedObject private var viewModel: MovieDetailsViewModel
   private let dependencies: Dependencies
   private weak var coordinator: DetailsCoordinator?
@@ -20,7 +20,7 @@ public struct MovieDetailsView: View {
     self.coordinator = coordinator
   }
   
-  public var body: some View {
+  var body: some View {
     ScrollView(showsIndicators: false) {
       VStack(spacing: 10) {
         if let url = $viewModel.movieDetails.wrappedValue?.trailerURL {

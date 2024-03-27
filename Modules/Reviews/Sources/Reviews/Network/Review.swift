@@ -1,4 +1,4 @@
-import Foundation
+import Utilities
 
 public struct ReviewsResponse: Decodable {
   public let page: Int
@@ -14,7 +14,7 @@ public struct Review: Decodable {
     
     public var imageUrl: String {
       guard let path = avatarPath else { return . init() }
-      return "https://image.tmdb.org/t/p/w500/\(path)"
+      return path.url
     }
   }
   public let id: String

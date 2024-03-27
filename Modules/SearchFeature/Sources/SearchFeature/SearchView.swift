@@ -5,7 +5,7 @@ import UIComponents
 import SwiftUI
 import CoreData
 
-public struct SearchView: View {
+struct SearchView: View {
   @ObservedObject private var viewModel: SearchViewModel
   private let dependencies: Dependencies
   public weak var coordinator: SearchCoordinator?
@@ -20,7 +20,7 @@ public struct SearchView: View {
     self.coordinator = coordinator
   }
   
-  public var body: some View {
+  var body: some View {
     let layout = [
       GridItem(.fixed(110)),
       GridItem(.fixed(110)),

@@ -9,7 +9,7 @@ final class SearchViewModel: ObservableObject {
   @Published var debouncedQuery: String = .init()
   
   
-  public init(service: Service) {
+  init(service: Service) {
     self.service = service
   }
   

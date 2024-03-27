@@ -1,4 +1,4 @@
-import Foundation
+import Utilities
 
 public protocol Listable {
   var name: String { get }
@@ -16,7 +16,7 @@ public struct Details: Decodable {
   
   public var imageUrl: String {
     guard let path = (posterPath ?? backdropPath) else { return . init() }
-    return "https://image.tmdb.org/t/p/w500/\(path)"
+    return path.url
   }
 }
 
@@ -58,7 +58,7 @@ public struct WatchProvider: Decodable, Hashable {
   
   public var logoUrl: String {
     guard let path = logoPath else { return . init() }
-    return "https://image.tmdb.org/t/p/w500/\(path)"
+    return path.url
   }
 }
 

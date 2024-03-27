@@ -31,10 +31,7 @@ public struct WatchlistView: View {
             }
           }
         } header: {
-          Text("Movies")
-            .font(.title2)
-            .bold()
-            .frame(maxWidth: .infinity, alignment: .leading)
+          SectionHeader(title: "Movies")
         }
         .padding()
       }
@@ -58,10 +55,7 @@ public struct WatchlistView: View {
             }
           }
         } header: {
-          Text("Series")
-            .font(.title2)
-            .bold()
-            .frame(maxWidth: .infinity, alignment: .leading)
+          SectionHeader(title: "Series")
         }
         .padding()
       }

@@ -1,4 +1,5 @@
 import Foundation
+import Utilities
 
 struct SeriesResponse: Decodable {
   public let page: Int
@@ -24,6 +25,6 @@ struct Series: Decodable, Hashable {
 extension Series {
   var imageUrl: String {
     guard let path = posterPath else { return . init() }
-    return "https://image.tmdb.org/t/p/w500/\(path)"
+    return path.url
   }
 }

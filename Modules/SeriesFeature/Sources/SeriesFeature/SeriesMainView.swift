@@ -95,10 +95,7 @@ struct ListSection: View {
         }
       }
     } header: {
-      Text(title)
-        .font(.title2)
-        .bold()
-        .frame(maxWidth: .infinity, alignment: .leading)
+      SectionHeader(title: title)
     }
     .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
   }

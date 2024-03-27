@@ -29,18 +29,10 @@ struct Movie: Decodable, Hashable {
 extension Movie {
   var imageUrl: String {
     guard let path = posterPath else { return . init() }
-    return "https://image.tmdb.org/t/p/w500/\(path)"
+    return path.url
   }
   
   var formattedDate: String {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .medium
-    formatter.dateFormat = "yyyy-MM-dd"
-    formatter.timeZone = TimeZone(secondsFromGMT: 0)
-    guard let finalDate = formatter.date(from: releaseDate) else {
-      return ""
-    }
-    formatter.dateStyle = .medium
-    return formatter.string(from: finalDate)
+    String.formattedDate(releaseDate) ?? ""
   }
 }

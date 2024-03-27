@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SearchResultResponse: Decodable {
+struct SearchResultResponse: Decodable {
   let page: Int
   let results: [SearchResult]
 }
@@ -11,7 +11,7 @@ public enum MediaType: String {
   case unknown
 }
 
-public struct SearchResult {
+struct SearchResult {
   var backDropPath: String?
   var id: Int
   var title: String?
@@ -43,12 +43,12 @@ public struct SearchResult {
   var imageUrl: String {
     let path = posterPath ?? backDropPath
     guard let path = path else { return . init() }
-    return "https://image.tmdb.org/t/p/w500/\(path)"
+    return path.url
   }
 }
 
 extension SearchResult: Decodable, Hashable {
-  public init(from decoder: Decoder) throws {
+  init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.backDropPath = try container.decodeIfPresent(String.self, forKey: .backDropPath)
     self.id = try container.decode(Int.self, forKey: .id)

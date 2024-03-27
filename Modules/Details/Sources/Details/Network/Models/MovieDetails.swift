@@ -23,7 +23,7 @@ public struct MovieDetails {
   
   public var imageUrl: String {
     guard let path = posterPath else { return . init() }
-    return "https://image.tmdb.org/t/p/w500/\(path)"
+    return path.url
   }
   
   enum CodingKeys: String, CodingKey{

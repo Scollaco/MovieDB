@@ -1,7 +1,7 @@
 import Foundation
 import Dependencies
 
-public protocol Service {
+protocol Service {
   func search(query: String, page: Int) async throws -> SearchResultResponse
 }
 

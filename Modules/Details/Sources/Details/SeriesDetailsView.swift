@@ -4,7 +4,7 @@ import UIComponents
 import Routing
 import AVKit
 
-public struct SeriesDetailsView: View {
+struct SeriesDetailsView: View {
   @ObservedObject private var viewModel: SeriesDetailsViewModel
   private let dependencies: Dependencies
   private weak var coordinator: DetailsCoordinator?
@@ -55,7 +55,6 @@ public struct SeriesDetailsView: View {
             HStack {
               Text("Reviews")
                 .bold()
-              Text("(\($viewModel.reviews.count))")
               Spacer()
               Image.init(systemName: "chevron.forward")
             }
