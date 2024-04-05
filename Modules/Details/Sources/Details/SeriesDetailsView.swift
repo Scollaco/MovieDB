@@ -102,6 +102,18 @@ struct SeriesDetailsView: View {
       }
     }
     .toolbar {
+      if let details = viewModel.seriesDetails,
+         let url = details.shareUrl {
+          ShareLink(
+            item: url,
+            message:
+              Text(viewModel.shareDetails),
+            preview: SharePreview(
+              details.name,
+              image: Image(systemName: "square.and.arrow.up")
+            )
+          )
+        }
       Button(action: {
         viewModel.addSeriesToWatchlist()
       }, label: {

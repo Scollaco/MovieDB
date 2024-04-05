@@ -53,6 +53,10 @@ public struct SeriesDetails {
     return path.url
   }
   
+  var shareUrl: URL? {
+      URL(string: "https://www.themoviedb.org/movie/\(id)")
+  }
+  
   enum CodingKeys: String, CodingKey{
     case backdropPath
     case posterPath

@@ -20,13 +20,15 @@ extension Video {
     id: String = "id",
     type: String = "Trailer",
     official: Bool = true,
-    key: String = "youtube_id"
+    key: String = "youtube_id",
+    name: String = "Video name"
   ) -> Video {
     Video(
       id: id,
       type: type,
       official: official,
-      key: key
+      key: key,
+      name: name
     )
   }
 }

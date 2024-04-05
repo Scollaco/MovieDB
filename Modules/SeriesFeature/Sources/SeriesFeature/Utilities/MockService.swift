@@ -1,6 +1,10 @@
 import Foundation
 
 final class MockService: Service {
+  func fetchTrendingSeries(page: Int, timeWindow: TimeWindow) async throws -> SeriesResponse {
+    SeriesResponse.init(page: 1, results: [.mock()])
+  }
+  
   func fetchSeries(
     category: SeriesFeature.Category,
     page: Int

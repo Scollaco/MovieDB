@@ -22,6 +22,16 @@ struct SeriesMainView: View {
   var body: some View {
     ScrollView(showsIndicators: false) {
       ListSection(
+        title: "Trending this week",
+        category: .trending,
+        viewModel: viewModel,
+        items: $viewModel.trendingSeries.wrappedValue,
+        dependencies: dependencies,
+        coordinator: coordinator
+      )
+      .padding(.bottom)
+      
+      ListSection(
         title: "Airing today",
         category: .airingToday,
         viewModel: viewModel,
@@ -49,6 +59,7 @@ struct SeriesMainView: View {
         dependencies: dependencies,
         coordinator: coordinator
       )
+      .padding(.bottom)
       
       ListSection(
         title: "On the air",
@@ -81,7 +92,8 @@ struct ListSection: View {
           ForEach(items, id: \.id) { series in
             ImageViewCell(
               imageUrl: series.imageUrl,
-              title: series.name
+              title: series.name,
+              rating: series.voteAverage
             )
             .onTapGesture {
               coordinator?.goToDetails(id: series.id)
@@ -98,38 +110,6 @@ struct ListSection: View {
       SectionHeader(title: title)
     }
     .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-  }
-}
-
-struct ImageView: View {
-  @Binding var series: Series
-  
-  var body: some View {
-    VStack {
-      if let url = URL(string: series.imageUrl) {
-        CacheAsyncImage(url: url) { phase in
-          switch phase {
-          case .failure:
-            Image(systemName: "photo") .font(.largeTitle)
-          case .success(let image):
-            image.resizable()
-          default:
-            ProgressView()
-          }
-        }
-        .frame(height: 165)
-        .clipShape(RoundedRectangle(cornerRadius: 5))
-      }
-      
-      Text(series.name)
-        .font(.footnote)
-        .lineLimit(2)
-        .multilineTextAlignment(.center)
-        .fixedSize(horizontal: false, vertical: true)
-        .frame(height: 35)
-        .bold()
-     }
-    .frame(width: 110)
   }
 }
 

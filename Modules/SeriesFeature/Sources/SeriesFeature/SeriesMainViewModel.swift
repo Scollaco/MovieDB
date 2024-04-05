@@ -3,12 +3,14 @@ import Utilities
 
 final class SeriesMainViewModel: ObservableObject {
   private let service: Service
-
+  
+  @Published var trendingSeries: [Series] = []
   @Published var airingTodaySeries: [Series] = []
   @Published var popularSeries: [Series] = []
   @Published var topRatedSeries: [Series] = []
   @Published var onTheAirSeries: [Series] = []
   
+  private(set) var nextTrendingSeriesPage = 1
   private(set) var nextAiringTodayPage = 1
   private(set) var nextPopularPage = 1
   private(set) var nextTopRatedPage = 1
@@ -16,12 +18,13 @@ final class SeriesMainViewModel: ObservableObject {
   
   init(service: Service) {
     self.service = service
-    fetchMovies()
+    fetchSeries()
   }
   
-  func fetchMovies() {
+  func fetchSeries() {
     Task {
       do {
+        try await fetchTrendingSeries()
         try await fetchAiringTodaySeries()
         try await fetchPopularSeries()
         try await fetchTopRatedSeries()
@@ -33,12 +36,24 @@ final class SeriesMainViewModel: ObservableObject {
   }
   
   @MainActor
+  private func fetchTrendingSeries() async throws {
+    let trendingResponse = try await service.fetchTrendingSeries(
+      page: nextTrendingSeriesPage,
+      timeWindow: .week
+    )
+    nextTrendingSeriesPage = trendingResponse.page + 1
+    let movies = trendingResponse
+      .results
+    trendingSeries.append(contentsOf: movies)
+  }
+  
+  @MainActor
   private func fetchAiringTodaySeries() async throws {
     let popularResponse = try await service.fetchSeries(category: .airingToday, page: nextAiringTodayPage)
     nextAiringTodayPage = popularResponse.page + 1
     let movies = popularResponse
       .results
-      .sorted(by: { $0.popularity > $1.popularity})
+      .shuffled()
     airingTodaySeries.append(contentsOf: movies)
   }
   
@@ -46,9 +61,10 @@ final class SeriesMainViewModel: ObservableObject {
   private func fetchPopularSeries() async throws {
     let nowPlayingResponse = try await service.fetchSeries(category: .popular, page: nextPopularPage)
     nextPopularPage = nowPlayingResponse.page + 1
-    let movies = nowPlayingResponse
+    let series = nowPlayingResponse
       .results
-    popularSeries.append(contentsOf: movies)
+      .shuffled()
+    popularSeries.append(contentsOf: series)
   }
   
   @MainActor
@@ -57,7 +73,7 @@ final class SeriesMainViewModel: ObservableObject {
     nextTopRatedPage = topRatedResponse.page + 1
     let movies = topRatedResponse
       .results
-      .sorted(by: { $0.voteAverage > $1.voteAverage })
+      .shuffled()
     topRatedSeries.append(contentsOf: movies)
   }
   
@@ -67,7 +83,7 @@ final class SeriesMainViewModel: ObservableObject {
     nextOnTheAirPage = onTheAirResponse.page + 1
     let movies = onTheAirResponse
       .results
-      .sorted(by: { $0.popularity > $1.popularity })
+      .shuffled()
     if let last = movies.last {
       onTheAirSeries.append(contentsOf: [last])
     }
@@ -82,6 +98,8 @@ final class SeriesMainViewModel: ObservableObject {
   func loadMoreData(for category: Category) {
     Task { @MainActor in
       switch category {
+      case .trending:
+        try? await fetchTrendingSeries()
       case .airingToday:
         try? await fetchAiringTodaySeries()
       case .popular:

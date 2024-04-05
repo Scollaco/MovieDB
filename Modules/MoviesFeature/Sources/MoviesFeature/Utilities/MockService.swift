@@ -10,5 +10,14 @@ final class MockService: Service {
       results: [.mock()]
     )
   }
+  func fetchTrendingMovies(
+    page: Int,
+    timeWindow: TimeWindow
+  ) async throws -> MovieResponse {
+    MovieResponse(
+      page: 1,
+      results: [.mock()]
+    )
+  }
 }
 

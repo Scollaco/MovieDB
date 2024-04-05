@@ -1,3 +1,4 @@
+import Foundation
 import Utilities
 
 public protocol Listable {
@@ -25,10 +26,29 @@ public struct VideoResponse: Decodable {
 }
 
 public struct Video: Decodable {
+  enum VideoType: String {
+    case trailer = "Trailer"
+    case behindScenes = "Behind the Scenes"
+    case other
+  }
+  
   public let id: String
   public let type: String
   public let official: Bool
   public let key: String
+  public let name: String
+  
+  var videoUrl: URL? {
+    URL(string: "https://youtube.com/embed/\(key)")
+  }
+  
+  var videoThumbnail: String? {
+    "https://img.youtube.com/vi/\(key)/0.jpg"
+  }
+  
+  var videoType: VideoType {
+    VideoType(rawValue: type) ?? .other
+  }
 }
 
 public struct Genre: Decodable {

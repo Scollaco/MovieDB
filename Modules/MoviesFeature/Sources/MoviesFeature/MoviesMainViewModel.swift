@@ -4,11 +4,13 @@ import Utilities
 final class MoviesMainViewModel: ObservableObject {
   private let service: Service
 
+  @Published var trendingMovies: [Movie] = []
   @Published var nowPlayingMovies: [Movie] = []
   @Published var popularMovies: [Movie] = []
   @Published var topRatedMovies: [Movie] = []
   @Published var upcomingMovies: [Movie] = []
   
+  private(set) var nextTrendingPage = 1
   private(set) var nextNowPlayingPage = 1
   private(set) var nextPopularPage = 1
   private(set) var nextTopRatedPage = 1
@@ -22,6 +24,7 @@ final class MoviesMainViewModel: ObservableObject {
   func fetchMovies() {
     Task {
       do {
+        try await fetchTrendingMovies()
         try await fetchNowPlayingMovies()
         try await fetchPopularMovies()
         try await fetchTopRatedMovies()
@@ -33,12 +36,24 @@ final class MoviesMainViewModel: ObservableObject {
   }
   
   @MainActor
+  private func fetchTrendingMovies() async throws {
+    let trendingResponse = try await service.fetchTrendingMovies(
+      page: nextTrendingPage,
+      timeWindow: .week
+    )
+    nextTrendingPage = trendingResponse.page + 1
+    let movies = trendingResponse
+      .results
+    trendingMovies.append(contentsOf: movies)
+  }
+  
+  @MainActor
   private func fetchPopularMovies() async throws {
     let popularResponse = try await service.fetchMovies(section: .popular, page: nextPopularPage)
     nextPopularPage = popularResponse.page + 1
     let movies = popularResponse
       .results
-      .sorted(by: { $0.popularity > $1.popularity})
+      .shuffled()
     popularMovies.append(contentsOf: movies)
   }
   
@@ -48,6 +63,7 @@ final class MoviesMainViewModel: ObservableObject {
     nextNowPlayingPage = nowPlayingResponse.page + 1
     let movies = nowPlayingResponse
       .results
+      .shuffled()
     nowPlayingMovies.append(contentsOf: movies)
   }
   
@@ -57,7 +73,7 @@ final class MoviesMainViewModel: ObservableObject {
     nextTopRatedPage = topRatedResponse.page + 1
     let movies = topRatedResponse
       .results
-      .sorted(by: { $0.voteAverage > $1.voteAverage })
+      .shuffled()
     topRatedMovies.append(contentsOf: movies)
   }
   
@@ -88,6 +104,8 @@ final class MoviesMainViewModel: ObservableObject {
         try? await fetchTopRatedMovies()
       case .upcoming:
         try? await fetchUpcomingMovies()
+      case .trending:
+        try? await fetchTrendingMovies()
       }
     }
   }

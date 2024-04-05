@@ -2,15 +2,19 @@ import SwiftUI
 import Details
 import UIComponents
 
-public struct WatchlistView: View {
-  @ObservedObject var viewModel = WatchlistViewModel(
-    moviesRepository: MovieRepository(),
-    seriesRepository: SeriesRepository()
-  )
+struct WatchlistView: View {
+  @ObservedObject var viewModel: WatchlistViewModel
+  public weak var coordinator: WatchlistCoordinator?
+
+  init(
+    viewModel: WatchlistViewModel,
+    coordinator: WatchlistCoordinator
+  ) {
+    self.viewModel = viewModel
+    self.coordinator = coordinator
+  }
   
-  public init() {}
-  
-  public var body: some View {
+  var body: some View {
     ScrollView {
       if viewModel.moviesSectionIsVisible {
         Section {
@@ -27,6 +31,9 @@ public struct WatchlistView: View {
                     }
                   }
                 )
+                .onTapGesture {
+                  coordinator?.goToDetails(id: movie.wrappedValue.id, type: .movie)
+                }
               }
             }
           }
@@ -51,6 +58,9 @@ public struct WatchlistView: View {
                     }
                   }
                 )
+                .onTapGesture {
+                  coordinator?.goToDetails(id: series.wrappedValue.id, type: .tv)
+                }
               }
             }
           }

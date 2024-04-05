@@ -45,6 +45,7 @@ struct MovieDetailsView: View {
           ExpandableText(text: $viewModel.movieDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
             .font(.footnote)
             .padding()
+          
         }
         
         if $viewModel.reviewsSectionIsVisible.wrappedValue,
@@ -95,6 +96,17 @@ struct MovieDetailsView: View {
       }
     }
     .toolbar {
+      if let details = viewModel.movieDetails,
+         let url = details.shareUrl {
+          ShareLink(
+            item: url,
+            message: Text(viewModel.shareDetails),
+            preview: SharePreview(
+              details.title,
+              image: Image(systemName: "square.and.arrow.up")
+            )
+          )
+        }
       Button(action: {
         viewModel.addMovieToWatchlist()
       }, label: {

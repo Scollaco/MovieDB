@@ -25,10 +25,20 @@ public struct MoviesMainView: View {
   public var body: some View {
     ScrollView(showsIndicators: false) {
       ListSection(
-        title: "Now Playing",
-        category: .nowPlaying,
+        title: "Trending this week",
+        category: .trending,
         viewModel: viewModel,
-        items: $viewModel.nowPlayingMovies.wrappedValue,
+        items: $viewModel.trendingMovies.wrappedValue,
+        dependencies: dependencies,
+        coordinator: coordinator
+      )
+      .padding(.bottom)
+      
+      ListSection(
+        title: "Popular",
+        category: .popular,
+        viewModel: viewModel,
+        items: $viewModel.popularMovies.wrappedValue,
         dependencies: dependencies,
         coordinator: coordinator
       )
@@ -45,13 +55,14 @@ public struct MoviesMainView: View {
       .padding(.bottom)
       
       ListSection(
-        title: "Popular",
-        category: .popular,
+        title: "Now Playing",
+        category: .nowPlaying,
         viewModel: viewModel,
-        items: $viewModel.popularMovies.wrappedValue,
+        items: $viewModel.nowPlayingMovies.wrappedValue,
         dependencies: dependencies,
         coordinator: coordinator
       )
+      .padding(.bottom)
       
       ListSection(
         title: "Upcoming",
@@ -83,7 +94,8 @@ struct ListSection: View {
                 ImageViewCell(
                   imageUrl: movie.imageUrl,
                   title: movie.title,
-                  date: movie.formattedDate
+                  date: movie.formattedDate,
+                  rating: movie.voteAverage
                 )
                 .onTapGesture {
                   coordinator?.goToDetails(id: movie.id)

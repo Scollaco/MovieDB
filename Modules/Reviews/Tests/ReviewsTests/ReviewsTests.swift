@@ -2,11 +2,14 @@ import XCTest
 @testable import Reviews
 
 final class ReviewsTests: XCTestCase {
-    func testExample() throws {
-        // XCTest Documentation
-        // https://developer.apple.com/documentation/xctest
-
-        // Defining Test Cases and Test Methods
-        // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
+    func testShouldLoadMoreData_lessThanSixItemsInArray() throws {
+      let sut = ReviewsMainViewModel(
+        service: MockReviewsService(),
+        mediaType: "movie", id: 1
+      )
+      sut.reviews = [.mock(), .mock(), .mock(), .mock(), .mock()]
+    
+      // Item index is not the last
+      XCTAssertFalse(sut.shouldLoadMoreData("abcdefg"))
     }
 }

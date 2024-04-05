@@ -28,7 +28,11 @@ struct MovieDBApp: App {
             dependencies: Self.makeDependencies()
           )
         )
-        TabView3()
+        WatchlistView(
+          watchlistCoordinator: WatchlistCoordinator(
+            dependencies: Self.makeDependencies()
+          )
+        )
       }
       .navigationBarTitleDisplayMode(.large)
     }
@@ -88,11 +92,19 @@ struct SearchView: View {
   }
 }
 
-struct TabView3: View {  
+struct WatchlistView: View {
+  @ObservedObject var watchlistCoordinator: WatchlistCoordinator
+
   var body: some View {
     NavigationStack {
-      WatchlistView()
-        .navigationTitle("Watchlist")
+      NavigationStack(path: $watchlistCoordinator.path) {
+        watchlistCoordinator.get(page: .home)
+          .navigationDestination(for: Page.self) {
+            watchlistCoordinator.get(page: $0)
+          }
+          .navigationTitle("Watchlist")
+      }
+      .tag(3)
     }
     .tabItem { Label("Watchlist", systemImage: "bookmark") }
   }

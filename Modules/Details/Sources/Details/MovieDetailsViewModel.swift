@@ -11,6 +11,7 @@ final class MovieDetailsViewModel: ObservableObject {
   private let repository: MovieRepositoryInterface
 
   @Published var movieDetails: MovieDetails?
+  @Published var videos: [Video] = []
   @Published var providers: [WatchProvider] = []
   @Published var similarMovies: [Details] = []
   @Published var recommendatedMovies: [Details] = []
@@ -39,6 +40,9 @@ final class MovieDetailsViewModel: ObservableObject {
         generateProviders(for: movieDetails?.watchProviders)
         watchlistIconName = isWatchlisted ? Icon.bookmarkFill.rawValue : Icon.bookmark.rawValue
         reviews = movieDetails?.reviews ?? []
+        videos = movieDetails?.videos.results
+          .filter {
+            $0.videoType == .trailer || $0.videoType == .behindScenes } ?? []
         reviewsSectionIsVisible = !reviews.isEmpty
         overviewIsVisible = movieDetails?.overview != nil && !(movieDetails?.overview.isEmpty ?? true)
       } catch {
@@ -63,6 +67,14 @@ final class MovieDetailsViewModel: ObservableObject {
     }
     _ = repository.create(movie: movie)
     watchlistIconName = Icon.bookmarkFill.rawValue
+  }
+  
+  var shareDetails: String {
+    let name = movieDetails?.title ?? ""
+    guard !providers.isEmpty else {
+      return "\n\n\(name)"
+    }
+    return "\n\n\(name)\n\nAvailable on: \(providers.map(\.providerName).joined(separator: ", "))"
   }
   
   private var isWatchlisted: Bool {

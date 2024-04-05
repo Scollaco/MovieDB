@@ -18,12 +18,16 @@ public struct MovieDetails {
 
   public var trailerURL: URL? {
     let trailer = videos.results.first(where: { $0.type == "Trailer" })
-    return URL(string: "https://youtube.com/embed/\(trailer?.key ?? "")")
+    return trailer?.videoUrl
   }
   
   public var imageUrl: String {
     guard let path = posterPath else { return . init() }
     return path.url
+  }
+  
+  var shareUrl: URL? {
+      URL(string: "https://www.themoviedb.org/movie/\(id)")
   }
   
   enum CodingKeys: String, CodingKey{

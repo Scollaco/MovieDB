@@ -68,6 +68,14 @@ final class SeriesDetailsViewModel: ObservableObject {
     watchlistIconName = Icon.bookmarkFill.rawValue
   }
   
+  var shareDetails: String {
+    let name = seriesDetails?.name ?? ""
+    guard !providers.isEmpty else {
+      return "\n\n\(name)"
+    }
+    return "\n\n\(name)\n\nAvailable on: \(providers.map(\.providerName).joined(separator: ", "))"
+  }
+  
   private var isWatchlisted: Bool {
     guard let seriesDetails = seriesDetails,
           let _ = repository.getSeries(with: seriesDetails.id) else {
