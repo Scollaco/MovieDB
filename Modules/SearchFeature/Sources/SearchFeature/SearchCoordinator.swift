@@ -58,7 +58,7 @@ public final class SearchCoordinator: Coordinator, ObservableObject {
         moviesCoordinator.get(page: .details(id: id))
       case .tv:
         seriesCoordinator.get(page: .details(id: id))
-      case .unknown:
+      case .person, .unknown:
         EmptyView()
       }
     }

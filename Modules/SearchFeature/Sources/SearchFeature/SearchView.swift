@@ -22,9 +22,9 @@ struct SearchView: View {
   
   var body: some View {
     let layout = [
-      GridItem(.fixed(110)),
-      GridItem(.fixed(110)),
-      GridItem(.fixed(110))
+      GridItem(.fixed(110), alignment: .top),
+      GridItem(.fixed(110), alignment: .top),
+      GridItem(.fixed(110), alignment: .top)
     ]
     
     ScrollView {
@@ -38,18 +38,25 @@ struct SearchView: View {
                     type: result.wrappedValue.mediaType
                   )
                 }
+                .onAppear {
+                  if viewModel.shouldLoadMoreData(result.id.wrappedValue) {
+                    viewModel.loadMoreData()
+                  }
+                }
         }
       }
       Spacer(minLength: 200)
-      VStack {
-        Text("Find movies and series")
-          .font(.title)
-          .bold()
-        Text("Search for titles to find your favorite movies and series.")
-          .multilineTextAlignment(.center)
+      if viewModel.centerTextVisible {
+        VStack {
+          Text("Find movies and series")
+            .font(.title)
+            .bold()
+          Text("Search for titles to find your favorite movies and series.")
+            .multilineTextAlignment(.center)
+        }
+        .padding()
+        .foregroundColor(.gray)
       }
-      .padding()
-      .foregroundColor(.gray)
     }
     .scrollDismissesKeyboard(.immediately)
     .searchable(
@@ -66,7 +73,7 @@ struct SearchCell: View {
   @Binding var result: SearchResult
   
   var body: some View {
-    let placeholder = result.mediaType == .movie ? "movieclapper" : "tv"
+    let placeholder = result.mediaType.placeholder
     VStack {
       if let url = URL(string: result.imageUrl) {
         CacheAsyncImage(url: url) { phase in

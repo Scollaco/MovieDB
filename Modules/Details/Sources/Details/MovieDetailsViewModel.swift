@@ -51,7 +51,7 @@ final class MovieDetailsViewModel: ObservableObject {
     }
   }
   
-  func generateProviders(for response: WatchProviderResponse?) {
+  private func generateProviders(for response: WatchProviderResponse?) {
     let buy = response?.results.US?.buy ?? []
     let flatrate = response?.results.US?.flatrate ?? []
     let rent = response?.results.US?.rent ?? []

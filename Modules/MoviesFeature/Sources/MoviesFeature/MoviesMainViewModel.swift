@@ -88,9 +88,9 @@ final class MoviesMainViewModel: ObservableObject {
   }
   
   func shouldLoadMoreData(_ movieId: Int, items: [Movie]) -> Bool {
-    // Fetch more data when list is approaching the end
-    let targetItem = items.count >= 6 ? items[items.count - 5] : items.last
-    return movieId == targetItem?.id
+    guard items.count > 10 else { return false }
+    let targetItem = items[items.count - 5]
+    return movieId == targetItem.id
   }
   
   func loadMoreData(for category: MovieSection) {
