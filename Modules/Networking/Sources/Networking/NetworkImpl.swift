@@ -81,6 +81,8 @@ extension NetworkImpl {
       let results = try decoder.decode(T.self, from: data)
       return .success(results)
     } catch {
+      let error = error as NSError
+      print(error)
       return .failure(error)
     }
   }

@@ -45,9 +45,11 @@ public final class ReviewsMainViewModel: ObservableObject {
   }
   
   func shouldLoadMoreData(_ id: String) -> Bool {
-    // Fetch more data when list is approaching the end
-    let targetItem = reviews.count >= 6 ? reviews[reviews.count - 5] : reviews.last
-    return id == targetItem?.id
+    guard reviews.count > 6 else {
+      return false
+    }
+    let targetItem = reviews[reviews.count - 5]
+    return id == targetItem.id
   }
   
   func loadMoreData() {

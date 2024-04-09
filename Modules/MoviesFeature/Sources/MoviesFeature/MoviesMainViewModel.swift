@@ -2,6 +2,13 @@ import Foundation
 import Utilities
 
 final class MoviesMainViewModel: ObservableObject {
+  enum ViewState {
+    case loaded
+    case loading
+    case empty
+    case error(Error)
+  }
+  
   private let service: Service
 
   @Published var trendingMovies: [Movie] = []
@@ -9,6 +16,7 @@ final class MoviesMainViewModel: ObservableObject {
   @Published var popularMovies: [Movie] = []
   @Published var topRatedMovies: [Movie] = []
   @Published var upcomingMovies: [Movie] = []
+  @Published var state: ViewState = .loading
   
   private(set) var nextTrendingPage = 1
   private(set) var nextNowPlayingPage = 1
@@ -22,14 +30,16 @@ final class MoviesMainViewModel: ObservableObject {
   }
   
   func fetchMovies() {
-    Task {
+    Task { @MainActor in
       do {
         try await fetchTrendingMovies()
         try await fetchNowPlayingMovies()
         try await fetchPopularMovies()
         try await fetchTopRatedMovies()
         try await fetchUpcomingMovies()
+        state = .loaded
       } catch {
+        state = .error(error)
         print(error)
       }
     }

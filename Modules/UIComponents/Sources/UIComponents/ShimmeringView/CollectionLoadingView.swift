@@ -1,19 +1,19 @@
 import SwiftUI
 
-enum CollectionLoadingState<Content> {
+public enum CollectionLoadingState<Content> {
   case empty
   case error(Error)
   case loading(placeholder: Content)
   case loaded(content: Content)
 }
 
-struct CollectionLoadingView<Item, Content: View, EmptyView: View, ErrorView: View>: View {
-  private let fade = AnyTransition.opacity.animation(Animation.linear(duration: 0.5))
+public struct CollectionLoadingView<Item, Content: View, EmptyView: View, ErrorView: View>: View {
+  private let fade = AnyTransition.opacity.animation(Animation.linear(duration: 0.1))
   private let state: CollectionLoadingState<Item>
   private let makeContent: (Item) -> Content
   private let makeEmpty: () -> EmptyView
   private let makeError: (Error) -> ErrorView
-  init(
+  public init(
     state: CollectionLoadingState<Item>,
     @ViewBuilder content: @escaping (Item) -> Content,
     @ViewBuilder empty: @escaping () -> EmptyView,
@@ -25,7 +25,7 @@ struct CollectionLoadingView<Item, Content: View, EmptyView: View, ErrorView: Vi
     self.makeError = error
   }
   
-  var body: some View {
+  public var body: some View {
     switch state {
     case let .loading(placeholders):
       makeContent(placeholders)

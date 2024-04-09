@@ -10,7 +10,7 @@ public struct Review: Decodable {
     public let name: String?
     public let username: String?
     public let avatarPath: String?
-    public let rating: Int?
+    public let rating: Float?
     
     public var imageUrl: String {
       guard let path = avatarPath else { return . init() }

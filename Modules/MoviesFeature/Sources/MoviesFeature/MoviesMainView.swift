@@ -23,58 +23,96 @@ public struct MoviesMainView: View {
   }
   
   public var body: some View {
-    ScrollView(showsIndicators: false) {
-      ListSection(
-        title: "Trending this week",
-        category: .trending,
-        viewModel: viewModel,
-        items: $viewModel.trendingMovies.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
+    CollectionLoadingView(
+      state: mapToCollectionState(viewModel),
+      content: { items in
+        ScrollView(showsIndicators: false) {
+          ListSection(
+            title: "Trending this week",
+            category: .trending,
+            viewModel: viewModel,
+            items: $viewModel.trendingMovies.wrappedValue,
+            dependencies: dependencies,
+            coordinator: coordinator
+          )
+          .padding(.bottom)
+          
+          ListSection(
+            title: "Popular",
+            category: .popular,
+            viewModel: viewModel,
+            items: $viewModel.popularMovies.wrappedValue,
+            dependencies: dependencies,
+            coordinator: coordinator
+          )
+          .padding(.bottom)
+          
+          ListSection(
+            title: "Top Rated",
+            category: .topRated,
+            viewModel: viewModel,
+            items: $viewModel.topRatedMovies.wrappedValue,
+            dependencies: dependencies,
+            coordinator: coordinator
+          )
+          .padding(.bottom)
+          
+          ListSection(
+            title: "Now Playing",
+            category: .nowPlaying,
+            viewModel: viewModel,
+            items: $viewModel.nowPlayingMovies.wrappedValue,
+            dependencies: dependencies,
+            coordinator: coordinator
+          )
+          .padding(.bottom)
+          
+          ListSection(
+            title: "Upcoming",
+            category: .upcoming,
+            viewModel: viewModel,
+            items: $viewModel.upcomingMovies.wrappedValue,
+            dependencies: dependencies,
+            coordinator: coordinator
+          )
+          .padding(.bottom)
+        }
+        .listRowSpacing(10)
+      },
+      empty: {
+        Text("No results found.")
+          .bold()
+      },
+      error: { error in
+        Text("Error: \(error.localizedDescription)")
+          .bold()
+      }
+    )
+  }
+  
+  func mapToCollectionState(_ viewModel: MoviesMainViewModel) -> CollectionLoadingState<Any> {
+    let state = viewModel.state
+    switch state {
+    case .loading:
+      return .loading(
+        placeholder:
+          ListSection(
+            title: "Top Rated",
+            category: .topRated,
+            viewModel: viewModel,
+            items: [.mock()],
+            dependencies: dependencies,
+            coordinator: coordinator
+          )
+          .padding(.bottom)
       )
-      .padding(.bottom)
-      
-      ListSection(
-        title: "Popular",
-        category: .popular,
-        viewModel: viewModel,
-        items: $viewModel.popularMovies.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
-      )
-      .padding(.bottom)
-      
-      ListSection(
-        title: "Top Rated",
-        category: .topRated,
-        viewModel: viewModel,
-        items: $viewModel.topRatedMovies.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
-      )
-      .padding(.bottom)
-      
-      ListSection(
-        title: "Now Playing",
-        category: .nowPlaying,
-        viewModel: viewModel,
-        items: $viewModel.nowPlayingMovies.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
-      )
-      .padding(.bottom)
-      
-      ListSection(
-        title: "Upcoming",
-        category: .upcoming,
-        viewModel: viewModel,
-        items: $viewModel.upcomingMovies.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
-      )
-      .padding(.bottom)
+    case .loaded:
+      return .loaded(content: $viewModel.trendingMovies.wrappedValue)
+    case .empty:
+      return .empty
+    case .error(let error):
+      return .error(error)
     }
-    .listRowSpacing(10)
   }
 }
 

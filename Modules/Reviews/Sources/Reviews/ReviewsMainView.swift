@@ -60,7 +60,7 @@ struct ReviewCell: View {
             Image(systemName: "star.fill")
               .frame(width: 15, height: 15)
               .foregroundColor(.yellow)
-            Text("\(rating)/10")
+            Text("\(Int(rating))/10")
               .font(.caption)
               .bold()
           }

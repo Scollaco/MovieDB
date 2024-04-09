@@ -92,7 +92,7 @@ public struct Review: Decodable {
     public let name: String?
     public let username: String?
     public let avatarPath: String?
-    public let rating: Int?
+    public let rating: Float?
   }
   public let id: String
   public let author: String?
