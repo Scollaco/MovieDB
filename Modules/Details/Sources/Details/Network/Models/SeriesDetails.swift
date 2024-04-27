@@ -1,11 +1,6 @@
 import Foundation
 
 public struct SeriesDetails {
-  public struct Creator: Decodable{
-    public let id: Int
-    public let name: String
-  }
-  
   public struct Season: Decodable, Listable {
     public let id: Int
     public let name: String
@@ -20,7 +15,7 @@ public struct SeriesDetails {
   
   public let backdropPath: String?
   public let posterPath: String?
-  public let createdBy: [Creator]
+  public let createdBy: [Creator]?
   public let firstAirDate: String
   public let lastAirDate: String
   public let genres: [Genre]?
@@ -87,7 +82,6 @@ extension SeriesDetails: Decodable {
     self.backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
     self.posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath)
     self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
-    self.createdBy = try container.decode([Creator].self, forKey: .createdBy)
     self.id = try container.decode(Int.self, forKey: .id)
     self.seasons = try container.decode([Season].self, forKey: .seasons)
     self.originalName = try container.decode(String.self, forKey: .originalName)
@@ -104,6 +98,7 @@ extension SeriesDetails: Decodable {
     self.watchProviders = try container.decodeIfPresent(WatchProviderResponse.self, forKey: .watchProviders)
     self.releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate)
     self.reviews = try container.decodeIfPresent(ReviewsResponse.self, forKey: .reviews)?.results
+    self.createdBy = try container.decodeIfPresent([Creator].self, forKey: .createdBy)
   }
 }
 

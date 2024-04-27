@@ -15,6 +15,7 @@ public struct MovieDetails {
   public let recommendations: MovieResponse
   public let watchProviders: WatchProviderResponse
   public let reviews: [Review]?
+  public let createdBy: [Creator]?
 
   public var trailerURL: URL? {
     let trailer = videos.results.first(where: { $0.type == "Trailer" })
@@ -36,7 +37,7 @@ public struct MovieDetails {
     case originalTitle
     case releaseDate
     case watchProviders = "watch/providers"
-    case genres, id, overview, title, tagline, videos, similar, recommendations, reviews
+    case genres, id, overview, title, tagline, videos, similar, recommendations, reviews, createdBy
   }
 }
 
@@ -57,6 +58,7 @@ extension MovieDetails: Decodable {
     self.recommendations = try container.decode(MovieResponse.self, forKey: .recommendations)
     self.watchProviders = try container.decode(WatchProviderResponse.self, forKey: .watchProviders)
     self.reviews = try container.decodeIfPresent(ReviewsResponse.self, forKey: .reviews)?.results
+    self.createdBy = try container.decodeIfPresent([Creator].self, forKey: .createdBy)
   }
 }
 

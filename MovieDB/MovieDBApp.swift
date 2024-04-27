@@ -13,33 +13,33 @@ import UIComponents
 @main
 struct MovieDBApp: App {
   var body: some Scene {
+    lazy var dependencies: Dependencies = {
+      ConcreteDependencies(network: NetworkImpl())
+    }()
+    
     WindowGroup {
       TabView {
         DiscoverView(
           moviesCoordinator: MoviesCoordinator(
-            dependencies: Self.makeDependencies()
+            dependencies: dependencies
           ),
           seriesCoordinator: SeriesCoordinator(
-            dependencies: Self.makeDependencies()
+            dependencies: dependencies
           )
         )
         SearchView(
           searchCoordinator: SearchCoordinator(
-            dependencies: Self.makeDependencies()
+            dependencies: dependencies
           )
         )
         WatchlistView(
           watchlistCoordinator: WatchlistCoordinator(
-            dependencies: Self.makeDependencies()
+            dependencies: dependencies
           )
         )
       }
       .navigationBarTitleDisplayMode(.large)
     }
-  }
-  
-  private static func makeDependencies() -> Dependencies {
-    ConcreteDependencies(network: NetworkImpl())
   }
 }
 

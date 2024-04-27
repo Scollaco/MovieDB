@@ -2,20 +2,19 @@ import CoreData
 import Storage
 
 public final class MovieRepository {
-  private let repository: CoreDataRepository<MovieEntity>
+  private let store: CoreDataStore<MovieEntity>
   
   public init() {
-    repository = CoreDataRepository()
+    store = CoreDataStore()
   }
 }
 
 extension MovieRepository: MovieRepositoryInterface {
-  // Get a gook using a predicate
   @discardableResult public func getMovies(
     predicate: NSPredicate? = nil,
     sortDescriptors: [NSSortDescriptor]? = nil
   ) -> Result<[MovieDetails], Error> {
-    let result = repository.get(predicate: predicate, sortDescriptors: sortDescriptors)
+    let result = store.get(predicate: predicate, sortDescriptors: sortDescriptors)
     switch result {
     case .success(let moviesMO):
       // Transform the NSManagedObject objects to domain objects
@@ -31,7 +30,7 @@ extension MovieRepository: MovieRepositoryInterface {
   
   // Creates a book on the persistance layer.
   @discardableResult public func create(movie: MovieDetails) -> Result<Bool, Error> {
-    let result = repository.create()
+    let result = store.create()
     switch result {
     case .success(let movieEntity):
       movieEntity.backdropPath = movie.backdropPath
@@ -41,7 +40,7 @@ extension MovieRepository: MovieRepositoryInterface {
       movieEntity.originalTitle = movie.originalTitle
       movieEntity.title = movie.title
       movieEntity.releaseDate = movie.releaseDate
-      try? repository.context.save()
+      try? store.context.save()
       return .success(true)
     case .failure(let error):
       // Return the Core Data error.
@@ -50,12 +49,12 @@ extension MovieRepository: MovieRepositoryInterface {
   }
   
   public func delete(movie: MovieDetails) {
-    guard let movieEntity = repository.get(with: movie.id) else { return }
-    _ = repository.delete(entity: movieEntity)
+    guard let movieEntity = store.get(with: movie.id) else { return }
+    _ = store.delete(entity: movieEntity)
   }
   
   public func getMovie(with id: Int) -> MovieDetails? {
-    let movieEntity = repository.get(with: id)
+    let movieEntity = store.get(with: id)
     return movieEntity?.toDomainModel()
   }
 }

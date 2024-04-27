@@ -70,19 +70,16 @@ public final class NetworkImpl: NetworkInterface, ObservableObject {
 // MARK: - NetworkInterface
 
 extension NetworkImpl {
-  public func request<T>(endpoint: Endpoint, type: T.Type) async -> Result<T, Error> where T: Decodable {
+  public func request<T: Decodable>(endpoint: Endpoint, type: T.Type) async -> Result<T, Error> {
     let request = buildRequest(endpoint: endpoint)
     guard let url = request?.url else {
       return .failure(RestAPIClientError.invalidUrl)
     }
-    
     do {
       let (data, _) = try await session.data(from: url)
-      let results = try decoder.decode(T.self, from: data)
-      return .success(results)
+      let object = try decoder.decode(type.self, from: data)
+      return .success(object)
     } catch {
-      let error = error as NSError
-      print(error)
       return .failure(error)
     }
   }

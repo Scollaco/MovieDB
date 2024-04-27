@@ -9,6 +9,21 @@ extension Genre {
   }
 }
 
+extension Creator {
+  static func mock(
+    id: Int = 1,
+    creditId: String = "12345",
+    name: String = "John Doe"
+  ) -> Creator {
+    Creator(
+      id: 1,
+      creditId: creditId,
+      name: name,
+      profilePath: nil
+    )
+  }
+}
+
 extension VideoResponse {
   static func mock() -> VideoResponse {
     VideoResponse(results: [.mock()])

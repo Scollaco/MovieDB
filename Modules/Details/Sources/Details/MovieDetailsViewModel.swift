@@ -19,6 +19,8 @@ final class MovieDetailsViewModel: ObservableObject {
   @Published var watchlistIconName: String = Icon.bookmark.rawValue
   @Published var reviewsSectionIsVisible: Bool = false
   @Published var overviewIsVisible: Bool = false
+  @Published var genreListIsVisible: Bool = false
+  @Published var directorsRowIsVisible: Bool = false
 
   init(
     id: Int,
@@ -45,6 +47,8 @@ final class MovieDetailsViewModel: ObservableObject {
             $0.videoType == .trailer || $0.videoType == .behindScenes } ?? []
         reviewsSectionIsVisible = !reviews.isEmpty
         overviewIsVisible = movieDetails?.overview != nil && !(movieDetails?.overview.isEmpty ?? true)
+        genreListIsVisible = !(movieDetails?.genres?.isEmpty ?? true)
+        directorsRowIsVisible = !(movieDetails?.createdBy?.isEmpty ?? true)
       } catch {
         print(error)
       }

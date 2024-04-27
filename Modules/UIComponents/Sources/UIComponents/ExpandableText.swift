@@ -37,13 +37,13 @@ public struct ExpandableText: View {
         )
       if truncated && !expanded {
         MoreButton(
-          title: "Read more",
+          title: "Read more...",
           action: {
             expanded.toggle()
           })
       } else if expanded {
         MoreButton(
-          title: "Less",
+          title: "See less",
           action: {
             expanded.toggle()
           })

@@ -40,6 +40,7 @@ final class SearchViewModel: ObservableObject {
       .results
     if isNewSearch {
       results = sortedResults
+      nextResultsPage = 1
     } else {
       results.append(contentsOf: sortedResults)
     }

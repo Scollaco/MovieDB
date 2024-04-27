@@ -3,10 +3,9 @@ import Foundation
 @testable import Details
 
 final class TestingMovieRepository: MovieRepositoryInterface {
-  private let repository: CoreDataRepository<MovieEntity>
+  private let store: CoreDataStore<MovieEntity>
   init() {
-    self.repository = CoreDataRepository()
-    repository.
+    store = CoreDataStore()
   }
   
   func getMovie(with id: Int) -> Details.MovieDetails? {
@@ -28,7 +27,7 @@ final class TestingMovieRepository: MovieRepositoryInterface {
   
 }
 
-extension CoreDataRepository {
+extension CoreDataStore {
   
   convenience init(persistenceController: PersistenceController) {
     

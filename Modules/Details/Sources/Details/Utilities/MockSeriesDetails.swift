@@ -64,9 +64,3 @@ extension SeriesDetails.Season {
     )
   }
 }
-
-extension SeriesDetails.Creator {
-  static func mock(id: Int = 1, name: String = "Creator") -> SeriesDetails.Creator {
-    SeriesDetails.Creator(id: id, name: name)
-  }
-}

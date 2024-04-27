@@ -29,13 +29,14 @@ extension MovieEntity: DomainModel {
       similar: .init(page: 1, results: []),
       recommendations: .init(page: 1, results: []), 
       watchProviders: .init(results: .init(US: nil)),
-      reviews: nil
+      reviews: nil,
+      createdBy: []
     )
   }
 }
 
 extension MovieEntity {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<MovieEntity> {
+    public class func fetchRequest() -> NSFetchRequest<MovieEntity> {
         NSFetchRequest<MovieEntity>(entityName: "MovieEntity")
     }
 }

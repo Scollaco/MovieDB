@@ -8,7 +8,7 @@ enum CoreDataError: Error {
 }
 
 /// Generic class for handling NSManagedObject subclasses.
-public final class CoreDataRepository<T: NSManagedObject>: Repository {
+public final class CoreDataStore<T: NSManagedObject>: DataStoreInterface {
   public typealias Entity = T
     
   /// The NSManagedObjectContext instance to be used for performing the operations.

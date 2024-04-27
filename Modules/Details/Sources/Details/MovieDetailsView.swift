@@ -40,12 +40,61 @@ struct MovieDetailsView: View {
             .padding(.horizontal)
             .multilineTextAlignment(.center)
         }
-        
+       
         if $viewModel.overviewIsVisible.wrappedValue {
           ExpandableText(text: $viewModel.movieDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
             .font(.footnote)
             .padding()
           
+        }
+        
+        if $viewModel.directorsRowIsVisible.wrappedValue {
+          VStack(alignment: .leading) {
+            HStack {
+              Text("Created by:")
+                .font(.caption)
+                .bold()
+             Spacer()
+            }
+            ScrollView(.horizontal) {
+              HStack(spacing: 10) {
+                ForEach(viewModel.movieDetails?.createdBy ?? [], id: \.id) { creator in
+                  ImageCapsuleView(
+                    imageUrl: creator.profileImageUrl,
+                    text: creator.name
+                  )
+                }
+              }
+              .padding(.horizontal)
+            }
+          }
+          .scrollIndicators(.hidden)
+        }
+        
+        if $viewModel.genreListIsVisible.wrappedValue {
+          VStack {
+            HStack {
+              Text("Genres:")
+                .font(.caption)
+                .bold()
+              Spacer()
+            }
+            ScrollView(.horizontal) {
+              HStack {
+                ForEach(viewModel.movieDetails?.genres ?? [], id: \.id) { genre in
+                  Text(genre.name)
+                    .font(.caption)
+                    .bold()
+                    .padding(.horizontal)
+                    .background(.quaternary)
+                    .clipShape(.capsule)
+                }
+              }
+              Spacer()
+            }
+          }
+          .scrollIndicators(.hidden)
+          .padding(.horizontal)
         }
         
         if $viewModel.reviewsSectionIsVisible.wrappedValue,
@@ -118,6 +167,45 @@ struct MovieDetailsView: View {
     .onAppear {
       viewModel.fetchMovieDetails()
     }
+  }
+}
+
+struct ImageCapsuleView: View {
+  let imageUrl: String?
+  let text: String
+  private let placeholder = Image(systemName: "person")
+  var body: some View {
+      HStack {
+        if let imageUrl = imageUrl, let url = URL(string: imageUrl) {
+          CacheAsyncImage(url: url) { phase in
+            switch phase {
+            case .failure:
+              placeholder
+            case .success(let image):
+              image.resizable()
+            default:
+              ProgressView()
+            }
+          }
+          .aspectRatio(contentMode: .fill)
+          .frame(width: 30, height: 30)
+          .clipShape(.circle)
+        } else {
+          placeholder
+            .frame(width: 30, height: 30)
+        }
+        Text(text)
+          .font(.caption)
+          .tint(.primary)
+          .bold()
+      }
+      .background(
+        GeometryReader { textGeometry in
+          Capsule(style: .circular)
+            .foregroundStyle(.quaternary)
+            .frame(width: textGeometry.size.width + 10)
+        }
+      )
   }
 }
 

@@ -15,7 +15,8 @@ extension MovieDetails {
     similar: MovieResponse = .init(page: 1, results: []),
     recommendations: MovieResponse = .init(page: 1, results: []),
     watchProviders: WatchProviderResponse = .mock(),
-    reviews: [Review] = []
+    reviews: [Review] = [],
+    createdBy: [Creator] = []
   ) -> MovieDetails {
     MovieDetails(
       backdropPath: backdropPath,
@@ -31,7 +32,8 @@ extension MovieDetails {
       similar: similar,
       recommendations: recommendations,
       watchProviders: watchProviders,
-      reviews: reviews
+      reviews: reviews,
+      createdBy: createdBy
     )
   }
 }

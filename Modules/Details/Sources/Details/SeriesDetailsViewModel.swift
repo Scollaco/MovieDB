@@ -19,6 +19,8 @@ final class SeriesDetailsViewModel: ObservableObject {
   @Published var watchlistIconName: String = Icon.bookmark.rawValue
   @Published var reviewsSectionIsVisible: Bool = false
   @Published var overviewIsVisible: Bool = false
+  @Published var genreListIsVisible: Bool = false
+  @Published var directorsRowIsVisible: Bool = false
 
   init(
     id: Int,
@@ -44,6 +46,9 @@ final class SeriesDetailsViewModel: ObservableObject {
         reviews = seriesDetails?.reviews ?? []
         reviewsSectionIsVisible = !reviews.isEmpty
         overviewIsVisible = seriesDetails?.overview != nil && !(seriesDetails?.overview.isEmpty ?? true)
+        genreListIsVisible = !(seriesDetails?.genres?.isEmpty ?? true)
+        directorsRowIsVisible = !(seriesDetails?.createdBy?.isEmpty ?? true)
+
       } catch {
         print(error)
       }

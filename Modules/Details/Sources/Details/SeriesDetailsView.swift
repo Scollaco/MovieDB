@@ -47,6 +47,61 @@ struct SeriesDetailsView: View {
             .padding()
         }
         
+        if $viewModel.directorsRowIsVisible.wrappedValue {
+          VStack {
+            HStack {
+              Text("Created by:")
+                .font(.caption)
+                .bold()
+                .padding(.leading)
+              Spacer()
+            }
+            ScrollView(.horizontal) {
+              HStack {
+                ForEach(viewModel.seriesDetails?.createdBy ?? [], id: \.id) { creator in
+                  ImageCapsuleView(
+                    imageUrl: creator.profileImageUrl,
+                    text: creator.name
+                  )
+                  .padding(.trailing)
+                }
+              }
+              .padding(.horizontal)
+            }
+            .scrollIndicators(.hidden)
+          }
+          .padding(.bottom)
+        }
+        
+        if $viewModel.genreListIsVisible.wrappedValue {
+          VStack {
+            HStack {
+              Text("Genres")
+                .font(.caption)
+                .bold()
+              Spacer()
+            }
+            ScrollView(.horizontal) {
+              HStack {
+                ForEach(viewModel.seriesDetails?.genres ?? [], id: \.id) { genre in
+                  Text(genre.name)
+                    .font(.caption)
+                    .bold()
+                    .padding(.horizontal)
+                    .background(.quaternary)
+                    .clipShape(.capsule)
+                }
+              }
+              Spacer()
+            }
+          }
+          .scrollIndicators(.hidden)
+          .padding(.horizontal)
+        }
+        
+        Divider()
+            .background(.quaternary)
+          
         if $viewModel.reviewsSectionIsVisible.wrappedValue,
            let id = viewModel.seriesDetails?.id{
           NavigationLink(destination: {

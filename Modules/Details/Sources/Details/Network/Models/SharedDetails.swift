@@ -21,6 +21,17 @@ public struct Details: Decodable {
   }
 }
 
+public struct Creator: Decodable {
+  let id: Int
+  let creditId: String
+  let name: String
+  let profilePath: String?
+  
+  var profileImageUrl: String {
+    profilePath?.url ?? .init()
+  }
+}
+
 public struct VideoResponse: Decodable {
   public let results: [Video]
 }

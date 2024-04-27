@@ -3,10 +3,10 @@ import Dependencies
 import Storage
 
 public final class SeriesRepository {
-  private let repository:  CoreDataRepository<SeriesEntity>
+  private let repository:  CoreDataStore<SeriesEntity>
   
   public init() {
-    repository = CoreDataRepository<SeriesEntity>()
+    repository = CoreDataStore<SeriesEntity>()
   }
 }
 
