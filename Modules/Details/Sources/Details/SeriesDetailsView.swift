@@ -1,17 +1,17 @@
 import SwiftUI
-import Dependencies
+import MovieDBDependencies
 import UIComponents
 import Routing
 import AVKit
 
 struct SeriesDetailsView: View {
   @ObservedObject private var viewModel: SeriesDetailsViewModel
-  private let dependencies: Dependencies
+  private let dependencies: MovieDBDependencies
   private weak var coordinator: DetailsCoordinator?
   
   init(
     viewModel: SeriesDetailsViewModel,
-    dependencies: Dependencies,
+    dependencies: MovieDBDependencies,
     coordinator: DetailsCoordinator?
   ) {
     self.viewModel = viewModel
@@ -211,7 +211,7 @@ struct SeasonListSection: View {
 struct DetailListSection: View {
   let title: String
   let items: [Details]
-  let dependencies: Dependencies
+  let dependencies: MovieDBDependencies
   let coordinator: DetailsCoordinator?
   @State private var isPresenting = false
   

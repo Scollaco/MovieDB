@@ -1,7 +1,7 @@
 import XCTest
-@testable import Dependencies
+@testable import MovieDBDependencies
 
-final class DependenciesTests: XCTestCase {
+final class MovieDBDependenciesTests: XCTestCase {
     func testExample() throws {
         // XCTest Documentation
         // https://developer.apple.com/documentation/xctest

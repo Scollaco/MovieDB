@@ -1,12 +1,13 @@
-import Dependencies
+import ComposableArchitecture
+import MovieDBDependencies
 import SwiftUI
 
 public final class ReviewsCoordinator: ObservableObject {
   @Published public var path = NavigationPath()
-  let dependencies: Dependencies
+  let dependencies: MovieDBDependencies
   // MARK: - Navigation
   
-  public init(dependencies: Dependencies) {
+  public init(dependencies: MovieDBDependencies) {
     self.dependencies = dependencies
   }
   
@@ -15,9 +16,11 @@ public final class ReviewsCoordinator: ObservableObject {
   public func get(page: Page) -> some View {
     switch page {
     case .home(let mediaType, let id):
-      let service = ReviewsService(dependencies: dependencies)
-      let viewModel = ReviewsMainViewModel(service: service, mediaType: mediaType, id: id)
-      ReviewsMainView(viewModel: viewModel)
+      ReviewsMainView(
+        store: Store(initialState: ReviewsFeature.State(id: id, mediaType: mediaType)) {
+          ReviewsFeature()
+        }
+      )
     }
   }
 }

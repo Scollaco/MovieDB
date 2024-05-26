@@ -1,4 +1,4 @@
-import Dependencies
+import MovieDBDependencies
 import Storage
 import SwiftUI
 import UIComponents
@@ -7,12 +7,12 @@ import AVKit
 
 struct MovieDetailsView: View {
   @ObservedObject private var viewModel: MovieDetailsViewModel
-  private let dependencies: Dependencies
+  private let dependencies: MovieDBDependencies
   private weak var coordinator: DetailsCoordinator?
   
   init(
     viewModel: MovieDetailsViewModel,
-    dependencies: Dependencies,
+    dependencies: MovieDBDependencies,
     coordinator: DetailsCoordinator
   ) {
     self.viewModel = viewModel
@@ -211,7 +211,7 @@ struct ImageCapsuleView: View {
 
 struct MovieDetailListSection: View {
   let title: String
-  let dependencies: Dependencies
+  let dependencies: MovieDBDependencies
   let coordinator: DetailsCoordinator?
   @Binding var items: [Details]
   

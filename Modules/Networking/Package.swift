@@ -13,14 +13,16 @@ let package = Package(
             targets: ["Networking"]),
     ],
     dependencies: [
-      .package(url: "Dependencies", from: "1.0.0")
+      .package(url: "MovieDBDependencies", from: "1.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Networking",
-            dependencies: ["Dependencies"]
+            dependencies: [
+              .byName(name: "MovieDBDependencies"),
+            ]
         ),
         .testTarget(
             name: "NetworkingTests",

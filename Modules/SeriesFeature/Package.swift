@@ -13,7 +13,7 @@ let package = Package(
             targets: ["SeriesFeature"]),
     ],
     dependencies: [
-      .package(url: "Dependencies", from: "1.0.0"),
+      .package(url: "MovieDBDependencies", from: "1.0.0"),
       .package(url: "UIComponents", from: "1.0.0"),
       .package(url: "Utilities", from: "1.0.0"),
       .package(url: "Routing", from: "1.0.0"),
@@ -25,7 +25,7 @@ let package = Package(
         .target(
             name: "SeriesFeature",
             dependencies: [
-              .byName(name: "Dependencies"),
+              .byName(name: "MovieDBDependencies"),
               .byName(name: "UIComponents"),
               .byName(name: "Utilities"),
               .byName(name: "Routing"),

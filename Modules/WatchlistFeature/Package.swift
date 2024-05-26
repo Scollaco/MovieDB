@@ -13,7 +13,7 @@ let package = Package(
             targets: ["WatchlistFeature"]),
     ],
     dependencies: [
-      .package(url: "Dependencies", from: "1.0.0"),
+      .package(url: "MovieDBDependencies", from: "1.0.0"),
       .package(url: "Routing", from: "1.0.0"),
       .package(url: "Storage", from: "1.0.0"),
       .package(url: "MoviesFeature", from: "1.0.0"),
@@ -26,7 +26,7 @@ let package = Package(
         .target(
             name: "WatchlistFeature",
             dependencies: [
-              .byName(name: "Dependencies"),
+              .byName(name: "MovieDBDependencies"),
               .byName(name: "Routing"),
               .byName(name: "Storage"),
               .byName(name: "MoviesFeature"),

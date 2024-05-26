@@ -1,4 +1,4 @@
-import Dependencies
+import MovieDBDependencies
 import Foundation
 import Networking
 import Utilities
@@ -9,12 +9,12 @@ import CoreData
 
 public struct MoviesMainView: View {
   @ObservedObject private var viewModel: MoviesMainViewModel
-  private let dependencies: Dependencies
+  private let dependencies: MovieDBDependencies
   private weak var coordinator: MoviesCoordinator?
   
   init(
     viewModel: MoviesMainViewModel,
-    dependencies: Dependencies,
+    dependencies: MovieDBDependencies,
     coordinator: MoviesCoordinator
   ) {
     self.viewModel = viewModel
@@ -121,7 +121,7 @@ struct ListSection: View {
   let category: MovieSection
   let viewModel: MoviesMainViewModel
   let items: [Movie]
-  let dependencies: Dependencies
+  let dependencies: MovieDBDependencies
   let coordinator: MoviesCoordinator?
   
   var body: some View {

@@ -1,5 +1,5 @@
 import CoreData
-import Dependencies
+import MovieDBDependencies
 
 /// Enum for CoreData related errors
 enum CoreDataError: Error {

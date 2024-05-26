@@ -1,5 +1,5 @@
 import CoreData
-import Dependencies
+import MovieDBDependencies
 import Storage
 
 public final class SeriesRepository {

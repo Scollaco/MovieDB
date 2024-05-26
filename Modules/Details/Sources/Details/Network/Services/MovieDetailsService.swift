@@ -1,13 +1,13 @@
 import Foundation
-import Dependencies
+import MovieDBDependencies
 
 public protocol MovieDetailsServiceInterface {
   func fetchMovieDetails(id: Int) async throws -> MovieDetails
 }
 
 public final class MovieDetailsService: MovieDetailsServiceInterface {
-  private let dependencies: Dependencies
-  public init(dependencies: Dependencies) {
+  private let dependencies: MovieDBDependencies
+  public init(dependencies: MovieDBDependencies) {
     self.dependencies = dependencies
   }
   

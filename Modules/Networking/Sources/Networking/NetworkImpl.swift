@@ -1,5 +1,5 @@
 import Foundation
-import Dependencies
+import MovieDBDependencies
 import SwiftUI
 
 public final class NetworkImpl: NetworkInterface, ObservableObject {

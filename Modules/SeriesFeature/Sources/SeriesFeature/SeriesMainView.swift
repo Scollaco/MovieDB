@@ -1,4 +1,4 @@
-import Dependencies
+import MovieDBDependencies
 import Routing
 import SwiftUI
 import UIComponents
@@ -6,12 +6,12 @@ import Utilities
 
 struct SeriesMainView: View {
   @ObservedObject private var viewModel: SeriesMainViewModel
-  private let dependencies: Dependencies
+  private let dependencies: MovieDBDependencies
   private weak var coordinator: SeriesCoordinator?
 
   init(
     viewModel: SeriesMainViewModel,
-    dependencies: Dependencies,
+    dependencies: MovieDBDependencies,
     coordinator: SeriesCoordinator
   ) {
     self.viewModel = viewModel
@@ -80,7 +80,7 @@ struct ListSection: View {
   let category: Category
   let viewModel: SeriesMainViewModel
   let items: [Series]
-  let dependencies: Dependencies
+  let dependencies: MovieDBDependencies
   let coordinator: SeriesCoordinator?
 
   @State private var scrollPosition: CGFloat = .zero

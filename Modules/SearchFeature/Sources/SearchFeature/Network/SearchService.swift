@@ -1,13 +1,13 @@
 import Foundation
-import Dependencies
+import MovieDBDependencies
 
 protocol Service {
   func search(query: String, page: Int) async throws -> SearchResultResponse
 }
 
 final class SearchService: Service {
-  private let dependencies: Dependencies
-  init(dependencies: Dependencies) {
+  private let dependencies: MovieDBDependencies
+  init(dependencies: MovieDBDependencies) {
     self.dependencies = dependencies
   }
   

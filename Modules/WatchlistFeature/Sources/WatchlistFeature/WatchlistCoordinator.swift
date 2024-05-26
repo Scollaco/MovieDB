@@ -1,4 +1,4 @@
-import Dependencies
+import MovieDBDependencies
 import Details
 import MoviesFeature
 import SeriesFeature
@@ -8,10 +8,10 @@ import Routing
 public final class WatchlistCoordinator: Coordinator, ObservableObject {
   @Published public var path = NavigationPath()
   @Published var page: Page = .home
-  let dependencies: Dependencies
+  let dependencies: MovieDBDependencies
   // MARK: - Navigation
   
-  public init(dependencies: Dependencies) {
+  public init(dependencies: MovieDBDependencies) {
     self.dependencies = dependencies
   }
   

@@ -1,4 +1,4 @@
-import Dependencies
+import MovieDBDependencies
 import Foundation
 
 protocol Service {
@@ -20,8 +20,8 @@ enum TimeWindow: String {
 }
 
 final class SeriesService: Service {
-  private let dependencies: Dependencies
-  init(dependencies: Dependencies) {
+  private let dependencies: MovieDBDependencies
+  init(dependencies: MovieDBDependencies) {
     self.dependencies = dependencies
   }
   

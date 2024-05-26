@@ -1,4 +1,4 @@
-import Dependencies
+import MovieDBDependencies
 import Details
 import SwiftUI
 import Routing
@@ -6,10 +6,10 @@ import Routing
 public final class MoviesCoordinator: Coordinator, ObservableObject {
   @Published public var path = NavigationPath()
   @Published var page: Page = .home
-  let dependencies: Dependencies
+  let dependencies: MovieDBDependencies
   // MARK: - Navigation
   
-  public init(dependencies: Dependencies) {
+  public init(dependencies: MovieDBDependencies) {
     self.dependencies = dependencies
   }
   

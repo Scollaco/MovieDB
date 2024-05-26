@@ -1,7 +1,7 @@
 import Foundation
-import Dependencies
+import MovieDBDependencies
 
-public final class ConcreteDependencies: Dependencies {
+public final class ConcreteDependencies: MovieDBDependencies {
   public var network: NetworkInterface
   
   

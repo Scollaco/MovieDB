@@ -5,7 +5,11 @@ public struct ReviewsResponse: Decodable {
   public let results: [Review]?
 }
 
-public struct Review: Decodable {
+public struct Review: Decodable, Equatable {
+  public static func == (lhs: Review, rhs: Review) -> Bool {
+    lhs.id == rhs.id
+  }
+  
   public struct AuthorDetails: Decodable {
     public let name: String?
     public let username: String?

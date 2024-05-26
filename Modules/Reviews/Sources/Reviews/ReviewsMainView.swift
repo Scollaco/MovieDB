@@ -1,30 +1,29 @@
+import ComposableArchitecture
 import UIComponents
 import SwiftUI
 
 struct ReviewsMainView: View {
-  @ObservedObject var viewModel: ReviewsMainViewModel
-  
-  init(viewModel: ReviewsMainViewModel) {
-    self.viewModel = viewModel
-  }
+  var store: StoreOf<ReviewsFeature>
   
   var body: some View {
-    List($viewModel.reviews, id: \.id) { review in
-      ReviewCell(review: review)
-      .onAppear {
-        if viewModel.shouldLoadMoreData(review.wrappedValue.id) {
-          viewModel.loadMoreData()
-        }
+    WithViewStore(store, observe: { $0 }) { viewStore in
+      List(viewStore.reviews, id: \.id) { review in
+        ReviewCell(review: review)
       }
-    }
-    .onAppear {
-      viewModel.fetchReviews()
+      .onAppear {
+        viewStore.send(
+          .requestReviews(
+            id: viewStore.id,
+            mediaType: viewStore.mediaType
+          )
+        )
+      }
     }
   }
 }
 
 struct ReviewCell: View {
-  @Binding var review: Review
+  var review: Review
   private let placeholder = "person.crop.circle.fill"
   
   public var body: some View {

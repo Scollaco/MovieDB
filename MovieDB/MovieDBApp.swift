@@ -1,5 +1,5 @@
 import Core
-import Dependencies
+import MovieDBDependencies
 import Details
 import MoviesFeature
 import Networking
@@ -13,7 +13,7 @@ import UIComponents
 @main
 struct MovieDBApp: App {
   var body: some Scene {
-    lazy var dependencies: Dependencies = {
+    lazy var dependencies: MovieDBDependencies = {
       ConcreteDependencies(network: NetworkImpl())
     }()
     

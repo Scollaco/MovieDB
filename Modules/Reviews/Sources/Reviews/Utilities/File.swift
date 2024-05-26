@@ -1,6 +1,6 @@
 import Foundation
 
-final class MockReviewsService: Service {
+final class MockReviewsService {
   func fetchReviews(mediaType: String, id: Int, page: Int) async throws -> ReviewsResponse {
     return .init(
       page: 1,

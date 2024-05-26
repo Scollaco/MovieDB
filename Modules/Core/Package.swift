@@ -13,7 +13,9 @@ let package = Package(
             targets: ["Core"]),
     ],
     dependencies: [
-      .package(url: "Dependencies", from: "1.0.0"),
+      .package(url: "MovieDBDependencies", from: "1.0.0"),
+      .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.9.3"),
+      
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -21,7 +23,8 @@ let package = Package(
         .target(
             name: "Core",
             dependencies: [
-              .byName(name: "Dependencies")
+              .byName(name: "MovieDBDependencies"),
+              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
         .testTarget(

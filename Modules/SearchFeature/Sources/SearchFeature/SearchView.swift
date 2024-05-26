@@ -1,5 +1,5 @@
 import Foundation
-import Dependencies
+import MovieDBDependencies
 import Routing
 import UIComponents
 import SwiftUI
@@ -7,12 +7,12 @@ import CoreData
 
 struct SearchView: View {
   @ObservedObject private var viewModel: SearchViewModel
-  private let dependencies: Dependencies
+  private let dependencies: MovieDBDependencies
   public weak var coordinator: SearchCoordinator?
 
   init(
     viewModel: SearchViewModel,
-    dependencies: Dependencies,
+    dependencies: MovieDBDependencies,
     coordinator: SearchCoordinator
   ) {
     self.viewModel = viewModel
