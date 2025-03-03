@@ -1,4 +1,4 @@
-import MovieDBDependencies
+import ComposableArchitecture
 import Foundation
 import Networking
 import Utilities
@@ -8,72 +8,65 @@ import SwiftUI
 import CoreData
 
 public struct MoviesMainView: View {
-  @ObservedObject private var viewModel: MoviesMainViewModel
-  private let dependencies: MovieDBDependencies
+  @Bindable var store: StoreOf<MoviesFeature>
+  
   private weak var coordinator: MoviesCoordinator?
   
   init(
-    viewModel: MoviesMainViewModel,
-    dependencies: MovieDBDependencies,
+    store: StoreOf<MoviesFeature>,
     coordinator: MoviesCoordinator
   ) {
-    self.viewModel = viewModel
-    self.dependencies = dependencies
+    self.store = store
     self.coordinator = coordinator
   }
   
   public var body: some View {
     CollectionLoadingView(
-      state: mapToCollectionState(viewModel),
+      state: mapToCollectionState(),
       content: { items in
         ScrollView(showsIndicators: false) {
           ListSection(
             title: "Trending this week",
             category: .trending,
-            viewModel: viewModel,
-            items: $viewModel.trendingMovies.wrappedValue,
-            dependencies: dependencies,
-            coordinator: coordinator
+            items: store.trendingMovies,
+            coordinator: coordinator,
+            store: store
           )
           .padding(.bottom)
           
           ListSection(
             title: "Popular",
             category: .popular,
-            viewModel: viewModel,
-            items: $viewModel.popularMovies.wrappedValue,
-            dependencies: dependencies,
-            coordinator: coordinator
+            items: store.popularMovies,
+            coordinator: coordinator,
+            store: store
           )
           .padding(.bottom)
           
           ListSection(
             title: "Top Rated",
             category: .topRated,
-            viewModel: viewModel,
-            items: $viewModel.topRatedMovies.wrappedValue,
-            dependencies: dependencies,
-            coordinator: coordinator
+            items: store.topRatedMovies,
+            coordinator: coordinator,
+            store: store
           )
           .padding(.bottom)
           
           ListSection(
             title: "Now Playing",
             category: .nowPlaying,
-            viewModel: viewModel,
-            items: $viewModel.nowPlayingMovies.wrappedValue,
-            dependencies: dependencies,
-            coordinator: coordinator
+            items: store.nowPlayingMovies,
+            coordinator: coordinator,
+            store: store
           )
           .padding(.bottom)
           
           ListSection(
             title: "Upcoming",
             category: .upcoming,
-            viewModel: viewModel,
-            items: $viewModel.upcomingMovies.wrappedValue,
-            dependencies: dependencies,
-            coordinator: coordinator
+            items: store.upcomingMovies,
+            coordinator: coordinator,
+            store: store
           )
           .padding(.bottom)
         }
@@ -88,41 +81,34 @@ public struct MoviesMainView: View {
           .bold()
       }
     )
+    .onAppear {
+      store.send(.onAppear)
+    }
   }
   
-  func mapToCollectionState(_ viewModel: MoviesMainViewModel) -> CollectionLoadingState<Any> {
-    let state = viewModel.state
-    switch state {
-    case .loading:
-      return .loading(
+  func mapToCollectionState() -> CollectionLoadingState<Any> {
+    return store.isLoading ?
+      .loading(
         placeholder:
           ListSection(
             title: "Top Rated",
             category: .topRated,
-            viewModel: viewModel,
             items: [.mock()],
-            dependencies: dependencies,
-            coordinator: coordinator
+            coordinator: coordinator,
+            store: store
           )
           .padding(.bottom)
-      )
-    case .loaded:
-      return .loaded(content: $viewModel.trendingMovies.wrappedValue)
-    case .empty:
-      return .empty
-    case .error(let error):
-      return .error(error)
-    }
+      ) :
+      .loaded(content: store.trendingMovies)
   }
 }
 
 struct ListSection: View {
   let title: String
   let category: MovieSection
-  let viewModel: MoviesMainViewModel
   let items: [Movie]
-  let dependencies: MovieDBDependencies
   let coordinator: MoviesCoordinator?
+  let store: StoreOf<MoviesFeature>
   
   var body: some View {
     Section {
@@ -138,11 +124,11 @@ struct ListSection: View {
                 .onTapGesture {
                   coordinator?.goToDetails(id: movie.id)
                 }
-                .onAppear {
-                  if viewModel.shouldLoadMoreData(movie.id, items: items) {
-                    viewModel.loadMoreData(for: category)
-                  }
-                }
+//                .onAppear {
+//                  if store.shouldLoadMoreData(movie.id, items: items) {
+//                    store.send(.loadMoreData(for: category))
+//                  }
+//                }
           }
         }
       }
@@ -153,6 +139,14 @@ struct ListSection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+  }
+}
+
+extension MoviesFeature.State {
+  func shouldLoadMoreData(_ movieId: Int, items: [Movie]) -> Bool {
+    guard items.count > 10 else { return false }
+    let targetItem = items[items.count - 5]
+    return movieId == targetItem.id
   }
 }
 

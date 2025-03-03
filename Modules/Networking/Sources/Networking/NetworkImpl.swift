@@ -83,6 +83,17 @@ extension NetworkImpl {
       return .failure(error)
     }
   }
+  
+  public func requestTry<T: Decodable>(endpoint: Endpoint, type: T.Type) async throws -> T {
+    let request = buildRequest(endpoint: endpoint)
+    guard let url = request?.url else {
+      throw RestAPIClientError.invalidUrl
+    }
+    do {
+      let (data, _) = try await session.data(from: url)
+      return try decoder.decode(type.self, from: data)
+    }
+  }
 }
 
 enum RestAPIClientError: Error {

@@ -10,7 +10,7 @@ struct MovieResponse: Decodable {
   }
 }
 
-struct Movie: Decodable, Hashable {
+public struct Movie: Decodable, Hashable {
   let adult: Bool
   let backdropPath: String?
   let id: Int

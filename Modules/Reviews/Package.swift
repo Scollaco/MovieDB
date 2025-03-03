@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Reviews",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -18,7 +18,7 @@ let package = Package(
       .package(url: "UIComponents", from: "1.0.0"),
       .package(url: "Utilities", from: "1.0.0"),
       .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.18.0"),
-      .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
+      .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.8.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

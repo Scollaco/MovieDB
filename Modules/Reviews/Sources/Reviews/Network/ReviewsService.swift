@@ -31,8 +31,12 @@ extension ReviewsService: DependencyKey {
   static let liveValue = Self(
     fetchReviews: { (mediaType, id, page) in
       let result = await network.request(
-        endpoint: ReviewsEndpoint(mediaType: mediaType, id: id, page: page),
-        type: ReviewsResponse.self
+        endpoint: ReviewsEndpoint(
+          mediaType: mediaType,
+          id: id,
+          page: page
+        ),
+        type:  ReviewsResponse.self
       )
       switch result {
       case .success(let response):

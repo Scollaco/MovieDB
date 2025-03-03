@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import MovieDBDependencies
 import Details
 import SwiftUI
@@ -27,11 +28,10 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
   }
   
   private lazy var mainView: some View = {
-    let service = MoviesService(dependencies: dependencies)
-    let viewModel = MoviesMainViewModel(service: service)
-    return MoviesMainView(
-      viewModel: viewModel,
-      dependencies: dependencies,
+    MoviesMainView(
+      store: Store(initialState: MoviesFeature.State()) {
+        MoviesFeature()
+      },
       coordinator: self
     )
   }()

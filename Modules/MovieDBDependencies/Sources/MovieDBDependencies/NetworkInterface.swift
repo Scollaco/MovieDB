@@ -1,5 +1,11 @@
 import Foundation
 
+public protocol Endpoint {
+  var additionalHeaders: [String: String]? { get }
+  var path: String { get }
+  var method: HTTPMethod { get }
+}
+
 public enum HTTPMethod: Equatable {
   case get([URLQueryItem])
   case post(Data)
@@ -12,12 +18,7 @@ public enum HTTPMethod: Equatable {
   }
 }
 
-public protocol Endpoint {
-  var additionalHeaders: [String: String]? { get }
-  var path: String { get }
-  var method: HTTPMethod { get }
-}
-
 public protocol NetworkInterface {
   func request<T: Decodable>(endpoint: Endpoint, type: T.Type) async -> Result<T, Error>
+  func requestTry<T: Decodable>(endpoint: Endpoint, type: T.Type) async throws -> T
 }
