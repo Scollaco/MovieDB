@@ -2,17 +2,15 @@ import Foundation
 import Utilities
 import ComposableArchitecture
 
-struct ReviewsFeature: Reducer {
+@Reducer
+struct ReviewsFeature {
   @Dependency(\.apiClient) var service
-  
-  private var reviews: [Review] = []
-  
+    
+  @ObservableState
   struct State: Equatable {
-    static func == (lhs: ReviewsFeature.State, rhs: ReviewsFeature.State) -> Bool {
-      lhs.reviews == rhs.reviews
-    }
     var reviews: [Review] = []
     var currentPage = 1
+    var shouldLoadMoreData = false
     let id: Int
     let mediaType: String
   }
@@ -21,6 +19,7 @@ struct ReviewsFeature: Reducer {
     case requestReviews(id: Int, mediaType: String)
     case reviewsResponse(ReviewsResponse)
     case reviewsResponseFailure(Error)
+    case cellDidAppear(id: Int)
   }
   
   var body: some ReducerOf<Self> {
@@ -51,6 +50,13 @@ struct ReviewsFeature: Reducer {
         return .none
       case .reviewsResponseFailure(let error):
         print(error)
+        return .none
+      case .cellDidAppear(let id):
+        guard state.reviews.count > 10 else {
+          return .none
+        }
+        let targetItem = state.reviews[state.reviews.count - 3]
+        state.shouldLoadMoreData = "\(id)" == targetItem.id
         return .none
       }
     }

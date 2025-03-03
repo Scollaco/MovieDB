@@ -6,18 +6,26 @@ struct ReviewsMainView: View {
   var store: StoreOf<ReviewsFeature>
   
   var body: some View {
-    WithViewStore(store, observe: { $0 }) { viewStore in
-      List(viewStore.reviews, id: \.id) { review in
-        ReviewCell(review: review)
-      }
-      .onAppear {
-        viewStore.send(
-          .requestReviews(
-            id: viewStore.id,
-            mediaType: viewStore.mediaType
-          )
+    List(store.reviews, id: \.id) { review in
+      ReviewCell(review: review)
+        .onAppear {
+          if store.shouldLoadMoreData {
+            store.send(
+              .requestReviews(
+                id: store.id,
+                mediaType: store.mediaType
+              )
+            )
+          }
+        }
+    }
+    .onAppear {
+      store.send(
+        .requestReviews(
+          id: store.id,
+          mediaType: store.mediaType
         )
-      }
+      )
     }
   }
 }
@@ -53,7 +61,9 @@ struct ReviewCell: View {
             .font(.caption2)
             .bold()
         }
+
         Spacer()
+
         if let rating = review.authorDetails?.rating {
           HStack {
             Image(systemName: "star.fill")
@@ -69,7 +79,7 @@ struct ReviewCell: View {
       ExpandableText(text: review.content ?? "", compactedLineLimit: 5)
         .tint(.primary)
         .font(.footnote)
-     }
+    }
     .padding(.horizontal)
   }
 }

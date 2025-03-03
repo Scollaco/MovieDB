@@ -9,7 +9,7 @@ final class MockReviewsService {
   }
 }
 
-extension Review {
+public extension Review {
   static func mock(
     id: String = "abcdefg",
     author: String? = "Test author",
