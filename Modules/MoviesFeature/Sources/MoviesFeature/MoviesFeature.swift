@@ -1,13 +1,22 @@
 import ComposableArchitecture
 import Dependencies
 import Foundation
+import Details
 
 @Reducer
 public struct MoviesFeature {
   @Dependency(\.moviesClient) var client
 
+  @Reducer
+  public enum Destination {
+    case details(DetailsFeature)
+  }
+  
   @ObservableState
   public struct State {
+    @Presents var destination: Destination.State?
+  
+    var detailsState: DetailsFeature.State
     var isLoading: Bool
     var trendingMovies: [Movie] = []
     var nowPlayingMovies: [Movie] = []
@@ -22,6 +31,8 @@ public struct MoviesFeature {
     var nextUpcomingPage = 1
     
     init(
+      destination: Destination.State? = nil,
+      detailsState: DetailsFeature.State = .init(),
       isLoading: Bool = false,
       trendingMovies: [Movie] = [],
       nowPlayingMovies: [Movie] = [],
@@ -34,6 +45,8 @@ public struct MoviesFeature {
       nextTopRatedPage: Int = 1,
       nextUpcomingPage: Int = 1
     ) {
+      self.destination = destination
+      self.detailsState = detailsState
       self.isLoading = isLoading
       self.trendingMovies = trendingMovies
       self.nowPlayingMovies = nowPlayingMovies
@@ -49,6 +62,8 @@ public struct MoviesFeature {
   }
   
   public enum Action {
+    case destination(PresentationAction<Destination.Action>)
+    case details(DetailsFeature.Action)
     case fetchNowPlayingMoviesResult(Result<[Movie], Error>)
     case fetchPopularMoviesResult(Result<[Movie], Error>)
     case fetchTopRatedMoviesResult(Result<[Movie], Error>)
@@ -56,11 +71,15 @@ public struct MoviesFeature {
     case fetchUpcomingMoviesResult(Result<[Movie], Error>)
     case loadMoreData(MovieSection)
     case onAppear
+    case movieSelected(Int)
   }
   
   public init() {}
   
   public var body: some ReducerOf<Self> {
+    Scope(state: \.detailsState, action: \.details) {
+      DetailsFeature()
+    }
     Reduce { state, action in
       switch action {
       case .onAppear:
@@ -130,8 +149,15 @@ public struct MoviesFeature {
         case .trending:
           return fetchTrendingMovies(state: state)
         }
+      case .movieSelected(let id):
+        state.destination = .details(.init(id: id))
+        return .none
+      case .destination,
+          .details:
+        return .none
       }
     }
+    .ifLet(\.$destination, action: \.destination)
   }
   
   private func fetchTrendingMovies(state: State) -> Effect<Self.Action> {

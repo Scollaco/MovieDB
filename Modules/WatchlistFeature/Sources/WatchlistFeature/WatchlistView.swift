@@ -27,7 +27,7 @@ struct WatchlistView: View {
                   overview: movie.wrappedValue.overview,
                   action: {
                     withAnimation {
-                      viewModel.delete(movie: movie.wrappedValue)
+                      // viewModel.delete(movie: movie.wrappedValue)
                     }
                   }
                 )
@@ -54,7 +54,7 @@ struct WatchlistView: View {
                   overview: series.wrappedValue.overview,
                   action: {
                     withAnimation {
-                      viewModel.delete(series: series.wrappedValue)
+                      //viewModel.delete(series: series.wrappedValue)
                     }
                   }
                 )
@@ -71,7 +71,7 @@ struct WatchlistView: View {
       }
     }
     .onAppear {
-      viewModel.fetchData()
+      //viewModel.fetchData()
     }
   }
 }

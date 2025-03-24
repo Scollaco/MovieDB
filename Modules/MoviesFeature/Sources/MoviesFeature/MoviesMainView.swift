@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Details
 import Foundation
 import Networking
 import Utilities
@@ -84,6 +85,11 @@ public struct MoviesMainView: View {
     .onAppear {
       store.send(.onAppear)
     }
+    .navigationDestination(
+      item: $store.scope(state: \.destination?.details, action: \.destination.details)
+    ) { detailsStore in
+      MovieDetailsView(store: detailsStore)
+    }
   }
   
   func mapToCollectionState() -> CollectionLoadingState<Any> {
@@ -122,7 +128,8 @@ struct ListSection: View {
                   rating: movie.voteAverage
                 )
                 .onTapGesture {
-                  coordinator?.goToDetails(id: movie.id)
+                  store.send(.movieSelected(movie.id))
+                  // coordinator?.goToDetails(id: movie.id)
                 }
 //                .onAppear {
 //                  if store.shouldLoadMoreData(movie.id, items: items) {

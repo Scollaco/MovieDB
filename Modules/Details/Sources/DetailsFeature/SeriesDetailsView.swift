@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import SwiftUI
 import MovieDBDependencies
 import UIComponents
@@ -5,35 +6,33 @@ import Routing
 import AVKit
 
 struct SeriesDetailsView: View {
-  @ObservedObject private var viewModel: SeriesDetailsViewModel
   private let dependencies: MovieDBDependencies
-  private weak var coordinator: DetailsCoordinator?
+  
+  @Bindable var store: StoreOf<DetailsFeature>
   
   init(
-    viewModel: SeriesDetailsViewModel,
-    dependencies: MovieDBDependencies,
-    coordinator: DetailsCoordinator?
+    store: StoreOf<DetailsFeature>,
+    dependencies: MovieDBDependencies
   ) {
-    self.viewModel = viewModel
+    self.store = store
     self.dependencies = dependencies
-    self.coordinator = coordinator
   }
   
   public var body: some View {
     ScrollView(showsIndicators: false) {
       VStack(spacing: 10) {
-        if let url = $viewModel.seriesDetails.wrappedValue?.trailerURL {
+        if let url = store.seriesDetails?.trailerURL {
           VideoPlayerView(videoUrl: url)
             .frame(height: 230)
         }
         
-        Text($viewModel.seriesDetails.wrappedValue?.name ?? .init())
+        Text(store.seriesDetails?.name ?? .init())
           .font(.title2)
           .bold()
           .multilineTextAlignment(.center)
           .padding()
         
-        if let tagline = $viewModel.seriesDetails.wrappedValue?.tagline, !tagline.isEmpty {
+        if let tagline = store.seriesDetails?.tagline, !tagline.isEmpty {
           Text(tagline)
             .font(.caption)
             .bold()
@@ -41,13 +40,13 @@ struct SeriesDetailsView: View {
             .multilineTextAlignment(.center)
         }
         
-        if $viewModel.overviewIsVisible.wrappedValue {
-          ExpandableText(text: $viewModel.seriesDetails.wrappedValue?.overview ?? .init(), compactedLineLimit: 6)
+        if store.overviewIsVisible {
+          ExpandableText(text: store.seriesDetails?.overview ?? .init(), compactedLineLimit: 6)
             .font(.footnote)
             .padding()
         }
         
-        if $viewModel.directorsRowIsVisible.wrappedValue {
+        if store.directorsRowIsVisible {
           VStack {
             HStack {
               Text("Created by:")
@@ -58,7 +57,7 @@ struct SeriesDetailsView: View {
             }
             ScrollView(.horizontal) {
               HStack {
-                ForEach(viewModel.seriesDetails?.createdBy ?? [], id: \.id) { creator in
+                ForEach(store.seriesDetails?.createdBy ?? [], id: \.id) { creator in
                   ImageCapsuleView(
                     imageUrl: creator.profileImageUrl,
                     text: creator.name
@@ -73,7 +72,7 @@ struct SeriesDetailsView: View {
           .padding(.bottom)
         }
         
-        if $viewModel.genreListIsVisible.wrappedValue {
+        if store.genreListIsVisible {
           VStack {
             HStack {
               Text("Genres")
@@ -83,7 +82,7 @@ struct SeriesDetailsView: View {
             }
             ScrollView(.horizontal) {
               HStack {
-                ForEach(viewModel.seriesDetails?.genres ?? [], id: \.id) { genre in
+                ForEach(store.seriesDetails?.genres ?? [], id: \.id) { genre in
                   Text(genre.name)
                     .font(.caption)
                     .bold()
@@ -102,10 +101,10 @@ struct SeriesDetailsView: View {
         Divider()
             .background(.quaternary)
           
-        if $viewModel.reviewsSectionIsVisible.wrappedValue,
-           let id = viewModel.seriesDetails?.id{
+        if store.reviewsSectionIsVisible,
+           let id = store.seriesDetails?.id {
           NavigationLink(destination: {
-            coordinator?.get(page: .reviews(id: id, type: "tv"))
+            // coordinator?.get(page: .reviews(id: id, type: "tv"))
           }, label: {
             HStack {
               Text("Reviews")
@@ -121,35 +120,37 @@ struct SeriesDetailsView: View {
           .padding(.horizontal)
         }
         
-        if !$viewModel.providers.isEmpty {
-          ProvidersSection(items: $viewModel.providers)
+        if !store.providers.isEmpty {
+          ProvidersSection(items: store.providers)
         }
         
         ScrollView(showsIndicators: false) {
-          if !$viewModel.seasons.isEmpty {
+          if !store.seasons.isEmpty {
             SeasonListSection(
               title: "Seasons",
-              items: $viewModel.seasons.wrappedValue
+              items: store.seasons
             )
             .padding(.bottom)
           }
           
-          if !$viewModel.similarSeries.isEmpty {
+          if let similar = store.movieDetails?.similar.results,
+             !similar.isEmpty {
             DetailListSection(
+              store: store,
               title: "Similar Series",
-              items: $viewModel.similarSeries.wrappedValue,
-              dependencies: dependencies,
-              coordinator: coordinator
+              items: similar,
+              dependencies: dependencies
             )
             .padding(.bottom)
           }
           
-          if !$viewModel.recommendatedSeries.isEmpty {
+          if let recommended = store.movieDetails?.recommendations.results,
+              !recommended.isEmpty {
             DetailListSection(
+              store: store,
               title: "People Also Watched",
-              items: $viewModel.recommendatedSeries.wrappedValue,
-              dependencies: dependencies,
-              coordinator: coordinator
+              items: recommended,
+              dependencies: dependencies
             )
           }
         }
@@ -157,12 +158,12 @@ struct SeriesDetailsView: View {
       }
     }
     .toolbar {
-      if let details = viewModel.seriesDetails,
+      if let details = store.seriesDetails,
          let url = details.shareUrl {
           ShareLink(
             item: url,
             message:
-              Text(viewModel.shareDetails),
+              Text(""),//store.shareDetails),
             preview: SharePreview(
               details.name,
               image: Image(systemName: "square.and.arrow.up")
@@ -170,15 +171,17 @@ struct SeriesDetailsView: View {
           )
         }
       Button(action: {
-        viewModel.addSeriesToWatchlist()
+        store.send(.bookmarkButtonTapped)
       }, label: {
-        Image(systemName: viewModel.watchlistIconName)
+        Image(systemName: store.watchlistIconName)
       }
       )
     }
     .navigationBarTitleDisplayMode(.inline)
     .onAppear {
-      viewModel.fetchSeriesDetails()
+      if let id = store.seriesDetails?.id {
+        store.send(.onAppear(.tv, id))
+      }
     }
   }
 }
@@ -209,10 +212,10 @@ struct SeasonListSection: View {
 }
 
 struct DetailListSection: View {
+  @Bindable var store: StoreOf<DetailsFeature>
   let title: String
   let items: [Details]
   let dependencies: MovieDBDependencies
-  let coordinator: DetailsCoordinator?
   @State private var isPresenting = false
   
   var body: some View {
@@ -220,7 +223,7 @@ struct DetailListSection: View {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack {
           ForEach(items, id: \.id) { item in
-            BottomSheet(item: item, coordinator: coordinator)
+            BottomSheet(store: store, dependencies: dependencies, item: item)
           }
         }
       }
@@ -234,22 +237,28 @@ struct DetailListSection: View {
 }
 
 struct BottomSheet: View {
-  @State private var isPresenting = false
+  @Bindable var store: StoreOf<DetailsFeature>
+  private let dependencies: MovieDBDependencies
   var item: Details
-  let coordinator: DetailsCoordinator?
+  
+  init(store: StoreOf<DetailsFeature>, dependencies: MovieDBDependencies, item: Details) {
+    self.store = store
+    self.dependencies = dependencies
+    self.item = item
+  }
 
   var body: some View {
-    Button(action: {
-      isPresenting.toggle()
-    }, label: {
+    Button {
+      store.send(.onSelectingItem(.tv, item.id))
+    } label: {
       ImageViewCell(
         imageUrl: item.imageUrl,
         title: item.title ?? item.name ?? "",
         placeholder: "tv"
       )
-    })
-    .sheet(isPresented: $isPresenting) {
-      coordinator?.get(page: .seriesDetails(id: item.id))
+    }
+    .sheet(item: $store.scope(state: \.destination?.details, action: \.destination.details)) { detailsStore in
+      SeriesDetailsView(store: detailsStore, dependencies: dependencies)
     }
   }
 }

@@ -17,6 +17,8 @@ let package = Package(
       .package(url: "UIComponents", from: "1.0.0"),
       .package(url: "Reviews", from: "1.0.0"),
       .package(url: "Storage", from: "1.0.0"),
+      .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.18.0"),
+      .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.8.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -28,6 +30,8 @@ let package = Package(
               .byName(name: "UIComponents"),
               .byName(name: "Reviews"),
               .byName(name: "Storage"),
+              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+              .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         ),
         .testTarget(

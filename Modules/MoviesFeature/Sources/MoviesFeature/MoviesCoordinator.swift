@@ -36,9 +36,9 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
     )
   }()
   
-  private lazy var detailsCoordinator: DetailsCoordinator = {
-    DetailsCoordinator(dependencies: dependencies)
-  }()
+//  private lazy var detailsCoordinator: DetailsCoordinator = {
+//    DetailsCoordinator(dependencies: dependencies)
+//  }()
   
   // MARK: - View providers
   @ViewBuilder
@@ -47,7 +47,8 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
     case .home:
       mainView
     case .details(let id):
-      detailsCoordinator.get(page: .movieDetails(id: id))
+      mainView
+      // detailsCoordinator.get(page: .movieDetails(id: id))
     }
   }
 }

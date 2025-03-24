@@ -31,8 +31,8 @@ public final class WatchlistCoordinator: Coordinator, ObservableObject {
   
   private lazy var mainView: some View = {
     let viewModel = WatchlistViewModel(
-     moviesRepository: MovieRepository(),
-     seriesRepository: SeriesRepository()
+//     moviesRepository: MovieRepository(),
+  //   seriesRepository: SeriesRepository()
    )
     return WatchlistView(viewModel: viewModel, coordinator: self)
   }()

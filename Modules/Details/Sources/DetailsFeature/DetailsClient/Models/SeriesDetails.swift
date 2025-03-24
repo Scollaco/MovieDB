@@ -1,7 +1,7 @@
 import Foundation
 
 public struct SeriesDetails {
-  public struct Season: Decodable, Listable {
+  public struct Season: Decodable, Listable, Equatable {
     public let id: Int
     public let name: String
     public let posterPath: String?

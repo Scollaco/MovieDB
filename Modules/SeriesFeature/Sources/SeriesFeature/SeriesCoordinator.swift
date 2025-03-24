@@ -36,9 +36,9 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
     )
   }()
   
-  private lazy var detailsCoordinator: DetailsCoordinator = {
-    DetailsCoordinator(dependencies: dependencies)
-  }()
+//  private lazy var detailsCoordinator: DetailsCoordinator = {
+//    DetailsCoordinator(dependencies: dependencies)
+//  }()
   
   // MARK: - View providers
   @ViewBuilder
@@ -47,7 +47,8 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
     case .home:
       mainView
     case .details(let id):
-      detailsCoordinator.get(page: .seriesDetails(id: id))
+      mainView
+  //    detailsCoordinator.get(page: .seriesDetails(id: id))
     }
   }
 }

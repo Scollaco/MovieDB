@@ -59,6 +59,13 @@ extension MovieDetails: Decodable {
     self.watchProviders = try container.decode(WatchProviderResponse.self, forKey: .watchProviders)
     self.reviews = try container.decodeIfPresent(ReviewsResponse.self, forKey: .reviews)?.results
     self.createdBy = try container.decodeIfPresent([Creator].self, forKey: .createdBy)
+//    
+//
+//    self.seasons = try container.decode([Season].self, forKey: .seasons)
+//    self.firstAirDate = try container.decode(String.self, forKey: .firstAirDate)
+//    self.lastAirDate = try container.decode(String.self, forKey: .lastAirDate)
+//    self.numberOfEpisodes = try container.decode(Int.self, forKey: .numberOfEpisodes)
+//    self.numberOfSeasons = try container.decode(Int.self, forKey: .numberOfSeasons)
   }
 }
 
