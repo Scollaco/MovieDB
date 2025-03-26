@@ -18,17 +18,16 @@ public struct MoviesFeature {
   
     var detailsState: DetailsFeature.State
     var isLoading: Bool
-    var trendingMovies: [Movie] = []
-    var nowPlayingMovies: [Movie] = []
-    var popularMovies: [Movie] = []
-    var topRatedMovies: [Movie] = []
-    var upcomingMovies: [Movie] = []
-    
-    var nextTrendingPage = 1
-    var nextNowPlayingPage = 1
-    var nextPopularPage = 1
-    var nextTopRatedPage = 1
-    var nextUpcomingPage = 1
+    var trendingMovies: [Movie]
+    var nowPlayingMovies: [Movie]
+    var popularMovies: [Movie]
+    var topRatedMovies: [Movie]
+    var upcomingMovies: [Movie]
+    var nextTrendingPage: Int
+    var nextNowPlayingPage: Int
+    var nextPopularPage: Int
+    var nextTopRatedPage: Int
+    var nextUpcomingPage: Int
     
     init(
       destination: Destination.State? = nil,
@@ -62,6 +61,7 @@ public struct MoviesFeature {
   }
   
   public enum Action {
+    case cellDidAppear(Int, MovieSection)
     case destination(PresentationAction<Destination.Action>)
     case details(DetailsFeature.Action)
     case fetchNowPlayingMoviesResult(Result<[Movie], Error>)
@@ -82,6 +82,13 @@ public struct MoviesFeature {
     }
     Reduce { state, action in
       switch action {
+      case .cellDidAppear(let id, let section):
+        let shouldLoadMoreData = shouldLoadMoreData(for: section, id: id, state: state)
+        return shouldLoadMoreData ?
+          .run { send in
+            await send(.loadMoreData(section))
+          } :
+          .none
       case .onAppear:
         state.isLoading = true
         return .merge(
@@ -150,7 +157,7 @@ public struct MoviesFeature {
           return fetchTrendingMovies(state: state)
         }
       case .movieSelected(let id):
-        state.destination = .details(.init(id: id))
+        state.destination = .details(.init(id: id, mediaType: .movie))
         return .none
       case .destination,
           .details:
@@ -165,7 +172,7 @@ public struct MoviesFeature {
       await send(
         .fetchTrendingMoviesResult(
           Result {
-            return try await client.fetchTrendingMovies( state.nextTrendingPage, .week)
+            return try await client.fetchTrendingMovies(state.nextTrendingPage, .week)
               .results
               .shuffled()
           }
@@ -227,6 +234,30 @@ public struct MoviesFeature {
           }
         )
       )
+    }
+  }
+  
+  private func shouldLoadMoreData(for section: MovieSection, id: Int, state: State) -> Bool {
+    let movies = movies(for: section, state: state)
+    guard movies.count > 10 else {
+      return false
+    }
+    let targetItem = movies[movies.count - 3]
+    return id == targetItem.id
+  }
+  
+  private func movies(for section: MovieSection, state: State) -> [Movie] {
+    switch section {
+    case .nowPlaying:
+      return state.nowPlayingMovies
+    case .popular:
+      return state.popularMovies
+    case .topRated:
+      return state.topRatedMovies
+    case .trending:
+      return state.trendingMovies
+    case .upcoming:
+      return state.upcomingMovies
     }
   }
 }

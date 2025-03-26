@@ -31,8 +31,7 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
     MoviesMainView(
       store: Store(initialState: MoviesFeature.State()) {
         MoviesFeature()
-      },
-      coordinator: self
+      }
     )
   }()
   

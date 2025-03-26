@@ -3,7 +3,7 @@ import Foundation
 
 final class MockService: Service {  
   func fetchSeries(
-    category: SeriesFeature.Category,
+    category: SeriesFeature.SeriesCategory,
     page: Int
   ) async throws -> SeriesFeature.SeriesResponse {
     SeriesResponse.init(page: 1, results: [.mock()])

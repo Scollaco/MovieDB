@@ -11,14 +11,8 @@ import CoreData
 public struct MoviesMainView: View {
   @Bindable var store: StoreOf<MoviesFeature>
   
-  private weak var coordinator: MoviesCoordinator?
-  
-  init(
-    store: StoreOf<MoviesFeature>,
-    coordinator: MoviesCoordinator
-  ) {
+  init(store: StoreOf<MoviesFeature>) {
     self.store = store
-    self.coordinator = coordinator
   }
   
   public var body: some View {
@@ -30,7 +24,6 @@ public struct MoviesMainView: View {
             title: "Trending this week",
             category: .trending,
             items: store.trendingMovies,
-            coordinator: coordinator,
             store: store
           )
           .padding(.bottom)
@@ -39,7 +32,6 @@ public struct MoviesMainView: View {
             title: "Popular",
             category: .popular,
             items: store.popularMovies,
-            coordinator: coordinator,
             store: store
           )
           .padding(.bottom)
@@ -48,7 +40,6 @@ public struct MoviesMainView: View {
             title: "Top Rated",
             category: .topRated,
             items: store.topRatedMovies,
-            coordinator: coordinator,
             store: store
           )
           .padding(.bottom)
@@ -57,7 +48,6 @@ public struct MoviesMainView: View {
             title: "Now Playing",
             category: .nowPlaying,
             items: store.nowPlayingMovies,
-            coordinator: coordinator,
             store: store
           )
           .padding(.bottom)
@@ -66,7 +56,6 @@ public struct MoviesMainView: View {
             title: "Upcoming",
             category: .upcoming,
             items: store.upcomingMovies,
-            coordinator: coordinator,
             store: store
           )
           .padding(.bottom)
@@ -100,7 +89,6 @@ public struct MoviesMainView: View {
             title: "Top Rated",
             category: .topRated,
             items: [.mock()],
-            coordinator: coordinator,
             store: store
           )
           .padding(.bottom)
@@ -113,7 +101,6 @@ struct ListSection: View {
   let title: String
   let category: MovieSection
   let items: [Movie]
-  let coordinator: MoviesCoordinator?
   let store: StoreOf<MoviesFeature>
   
   var body: some View {
@@ -121,21 +108,18 @@ struct ListSection: View {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack {
           ForEach(items, id: \.title) { movie in
-                ImageViewCell(
-                  imageUrl: movie.imageUrl,
-                  title: movie.title,
-                  date: movie.formattedDate,
-                  rating: movie.voteAverage
-                )
-                .onTapGesture {
-                  store.send(.movieSelected(movie.id))
-                  // coordinator?.goToDetails(id: movie.id)
-                }
-//                .onAppear {
-//                  if store.shouldLoadMoreData(movie.id, items: items) {
-//                    store.send(.loadMoreData(for: category))
-//                  }
-//                }
+            ImageViewCell(
+              imageUrl: movie.imageUrl,
+              title: movie.title,
+              date: movie.formattedDate,
+              rating: movie.voteAverage
+            )
+            .onTapGesture {
+              store.send(.movieSelected(movie.id))
+            }
+            .onAppear {
+              store.send(.cellDidAppear(movie.id, category))
+            }
           }
         }
       }

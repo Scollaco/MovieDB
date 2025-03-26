@@ -6,7 +6,7 @@ struct SeriesResponse: Decodable {
   public let results: [Series]
 }
 
-struct Series: Decodable, Hashable {
+public struct Series: Decodable, Hashable {
   public let adult: Bool
   public let backdropPath: String?
   public let id: Int

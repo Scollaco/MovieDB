@@ -3,26 +3,42 @@ import Utilities
 import ComposableArchitecture
 
 @Reducer
-struct ReviewsFeature {
+public struct ReviewsFeature {
   @Dependency(\.apiClient) var service
     
   @ObservableState
-  struct State: Equatable {
-    var reviews: [Review] = []
-    var currentPage = 1
-    var shouldLoadMoreData = false
+  public struct State: Equatable {
+    var reviews: [Review]
+    var currentPage: Int
+    var shouldLoadMoreData: Bool
     let id: Int
     let mediaType: String
+    
+    public init(
+      reviews: [Review] = [],
+      currentPage: Int = 1,
+      shouldLoadMoreData: Bool = false,
+      id: Int,
+      mediaType: String
+    ) {
+      self.reviews = reviews
+      self.currentPage = currentPage
+      self.shouldLoadMoreData = shouldLoadMoreData
+      self.id = id
+      self.mediaType = mediaType
+    }
   }
   
-  enum Action {
+  public enum Action {
     case requestReviews(id: Int, mediaType: String)
     case reviewsResponse(ReviewsResponse)
     case reviewsResponseFailure(Error)
     case cellDidAppear(id: Int)
   }
   
-  var body: some ReducerOf<Self> {
+  public init() {}
+  
+  public var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
       case .requestReviews(let id, let mediaType):

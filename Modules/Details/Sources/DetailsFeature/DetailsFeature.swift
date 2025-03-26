@@ -1,13 +1,14 @@
 import ComposableArchitecture
 import Dependencies
 import Foundation
+import Reviews
 
 public enum Icon: String {
   case bookmark = "bookmark.circle"
   case bookmarkFill = "bookmark.circle.fill"
 }
 
-public enum MediaType {
+public enum MediaType: String {
   case movie
   case tv
 }
@@ -19,6 +20,7 @@ public struct DetailsFeature {
   @Reducer
   public indirect enum Destination {
     case details(DetailsFeature)
+    case reviews(ReviewsFeature)
   }
   
   @ObservableState
@@ -74,13 +76,15 @@ public struct DetailsFeature {
   
   public indirect enum Action: BindableAction {
     case binding(BindingAction<State>)
+    case bookmarkButtonTapped
     case destination(PresentationAction<Destination.Action>)
     case details(DetailsFeature.Action)
-    case bookmarkButtonTapped
     case fetchMoviesDetailsResult(Result<MovieDetails, Error>)
     case fetchSeriesDetailsResult(Result<SeriesDetails, Error>)
     case onAppear(MediaType, Int)
     case onSelectingItem(MediaType, Int)
+    case reviews(ReviewsFeature.Action)
+    case reviewsButtonTapped
   }
   
   public init() {}
@@ -125,9 +129,13 @@ public struct DetailsFeature {
       case .onSelectingItem(let mediaType, let id):
         state.destination = .details(.init(id: id, mediaType: mediaType))
         return .none
+      case .reviewsButtonTapped:
+        state.destination = .reviews(.init(id: state.id, mediaType: state.mediaType.rawValue))
+        return .none
       case .binding,
           .destination,
-          .details:
+          .details,
+          .reviews:
         return .none
       }
     }

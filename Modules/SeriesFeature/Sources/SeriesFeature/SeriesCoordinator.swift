@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import MovieDBDependencies
 import Details
 import Routing
@@ -27,12 +28,10 @@ public final class SeriesCoordinator: Coordinator, ObservableObject {
   }
 
   private lazy var mainView: some View = {
-    let service = SeriesService(dependencies: dependencies)
-    let viewModel = SeriesMainViewModel(service: service)
-    return SeriesMainView(
-      viewModel: viewModel,
-      dependencies: dependencies,
-      coordinator: self
+    SeriesMainView(
+      store: Store(initialState: SeriesFeature.State()) {
+        SeriesFeature()
+      }
     )
   }()
   

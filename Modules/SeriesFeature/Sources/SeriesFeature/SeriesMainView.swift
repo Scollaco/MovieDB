@@ -1,22 +1,16 @@
+import ComposableArchitecture
+import Details
 import MovieDBDependencies
-import Routing
+import Reviews
 import SwiftUI
 import UIComponents
 import Utilities
 
 struct SeriesMainView: View {
-  @ObservedObject private var viewModel: SeriesMainViewModel
-  private let dependencies: MovieDBDependencies
-  private weak var coordinator: SeriesCoordinator?
+  @Bindable var store: StoreOf<SeriesFeature>
 
-  init(
-    viewModel: SeriesMainViewModel,
-    dependencies: MovieDBDependencies,
-    coordinator: SeriesCoordinator
-  ) {
-    self.viewModel = viewModel
-    self.dependencies = dependencies
-    self.coordinator = coordinator
+  init(store: StoreOf<SeriesFeature>) {
+    self.store = store
   }
   
   var body: some View {
@@ -24,66 +18,60 @@ struct SeriesMainView: View {
       ListSection(
         title: "Trending this week",
         category: .trending,
-        viewModel: viewModel,
-        items: $viewModel.trendingSeries.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
+        items: store.trendingSeries,
+        store: store
       )
       .padding(.bottom)
       
       ListSection(
         title: "Airing today",
         category: .airingToday,
-        viewModel: viewModel,
-        items: $viewModel.airingTodaySeries.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
+        items: store.airingTodaySeries,
+        store: store
       )
       .padding(.bottom)
       
       ListSection(
         title: "Top rated",
         category: .topRated,
-        viewModel: viewModel,
-        items: $viewModel.topRatedSeries.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
+        items: store.topRatedSeries,
+        store: store
       )
       .padding(.bottom)
       
       ListSection(
         title: "Popular",
         category: .popular,
-        viewModel: viewModel,
-        items: $viewModel.popularSeries.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
+        items: store.popularSeries,
+        store: store
       )
       .padding(.bottom)
       
       ListSection(
         title: "On the air",
         category: .onTheAir,
-        viewModel: viewModel,
-        items: $viewModel.onTheAirSeries.wrappedValue,
-        dependencies: dependencies,
-        coordinator: coordinator
+        items: store.onTheAirSeries,
+        store: store
       )
       .padding(.bottom)
     }
     .listRowSpacing(10)
+    .onAppear {
+      store.send(.onAppear)
+    }
+    .navigationDestination(
+      item: $store.scope(state: \.destination?.details, action: \.destination.details)
+    ) { detailsStore in
+      SeriesDetailsView(store: detailsStore)
+    }
   }
 }
 
 struct ListSection: View {
   let title: String
-  let category: Category
-  let viewModel: SeriesMainViewModel
+  let category: SeriesCategory
   let items: [Series]
-  let dependencies: MovieDBDependencies
-  let coordinator: SeriesCoordinator?
-
-  @State private var scrollPosition: CGFloat = .zero
+  let store: StoreOf<SeriesFeature>
   
   var body: some View {
     Section {
@@ -96,12 +84,10 @@ struct ListSection: View {
               rating: series.voteAverage
             )
             .onTapGesture {
-              coordinator?.goToDetails(id: series.id)
+              store.send(.seriesSelected(series.id))
             }
             .onAppear {
-              if viewModel.shouldLoadMoreData(series.id, items: items) {
-                viewModel.loadMoreData(for: category)
-              }
+              store.send(.cellDidAppear(series.id, category))
             }
           }
         }

@@ -2,10 +2,14 @@ import ComposableArchitecture
 import UIComponents
 import SwiftUI
 
-struct ReviewsMainView: View {
+public struct ReviewsMainView: View {
   var store: StoreOf<ReviewsFeature>
   
-  var body: some View {
+  public init(store: StoreOf<ReviewsFeature>) {
+    self.store = store
+  }
+  
+  public var body: some View {
     List(store.reviews, id: \.id) { review in
       ReviewCell(review: review)
         .onAppear {

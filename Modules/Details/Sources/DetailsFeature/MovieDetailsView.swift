@@ -1,11 +1,12 @@
 import ComposableArchitecture
+import Storage
 import SwiftUI
-import MovieDBDependencies
 import UIComponents
 import Reviews
+import Routing
 import AVKit
 
-public struct SeriesDetailsView: View {
+public struct MovieDetailsView: View {
   @Bindable var store: StoreOf<DetailsFeature>
   
   public init(store: StoreOf<DetailsFeature>) {
@@ -15,68 +16,65 @@ public struct SeriesDetailsView: View {
   public var body: some View {
     ScrollView(showsIndicators: false) {
       VStack(spacing: 10) {
-        if let url = store.seriesDetails?.trailerURL {
+        if let url = store.movieDetails?.trailerURL {
           VideoPlayerView(videoUrl: url)
             .frame(height: 230)
         }
         
-        Text(store.seriesDetails?.name ?? .init())
+        Text(store.movieDetails?.title ?? .init())
           .font(.title2)
           .bold()
           .multilineTextAlignment(.center)
-          .padding()
         
-        if let tagline = store.seriesDetails?.tagline, !tagline.isEmpty {
+        if let tagline = store.movieDetails?.tagline {
           Text(tagline)
             .font(.caption)
             .bold()
             .padding(.horizontal)
             .multilineTextAlignment(.center)
         }
-        
+       
         if store.overviewIsVisible {
-          ExpandableText(text: store.seriesDetails?.overview ?? .init(), compactedLineLimit: 6)
+          ExpandableText(text: store.movieDetails?.overview ?? .init(), compactedLineLimit: 6)
             .font(.footnote)
             .padding()
+          
         }
         
         if store.directorsRowIsVisible {
-          VStack {
+          VStack(alignment: .leading) {
             HStack {
               Text("Created by:")
                 .font(.caption)
                 .bold()
-                .padding(.leading)
-              Spacer()
+             Spacer()
             }
             ScrollView(.horizontal) {
-              HStack {
-                ForEach(store.seriesDetails?.createdBy ?? [], id: \.id) { creator in
+              HStack(spacing: 10) {
+                ForEach(store.movieDetails?.createdBy ?? [], id: \.id) { creator in
                   ImageCapsuleView(
                     imageUrl: creator.profileImageUrl,
                     text: creator.name
                   )
-                  .padding(.trailing)
                 }
               }
               .padding(.horizontal)
             }
-            .scrollIndicators(.hidden)
           }
-          .padding(.bottom)
+          .scrollIndicators(.hidden)
         }
         
         if store.genreListIsVisible {
           VStack {
             HStack {
-              Text("Genres")
+              Text("Genres:")
                 .font(.caption)
                 .bold()
               Spacer()
             }
             ScrollView(.horizontal) {
               HStack {
-                ForEach(store.seriesDetails?.genres ?? [], id: \.id) { genre in
+                ForEach(store.movieDetails?.genres ?? [], id: \.id) { genre in
                   Text(genre.name)
                     .font(.caption)
                     .bold()
@@ -92,9 +90,6 @@ public struct SeriesDetailsView: View {
           .padding(.horizontal)
         }
         
-        Divider()
-            .background(.quaternary)
-          
         if store.reviewsSectionIsVisible {
           Button {
             store.send(.reviewsButtonTapped)
@@ -118,45 +113,37 @@ public struct SeriesDetailsView: View {
         }
         
         ScrollView(showsIndicators: false) {
-          if !store.seasons.isEmpty {
-            SeasonListSection(
-              title: "Seasons",
-              items: store.seasons
-            )
-            .padding(.bottom)
-          }
-          
           if let similar = store.movieDetails?.similar.results,
              !similar.isEmpty {
-            DetailListSection(
+            MovieDetailListSection(
               store: store,
-              title: "Similar Series",
+              title: "Similar Movies",
               items: similar
             )
             .padding(.bottom)
           }
-          
+       
           if let recommended = store.movieDetails?.recommendations.results,
               !recommended.isEmpty {
-            DetailListSection(
+            MovieDetailListSection(
               store: store,
               title: "People Also Watched",
               items: recommended
             )
+            .padding(.bottom)
           }
         }
         .padding()
       }
     }
     .toolbar {
-      if let details = store.seriesDetails,
+      if let details = store.movieDetails,
          let url = details.shareUrl {
-          ShareLink(
+        ShareLink(
             item: url,
-            message:
-              Text(""),//store.shareDetails),
+            message: Text(""),
             preview: SharePreview(
-              details.name,
+              details.title,
               image: Image(systemName: "square.and.arrow.up")
             )
           )
@@ -170,7 +157,7 @@ public struct SeriesDetailsView: View {
     }
     .navigationBarTitleDisplayMode(.inline)
     .onAppear {
-      store.send(.onAppear(.tv, store.id))
+      store.send(.onAppear(.movie, store.id))
     }
     .navigationDestination(
       item: $store.scope(
@@ -183,83 +170,100 @@ public struct SeriesDetailsView: View {
   }
 }
 
-struct SeasonListSection: View {
-  let title: String
-  let items: [SeriesDetails.Season]
+struct ImageCapsuleView: View {
+  let imageUrl: String?
+  let text: String
+  private let placeholder = Image(systemName: "person")
   var body: some View {
-    Section {
-      ScrollView(.horizontal, showsIndicators: false) {
-        LazyHStack {
-          ForEach(items, id: \.id) { season in
-            ImageViewCell(
-              imageUrl: season.imageUrl,
-              title: season.name,
-              placeholder: "tv"
-            )
+      HStack {
+        if let imageUrl = imageUrl, let url = URL(string: imageUrl) {
+          CacheAsyncImage(url: url) { phase in
+            switch phase {
+            case .failure:
+              placeholder
+            case .success(let image):
+              image.resizable()
+            default:
+              ProgressView()
+            }
           }
+          .aspectRatio(contentMode: .fill)
+          .frame(width: 30, height: 30)
+          .clipShape(.circle)
+        } else {
+          placeholder
+            .frame(width: 30, height: 30)
         }
+        Text(text)
+          .font(.caption)
+          .tint(.primary)
+          .bold()
       }
-    }  header: {
-      Text(title)
-        .font(.title2)
-        .bold()
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
+      .background(
+        GeometryReader { textGeometry in
+          Capsule(style: .circular)
+            .foregroundStyle(.quaternary)
+            .frame(width: textGeometry.size.width + 10)
+        }
+      )
   }
 }
 
-struct DetailListSection: View {
+struct MovieDetailListSection: View {
   @Bindable var store: StoreOf<DetailsFeature>
   let title: String
-  let items: [Details]
+  var items: [Details]
   
   var body: some View {
     Section {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack {
-          ForEach(items, id: \.id) { item in
-            BottomSheet(store: store, item: item)
+          ForEach(items, id: \.id) { movie in
+            MoviesBottomSheet(
+              movie: movie,
+              store: store
+            )
           }
         }
       }
-    }  header: {
+    } header: {
       Text(title)
         .font(.title2)
         .bold()
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+    .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
   }
 }
 
-struct BottomSheet: View {
+struct MoviesBottomSheet: View {
+  var movie: Details
   @Bindable var store: StoreOf<DetailsFeature>
-  var item: Details
-  
-  init(store: StoreOf<DetailsFeature>, item: Details) {
-    self.store = store
-    self.item = item
-  }
 
   var body: some View {
     Button {
-      store.send(.onSelectingItem(.tv, item.id))
+      store.send(.onSelectingItem(.movie, movie.id))
     } label: {
       ImageViewCell(
-        imageUrl: item.imageUrl,
-        title: item.title ?? item.name ?? "",
-        placeholder: "tv"
+        imageUrl: movie.imageUrl,
+        title: movie.title ?? "",
+        placeholder: "movieclapper"
       )
     }
-    .sheet(item: $store.scope(state: \.destination?.details, action: \.destination.details)) { detailsStore in
-      SeriesDetailsView(store: detailsStore)
+    .sheet(
+      item: $store.scope(state: \.destination?.details, action: \.destination.details)
+    ) { detailsStore in
+      MovieDetailsView(store: detailsStore)
     }
   }
 }
 
 //#Preview {
-//  SeriesDetailsView(
-//    viewModel: SeriesDetailsViewModel(
-//      series: .mock(),
-//      service: MockService())
+//  MoviesDetailsView(
+//    viewModel: DetailsViewModel(
+//      id: 1,
+//      mediaType: .movie,
+//      service: MockService()
+//    )
 //  )
 //}
