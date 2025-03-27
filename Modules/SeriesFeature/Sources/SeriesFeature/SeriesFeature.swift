@@ -91,7 +91,7 @@ public struct SeriesFeature {
       case .onAppear:
         state.isLoading = true
         return .merge(
-          // fetchTrendingSeries(page: state.nextTrendingPage),
+          fetchTrendingSeries(page: state.nextTrendingSeriesPage),
           fetchSeries(category: .airingToday, page: state.nextAiringTodayPage),
           fetchSeries(category: .popular, page: state.nextPopularPage),
           fetchSeries(category: .topRated, page: state.nextTopRatedPage),
@@ -140,8 +140,7 @@ public struct SeriesFeature {
         case .onTheAir:
           return fetchSeries(category: .onTheAir, page: state.nextOnTheAirPage)
         case .trending:
-          break
-         // return fetchTrendingSeries(page: state.nextTrendingPage)
+          return fetchTrendingSeries(page: state.nextTrendingSeriesPage)
         }
         return .none
       case .seriesSelected(let id):

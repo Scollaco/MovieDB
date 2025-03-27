@@ -18,8 +18,8 @@ public struct ReviewsFeature {
       reviews: [Review] = [],
       currentPage: Int = 1,
       shouldLoadMoreData: Bool = false,
-      id: Int,
-      mediaType: String
+      id: Int = 0,
+      mediaType: String = ""
     ) {
       self.reviews = reviews
       self.currentPage = currentPage

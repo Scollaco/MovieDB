@@ -126,7 +126,7 @@ public struct SeriesDetailsView: View {
             .padding(.bottom)
           }
           
-          if let similar = store.movieDetails?.similar.results,
+          if let similar = store.seriesDetails?.similar?.results,
              !similar.isEmpty {
             DetailListSection(
               store: store,
@@ -136,7 +136,7 @@ public struct SeriesDetailsView: View {
             .padding(.bottom)
           }
           
-          if let recommended = store.movieDetails?.recommendations.results,
+          if let recommended = store.seriesDetails?.recommendations?.results,
               !recommended.isEmpty {
             DetailListSection(
               store: store,
@@ -161,23 +161,21 @@ public struct SeriesDetailsView: View {
             )
           )
         }
-      Button(action: {
+      Button {
         store.send(.bookmarkButtonTapped)
-      }, label: {
+      } label: {
         Image(systemName: store.watchlistIconName)
       }
-      )
     }
     .navigationBarTitleDisplayMode(.inline)
     .onAppear {
-      store.send(.onAppear(.tv, store.id))
+        store.send(.onAppear(.tv, store.id))
     }
     .navigationDestination(
       item: $store.scope(
         state: \.destination?.reviews,
         action: \.destination.reviews
-      )
-    ) { reviewsStore in
+      )) { reviewsStore in
       ReviewsMainView(store: reviewsStore)
     }
   }

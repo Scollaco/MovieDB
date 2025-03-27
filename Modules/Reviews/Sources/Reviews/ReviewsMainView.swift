@@ -10,27 +10,32 @@ public struct ReviewsMainView: View {
   }
   
   public var body: some View {
-    List(store.reviews, id: \.id) { review in
-      ReviewCell(review: review)
-        .onAppear {
-          if store.shouldLoadMoreData {
-            store.send(
-              .requestReviews(
-                id: store.id,
-                mediaType: store.mediaType
-              )
-            )
-          }
+    ScrollView {
+      VStack {
+        ForEach(store.reviews, id: \.id) { review in
+          ReviewCell(review: review)
+            .onAppear {
+              if store.shouldLoadMoreData {
+                store.send(
+                  .requestReviews(
+                    id: store.id,
+                    mediaType: store.mediaType
+                  )
+                )
+              }
+            }
         }
-    }
-    .onAppear {
-      store.send(
-        .requestReviews(
-          id: store.id,
-          mediaType: store.mediaType
+      }
+      .onAppear {
+        store.send(
+          .requestReviews(
+            id: store.id,
+            mediaType: store.mediaType
+          )
         )
-      )
+      }
     }
+    .padding(.top, 10)
   }
 }
 
@@ -40,6 +45,9 @@ struct ReviewCell: View {
   
   public var body: some View {
     VStack(alignment: .leading) {
+      Divider()
+        .background(.tertiary)
+
       HStack {
         HStack {
           if let imageUrl = review.authorDetails?.imageUrl,
@@ -79,6 +87,7 @@ struct ReviewCell: View {
           }
         }
       }
+      .padding(.bottom, 15)
       
       ExpandableText(text: review.content ?? "", compactedLineLimit: 5)
         .tint(.primary)
@@ -86,4 +95,15 @@ struct ReviewCell: View {
     }
     .padding(.horizontal)
   }
+}
+
+#Preview {
+  ReviewsMainView(
+    store: .init(initialState: ReviewsFeature.State(
+      reviews: [.mock()]
+    )
+  ) {
+      ReviewsFeature()
+    }
+  )
 }
