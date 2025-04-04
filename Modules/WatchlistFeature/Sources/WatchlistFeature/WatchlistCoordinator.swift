@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import MovieDBDependencies
 import Details
 import MoviesFeature
@@ -24,17 +25,16 @@ public final class WatchlistCoordinator: Coordinator, ObservableObject {
     path.removeLast()
   }
   
-  func goToDetails(id: Int, type: MediaType) {
-    guard type != .unknown else { return }
-    path.append(Page.details(id: id, type: type))
-  }
+  func goToDetails(id: Int, type: MediaType) {}
   
   private lazy var mainView: some View = {
-    let viewModel = WatchlistViewModel(
-//     moviesRepository: MovieRepository(),
-  //   seriesRepository: SeriesRepository()
-   )
-    return WatchlistView(viewModel: viewModel, coordinator: self)
+    WatchlistView(
+      store: .init(
+        initialState: WatchlistFeature.State()
+      ) {
+        WatchlistFeature()
+      }
+    )
   }()
   
   private lazy var moviesCoordinator: MoviesCoordinator = {
@@ -57,17 +57,9 @@ public final class WatchlistCoordinator: Coordinator, ObservableObject {
         moviesCoordinator.get(page: .details(id: id))
       case .tv:
         seriesCoordinator.get(page: .details(id: id))
-      case .unknown:
-        EmptyView()
       }
     }
   }
-}
-
-public enum MediaType: String {
-  case movie
-  case tv
-  case unknown
 }
 
 public enum Page: Identifiable, Hashable {

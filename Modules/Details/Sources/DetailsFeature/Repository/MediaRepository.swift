@@ -2,13 +2,13 @@ import DependenciesMacros
 import Foundation
 
 @DependencyClient
-public struct MovieRepository: Sendable {
+public struct MediaRepository: Sendable {
   /// Get a movie by id
-  var getMovie: @Sendable (Int) async throws -> MovieDetails?
+  var getMedia: @Sendable (Int) async throws -> MediaProjection?
   /// Get a list of movies using a predicate
-  var getMovies: @Sendable () async throws -> [MovieDetails]
+  var getMedias: @Sendable () async throws -> [MediaProjection]
   /// Creates a movie on the persistance layer.
-  var create: @Sendable (MovieDetails) async throws -> Void
+  var create: @Sendable (MediaProjection) async throws -> Void
   /// Deletes a movie from the persistance layer.
   var delete: @Sendable (Int) async throws -> Void
 }

@@ -8,7 +8,7 @@ public enum Icon: String {
   case bookmarkFill = "bookmark.circle.fill"
 }
 
-public enum MediaType: String {
+public enum MediaType: String, Sendable {
   case movie
   case tv
 }
@@ -77,12 +77,14 @@ public struct DetailsFeature {
   public indirect enum Action: BindableAction {
     case binding(BindingAction<State>)
     case bookmarkButtonTapped
+    case bookmarkMediaResult(Result<String, Error>)
     case destination(PresentationAction<Destination.Action>)
     case details(DetailsFeature.Action)
     case fetchMoviesDetailsResult(Result<MovieDetails, Error>)
     case fetchSeriesDetailsResult(Result<SeriesDetails, Error>)
     case onAppear(MediaType, Int)
     case onSelectingItem(MediaType, Int)
+    case refreshBookmarkIconResult(Result<String, Error>)
     case reviews(ReviewsFeature.Action)
     case reviewsButtonTapped
   }
@@ -94,6 +96,20 @@ public struct DetailsFeature {
     Reduce { state, action in
       switch action {
       case .bookmarkButtonTapped:
+        let media = MediaProjection(
+          id: state.id,
+          backdropPath: state.mediaType == .movie ? state.movieDetails?.backdropPath : state.seriesDetails?.backdropPath,
+          posterPath: state.mediaType == .movie ? state.movieDetails?.posterPath : state.seriesDetails?.posterPath,
+          originalTitle: (state.mediaType == .movie ? state.movieDetails?.originalTitle : state.seriesDetails?.originalName) ?? "",
+          overview: (state.mediaType == .movie ? state.movieDetails?.overview : state.seriesDetails?.overview) ?? "",
+          mediaType: state.mediaType.rawValue,
+          title: (state.mediaType == .movie ? state.movieDetails?.title : state.seriesDetails?.name) ?? ""
+        )
+        return bookmark(media: media)
+      case .bookmarkMediaResult(.success(let iconName)):
+        state.watchlistIconName = iconName
+        return .none
+      case .bookmarkMediaResult(.failure):
         return .none
       case .fetchMoviesDetailsResult(.success(let details)):
         state.movieDetails = details
@@ -125,7 +141,10 @@ public struct DetailsFeature {
       case .onAppear(let mediaType, let id):
         state.id = id
         state.mediaType = mediaType
-        return mediaType == .movie ? fetchMovieDetails(id: id) : fetchSeriesDetails(id: id)
+        return .merge(
+          mediaType == .movie ? fetchMovieDetails(id: id) : fetchSeriesDetails(id: id),
+          getIconName(for: id)
+        )
       case .onSelectingItem(let mediaType, let id):
         state.destination = .details(.init(id: id, mediaType: mediaType))
         return .none
@@ -136,6 +155,12 @@ public struct DetailsFeature {
           .destination,
           .details,
           .reviews:
+        return .none
+      case .refreshBookmarkIconResult(.success(let iconName)):
+        state.watchlistIconName = iconName
+        return .none
+      case .refreshBookmarkIconResult(.failure):
+        state.watchlistIconName = Icon.bookmark.rawValue
         return .none
       }
     }
@@ -166,19 +191,37 @@ public struct DetailsFeature {
     }
   }
   
-//  private func addToWatchlist(id: Int, isWatchlisted: Bool) -> Effect<Self.Action> {
-//    .run { [id, isWatchlisted] in
-//      
-//    }
-//    guard let series = seriesDetails else { return }
-//    guard !isWatchlisted else {
-//      _ = repository.delete(series: series)
-//      watchlistIconName = Icon.bookmark.rawValue
-//      return
-//    }
-//    _ = repository.create(series: series)
-//    watchlistIconName = Icon.bookmarkFill.rawValue
-//  }
+  private func bookmark(media: MediaProjection) -> Effect<Self.Action> {
+    .run { [media, client] send in
+      await send(
+        .bookmarkMediaResult(
+          Result {
+            if let media = try await client.fetchMedia(media.id) {
+              try await client.deleteMedia(media.id)
+              return  "bookmark.circle"
+            }
+            try await client.saveMedia(media)
+            return "bookmark.circle.fill"
+          }
+        )
+      )
+    }
+  }
+  
+  private func getIconName(for id: Int) -> Effect<Self.Action> {
+    .run { [client] send in
+      await send(
+        .bookmarkMediaResult(
+          Result {
+            if let _ = try await client.fetchMedia(id) {
+              return "bookmark.circle.fill"
+            }
+            return "bookmark.circle"
+          }
+        )
+      )
+    }
+  }
   
   private func generateProviders(for response: WatchProviderResponse?) -> [WatchProvider] {
     let buy = response?.results.US?.buy ?? []

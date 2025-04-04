@@ -3,16 +3,16 @@ import Foundation
 import SwiftData
 import Storage
 
-extension MovieRepository: DependencyKey {
+extension MediaRepository: DependencyKey {
   public static let liveValue: Self = .live()
 }
 
-extension MovieRepository {
+extension MediaRepository {
   static func live() -> Self {
     do {
-      let database = try MovieDBDatabase<MovieEntity>(
+      let database = try MovieDBDatabase<MediaEntity>(
         modelContainer: .init(
-          for: MovieEntity.self,
+          for: MediaEntity.self,
           configurations: .init(
             "MovieDB.db",
             isStoredInMemoryOnly: false
@@ -21,21 +21,20 @@ extension MovieRepository {
       )
       
       return .init(
-        getMovie: { id in
+        getMedia: { id in
           try await database.get(
-            descriptor: FetchDescriptor<MovieEntity>(
+            descriptor: FetchDescriptor<MediaEntity>(
               predicate: #Predicate { $0.id == id }
             )
           )
         },
-        getMovies: {
+        getMedias: {
           try await database.getAll(
-            descriptor: FetchDescriptor<MovieEntity>()
+            descriptor: FetchDescriptor<MediaEntity>()
           )
-          // .sort(by: { $0.createdAt > $1.createdAt })
         },
-        create: { movie in
-          try await database.create(movie)
+        create: { media in
+          try await database.create(media)
         },
         delete: { id in
           try await database.delete(predicate: #Predicate { $0.id == id })

@@ -1,78 +1,75 @@
-import SwiftUI
+import ComposableArchitecture
 import Details
+import SwiftUI
 import UIComponents
+import Utilities
 
-struct WatchlistView: View {
-  @ObservedObject var viewModel: WatchlistViewModel
-  public weak var coordinator: WatchlistCoordinator?
-
-  init(
-    viewModel: WatchlistViewModel,
-    coordinator: WatchlistCoordinator
-  ) {
-    self.viewModel = viewModel
-    self.coordinator = coordinator
+public struct WatchlistView: View {
+  var store: StoreOf<WatchlistFeature>
+  
+  public init(store: StoreOf<WatchlistFeature>) {
+    self.store = store
   }
   
-  var body: some View {
-    ScrollView {
-      if viewModel.moviesSectionIsVisible {
-        Section {
-          ScrollView(showsIndicators: false) {
-            VStack {
-              ForEach($viewModel.movies, id: \.title) { movie in
-                WatchlistItem(
-                  imageUrl: movie.wrappedValue.imageUrl,
-                  title: movie.wrappedValue.title,
-                  overview: movie.wrappedValue.overview,
-                  action: {
-                    withAnimation {
-                      // viewModel.delete(movie: movie.wrappedValue)
-                    }
-                  }
-                )
-                .onTapGesture {
-                  coordinator?.goToDetails(id: movie.wrappedValue.id, type: .movie)
-                }
-              }
-            }
-          }
-        } header: {
-          SectionHeader(title: "Movies")
+  public var body: some View {
+    List {
+      Section {
+        ForEach(store.movies) { movie in
+          WatchlistSection.init(media: movie, store: store)
+            .listRowBackground(Color.clear)
+            .padding(.bottom, 10)
         }
-        .padding()
+      } header: {
+        SectionHeader(title: "Movies")
       }
+      .headerProminence(.increased)
+      .hide(if: !store.moviesSectionIsVisible)
       
-      if viewModel.seriesSectionIsVisible {
-        Section {
-          ScrollView(showsIndicators: false) {
-            VStack {
-              ForEach($viewModel.series, id: \.id) { series in
-                WatchlistItem(
-                  imageUrl: series.wrappedValue.imageUrl,
-                  title: series.wrappedValue.name,
-                  overview: series.wrappedValue.overview,
-                  action: {
-                    withAnimation {
-                      //viewModel.delete(series: series.wrappedValue)
-                    }
-                  }
-                )
-                .onTapGesture {
-                  coordinator?.goToDetails(id: series.wrappedValue.id, type: .tv)
-                }
-              }
-            }
-          }
-        } header: {
-          SectionHeader(title: "Series")
+      Section {
+        ForEach(store.series) { series in
+          WatchlistSection.init(media: series, store: store)
+            .listRowBackground(Color.clear)
+            .padding(.bottom, 10)
         }
-        .padding()
+      } header: {
+        SectionHeader(title: "Series")
       }
+      .headerProminence(.increased)
+      .hide(if: !store.seriesSectionIsVisible)
     }
+    .listStyle(.plain)
+    .scrollContentBackground(.hidden)
     .onAppear {
-      //viewModel.fetchData()
+      store.send(.onAppear)
     }
+  }
+}
+
+struct WatchlistSection: View {
+  let media: MediaProjection
+  var store: StoreOf<WatchlistFeature>
+
+  var body: some View {
+    WatchlistItem(
+      imageUrl: media.imageUrl,
+      title: media.title,
+      overview: media.overview
+    )
+    .onTapGesture {
+      store.send(.bookmarkSelected(media.id, media.mediaType))
+    }
+    .listRowSeparator(.hidden)
+    .listRowInsets(.init())
+    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+      Button("Delete", role: .destructive) {
+        store.send(.deleteButtonTapped(media.id))
+      }
+      .tint(.red)
+    }
+    .padding(.bottom, 15)
+    .padding(.horizontal)
+    .listRowBackground(Color.clear)
+    .padding(.bottom)
   }
 }
 
@@ -80,7 +77,6 @@ struct WatchlistItem: View {
   let imageUrl: String
   let title: String
   let overview: String
-  let action: () -> Void
   
   var body: some View {
     HStack(alignment: .top) {
@@ -91,11 +87,6 @@ struct WatchlistItem: View {
       Text(overview)
         .font(.footnote)
         .foregroundStyle(.secondary)
-      Button {
-        action()
-      } label: {
-        Image(systemName: "bookmark.fill")
-      }
     }
   }
 }
