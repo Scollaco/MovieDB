@@ -12,12 +12,21 @@ public struct WatchlistView: View {
   }
   
   public var body: some View {
+    if store.centerTextVisible {
+      Spacer(minLength: 200)
+
+      EmptyStateView(
+        title: "Your watchlist is empty.",
+        subtitle: "Movies and series that you watchlisted will appear here."
+      )
+    }
+
     List {
       Section {
         ForEach(store.movies) { movie in
           WatchlistSection.init(media: movie, store: store)
             .listRowBackground(Color.clear)
-            .padding(.bottom, 10)
+            .padding(.bottom, 5)
         }
       } header: {
         SectionHeader(title: "Movies")
@@ -29,7 +38,6 @@ public struct WatchlistView: View {
         ForEach(store.series) { series in
           WatchlistSection.init(media: series, store: store)
             .listRowBackground(Color.clear)
-            .padding(.bottom, 10)
         }
       } header: {
         SectionHeader(title: "Series")

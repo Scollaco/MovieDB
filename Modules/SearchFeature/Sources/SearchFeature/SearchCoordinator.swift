@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import MovieDBDependencies
 import MoviesFeature
 import SeriesFeature
@@ -29,12 +30,10 @@ public final class SearchCoordinator: Coordinator, ObservableObject {
   }
   
   private lazy var mainView: some View = {
-    let service = SearchService(dependencies: dependencies)
-    let viewModel = SearchViewModel(service: service)
-    return SearchView(
-      viewModel: viewModel,
-      dependencies: dependencies,
-      coordinator: self
+    SearchView(
+      store: Store(initialState: SearchFeature.State()) {
+        SearchFeature()
+      }
     )
   }()
   
@@ -49,19 +48,20 @@ public final class SearchCoordinator: Coordinator, ObservableObject {
   // MARK: - View providers
   @ViewBuilder
   public func get(page: Page) -> some View {
-    switch page {
-    case .home:
-      mainView
-    case .details(let id, let type):
-      switch type {
-      case .movie:
-        moviesCoordinator.get(page: .details(id: id))
-      case .tv:
-        seriesCoordinator.get(page: .details(id: id))
-      case .person, .unknown:
-        EmptyView()
-      }
-    }
+    mainView
+//    switch page {
+//    case .home:
+//      mainView
+//    case .details(let id, let type):
+//      switch type {
+//      case .movie:
+//        moviesCoordinator.get(page: .details(id: id))
+//      case .tv:
+//        seriesCoordinator.get(page: .details(id: id))
+//      case .person, .unknown:
+//        EmptyView()
+//      }
+//    }
   }
 }
 

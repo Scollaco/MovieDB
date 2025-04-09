@@ -19,6 +19,7 @@ public struct WatchlistFeature {
     var detailsState: DetailsFeature.State
     var movies: [MediaProjection]
     var series: [MediaProjection]
+    var centerTextVisible: Bool
     var moviesSectionIsVisible: Bool
     var seriesSectionIsVisible: Bool
    
@@ -27,6 +28,7 @@ public struct WatchlistFeature {
       detailsState: DetailsFeature.State = .init(),
       movies: [MediaProjection] = [],
       series: [MediaProjection] = [],
+      centerTextVisible: Bool = true,
       moviesSectionIsVisible: Bool = false,
       seriesSectionIsVisible: Bool = false
     ) {
@@ -34,6 +36,7 @@ public struct WatchlistFeature {
       self.detailsState = detailsState
       self.movies = movies
       self.series = series
+      self.centerTextVisible = centerTextVisible
       self.moviesSectionIsVisible = moviesSectionIsVisible
       self.seriesSectionIsVisible = seriesSectionIsVisible
     }
@@ -72,8 +75,10 @@ public struct WatchlistFeature {
         state.series = results.filter { $0.mediaType == "tv" }
         state.moviesSectionIsVisible = !state.movies.isEmpty
         state.seriesSectionIsVisible = !state.series.isEmpty
+        state.centerTextVisible = results.isEmpty
         return .none
       case .fetchBookmarksResult(.failure):
+        state.centerTextVisible = true
         return .none
       case .onAppear:
         return fetchBookmarks()

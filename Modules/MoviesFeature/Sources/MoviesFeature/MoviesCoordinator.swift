@@ -42,13 +42,13 @@ public final class MoviesCoordinator: Coordinator, ObservableObject {
   // MARK: - View providers
   @ViewBuilder
   public func get(page: Page) -> some View {
-    switch page {
-    case .home:
-      mainView
-    case .details(let id):
-      mainView
-      // detailsCoordinator.get(page: .movieDetails(id: id))
-    }
+    mainView
+//    switch page {
+//    case .home:
+//      mainView
+//    case .details(let id):
+//      detailsCoordinator.get(page: .movieDetails(id: id))
+//    }
   }
 }
 

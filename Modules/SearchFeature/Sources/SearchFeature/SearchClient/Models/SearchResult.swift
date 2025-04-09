@@ -1,6 +1,6 @@
 import Foundation
 
-struct SearchResultResponse: Decodable {
+public struct SearchResultResponse: Decodable {
   let page: Int
   let results: [SearchResult]
 }
@@ -25,7 +25,7 @@ public enum MediaType: String {
   }
 }
 
-struct SearchResult {
+public struct SearchResult {
   var backDropPath: String?
   var id: Int
   var title: String?
@@ -64,7 +64,7 @@ struct SearchResult {
 }
 
 extension SearchResult: Decodable, Hashable {
-  init(from decoder: Decoder) throws {
+  public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.backDropPath = try container.decodeIfPresent(String.self, forKey: .backDropPath)
     self.id = try container.decode(Int.self, forKey: .id)

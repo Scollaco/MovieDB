@@ -1,23 +1,14 @@
+import ComposableArchitecture
+import Details
 import Foundation
-import MovieDBDependencies
-import Routing
 import UIComponents
 import SwiftUI
-import CoreData
 
 struct SearchView: View {
-  @ObservedObject private var viewModel: SearchViewModel
-  private let dependencies: MovieDBDependencies
-  public weak var coordinator: SearchCoordinator?
-
-  init(
-    viewModel: SearchViewModel,
-    dependencies: MovieDBDependencies,
-    coordinator: SearchCoordinator
-  ) {
-    self.viewModel = viewModel
-    self.dependencies = dependencies
-    self.coordinator = coordinator
+  @Bindable var store: StoreOf<SearchFeature>
+  
+  init(store: StoreOf<SearchFeature>) {
+    self.store = store
   }
   
   var body: some View {
@@ -29,48 +20,50 @@ struct SearchView: View {
     
     ScrollView {
       LazyVGrid(columns: layout) {
-        ForEach($viewModel.results, id: \.id) { result in
+        ForEach(store.results, id: \.id) { result in
               SearchCell(result: result)
-                .tag(result.id.wrappedValue)
+                .tag(result.id)
                 .onTapGesture {
-                  coordinator?.goToDetails(
-                    id: result.id.wrappedValue,
-                    type: result.wrappedValue.mediaType
-                  )
+                  store.send(.cellSelected(result.id, result.mediaType))
                 }
                 .onAppear {
-                  if viewModel.shouldLoadMoreData(result.id.wrappedValue) {
-                    viewModel.loadMoreData()
-                  }
+                  store.send(.cellDidAppear(result.id))
                 }
         }
       }
       Spacer(minLength: 200)
-      if viewModel.centerTextVisible {
-        VStack {
-          Text("Find movies and series")
-            .font(.title)
-            .bold()
-          Text("Search for titles to find your favorite movies and series.")
-            .multilineTextAlignment(.center)
-        }
-        .padding()
-        .foregroundColor(.gray)
+      if store.centerTextVisible {
+        EmptyStateView(
+          title: "Find movies and series",
+          subtitle: "Search for titles to find your favorite movies and series."
+        )
       }
     }
     .scrollDismissesKeyboard(.immediately)
     .searchable(
-      text: $viewModel.debouncedQuery,
+      text: $store.query,
       prompt: "Search movies and series"
     )
-    .onChange(of: $viewModel.debouncedQuery.wrappedValue) { _ in
-      viewModel.search()
+    .onChange(of: store.query) {
+      store.send(.search)
+    }
+    .navigationDestination(
+      item: $store.scope(
+        state: \.destination?.details,
+        action: \.destination.details
+      )
+    ) { detailsStore in
+      if store.selectedMediaType == .movie {
+        MovieDetailsView(store: detailsStore)
+      } else {
+        SeriesDetailsView(store: detailsStore)
+      }
     }
   }
 }
 
 struct SearchCell: View {
-  @Binding var result: SearchResult
+  var result: SearchResult
   
   var body: some View {
     let placeholder = result.mediaType.placeholder
